@@ -1,0 +1,132 @@
+<% layout('/layouts/boilerplate') %>
+
+<div class="container mt-5">
+    <h2 class="mb-5 text-center fw-bold">
+        Search results for 
+        <span class="text-primary">"<%= query %>"</span>
+    </h2>
+    
+    <div class="d-flex justify-content-end align-items-center mb-4">
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="toggle-switch" />
+            <label class="form-check-label" for="toggle-switch">
+                Display total after taxes
+            </label>
+        </div>
+    </div>
+    
+    <% if (allListings.length === 0) { %>
+        <div class="text-center my-5">
+            <p class="text-muted fs-4">
+                No listings found for "<%= query %>" 😞
+            </p>
+            <a href="/listings" class="btn btn-outline-primary rounded-pill mt-3">
+                🔍 Browse All Listings
+            </a>
+        </div>
+
+    <% } else { %>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <% allListings.forEach(listing => { %>
+            <div class="col">
+                <a href="/listings/<%= listing._id %>" class="listing-link">
+                    <div class="card attractive-card hover-lift shadow-lg rounded-4 overflow-hidden">
+
+                        <div class="position-relative">
+                            <img
+                                src="<%= listing.image?.url || '/images/default.jpg' %>"
+                                alt="<%= listing.title %>"
+                                class="card-img-top listing-img"
+                            />
+
+
+
+
+
+
+
+
+
+
+
+
+                            <!-- <style>
+              .wishlist-btn {
+                position: absolute;
+                top: 10px;
+                right: 15px;
+                z-index: 10;
+                border-radius: 60%;
+                background: white;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+
+                height: 30px;
+                width: 30px;
+              }
+              .wishlist-btn i {
+                color: black;
+                font-size: 15px;
+                text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+              }
+            </style>
+            <button class="wishlist-btn border-0">
+              <i class="fa-regular fa-heart"></i>
+            </button> -->
+
+                            <span class="badge bg-success text-white fw-bold rating-tag shadow-sm">
+                                <% if (listing.rating) { %>
+                                    <i class="fas fa-star me-1"></i> <%= listing.rating.toFixed(1) %>
+                                <% } else { %>
+                                    New
+                                <% } %>
+                            </span>
+                            
+                            </div>
+
+                        <div class="card-body card-body-main">
+                            <h5 class="card-title-main"><%= listing.title %></h5>
+                            <p class="card-text text-muted"><%= listing.location %></p>
+
+                            <p
+                                class="card-text price-text"
+                                data-base-price="<%= listing.price %>"
+                                data-gst-price="<%= (listing.price * 1.18).toFixed(0) %>"
+                            >
+                                <span class="final-price fw-bold text-dark price-amount">
+                                    ₹<%= listing.price.toLocaleString("en-IN") %>
+                                </span>
+
+                                <span class="old-price text-muted ms-2" style="display: none">
+                                    ₹<%= listing.price.toLocaleString("en-IN") %>
+                                </span>
+
+                                <span
+                                    class="gst-badge badge bg-success ms-2"
+                                    style="display: none"
+                                >
+                                    +18% GST
+                                </span>
+                            </p>
+                            <p class="card-text text-secondary mb-3 flex-grow-1" style="font-size: 0.95rem;">
+                                <%= listing.description.length > 100 ? listing.description.substring(0, 100) + '...' : listing.description %>
+                            </p>
+
+                            <div class="mt-auto text-center">
+                                <a href="/listings/<%= listing._id %>" class="btn btn-primary btn-sm rounded-pill">
+                                    View Listing
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        <% }) %>
+    </div>
+
+    <% } %>
+</div>
+
+<script src="/js/price-toggle.js"></script>

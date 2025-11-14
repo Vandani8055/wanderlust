@@ -1,0 +1,55 @@
+<% layout('/layouts/boilerplate') %>
+
+<div class="container mt-4">
+  <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-1 mt-3">
+    <% if (wishlist.length === 0) { %>
+    <div class="text-center mt-5">
+      <h4>No Wishlist Yet 😢</h4>
+      <p>Add some properties by clicking the ❤️ button</p>
+    </div>
+    <% } %> <% wishlist.forEach(listing => { %>
+    <div class="col mb-4">
+      <a href="/listings/<%= listing._id %>" class="listing-link">
+        <div
+          class="card attractive-card hover-lift shadow-lg rounded-4 overflow-hidden"
+        >
+          <div class="position-relative">
+            <!-- IMAGE -->
+            <img
+              src="<%= listing.image.url %>"
+              class="card-img-top listing-img"
+            />
+
+            <!-- REMOVE FROM WISHLIST HEART -->
+            <button class="wishlist-btn border-0" data-id="<%= listing._id %>">
+              <i class="fa-solid fa-heart text-danger"></i>
+            </button>
+
+            <!-- PRICE BADGE -->
+            <span
+              class="position-absolute px-3 py-2 badge text-white fw-bold shadow-sm price-tag"
+            >
+              ₹<%= listing.price.toLocaleString("en-IN") %> / night
+            </span>
+
+            <!-- NEW BADGE -->
+            <% if (listing.isNew) { %>
+            <span
+              class="position-absolute new-badge badge bg-success text-white fw-bold shadow-sm"
+            >
+              New
+            </span>
+            <% } %>
+          </div>
+
+          <!-- BODY -->
+          <div class="card-body card-body-main">
+            <h5 class="card-title-main"><%= listing.title %></h5>
+            <p class="card-text text-muted"><%= listing.location %></p>
+          </div>
+        </div>
+      </a>
+    </div>
+    <% }) %>
+  </div>
+</div>

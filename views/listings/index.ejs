@@ -1,0 +1,152 @@
+<% layout('/layouts/boilerplate') %>
+
+<div class="container-fluid mt-4">
+  <div id="filters">
+    <div class="filter">
+      <div><i class="fa-solid fa-fire"></i></div>
+      <p>Trending</p>
+    </div>
+
+    <div class="filter">
+      <div><i class="fa-solid fa-bed"></i></div>
+      <p>Rooms</p>
+    </div>
+
+    <div class="filter">
+      <div><i class="fa-solid fa-mountain-city"></i></div>
+      <p>Iconic Cities</p>
+    </div>
+
+    <div class="filter">
+      <div><i class="fa-solid fa-mountain"></i></div>
+      <p>Mountains</p>
+    </div>
+
+    <div class="filter">
+      <div><i class="fa-solid fa-gopuram"></i></div>
+      <p>Castel</p>
+    </div>
+
+    <div class="filter">
+      <div><i class="fa-solid fa-snowman"></i></div>
+      <p>Arctic</p>
+    </div>
+
+    <div class="filter">
+      <div><i class="fa-solid fa-person-swimming"></i></div>
+      <p>Amazing Pools</p>
+    </div>
+
+    <div class="filter">
+      <div><i class="fa-solid fa-tents"></i></div>
+      <p>Camping</p>
+    </div>
+
+    <div class="filter">
+      <div><i class="fa-solid fa-cow"></i></div>
+      <p>Farms</p>
+    </div>
+
+    <!-- <div class="filter">
+      <div><i class="fa-solid fa-landmark-dome"></i></div>
+      <p>Domes</p>
+    </div>
+
+    <div class="filter">
+      <div><i class="fa-solid fa-ship"></i></div>
+      <p>Boats</p>
+    </div> -->
+
+    <div class="text-toggle mb-4">
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="toggle-switch" />
+        <label class="form-check-label" for="toggle-switch">
+          Display total after taxes
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-1 mt-3">
+    <% for (let listing of allListings) { %>
+    <div class="col mb-4">
+      <a href="/listings/<%= listing._id %>" class="listing-link">
+        <div
+          class="card attractive-card hover-lift shadow-lg rounded-4 overflow-hidden"
+        >
+          <div class="position-relative">
+            <img
+              src="<%= listing.image.url %>"
+              alt="<%= listing.title %>"
+              class="card-img-top listing-img"
+            />
+
+
+
+
+
+            
+
+
+
+
+
+
+
+<!-- wishlist btn  -->
+            <button class="wishlist-btn border-0" data-id="<%= listing._id %>">
+              <i
+                class="<%= currUser && currUser.wishlist.includes(listing._id) ? 'fa-solid' : 'fa-regular' %> fa-heart heart-icon"
+              ></i>
+            </button>
+
+
+            
+            <span
+              class="position-absolute px-3 py-2 badge text-white fw-bold shadow-sm price-tag"
+            >
+              &#x20B9;<%= listing.price.toLocaleString("en-IN") %> / night
+            </span>
+
+            <% if (listing.isNew) { %>
+            <span
+              class="position-absolute new-badge badge bg-success text-white fw-bold shadow-sm"
+            >
+              New
+            </span>
+            <% } %>
+          </div>
+
+          <!-- gor gst : -->
+          <div class="card-body card-body-main">
+            <h5 class="card-title-main"><%= listing.title %></h5>
+
+            <p class="card-text text-muted"><%= listing.location %></p>
+
+            <p
+              class="card-text price-text"
+              data-base-price="<%= listing.price %>"
+              data-gst-price="<%= (listing.price * 1.18).toFixed(0) %>"
+            >
+              <span class="final-price fw-bold text-dark price-amount">
+                ₹<%= listing.price.toLocaleString("en-IN") %>
+              </span>
+
+              <span class="old-price text-muted ms-2" style="display: none">
+                ₹<%= listing.price.toLocaleString("en-IN") %>
+              </span>
+
+              <span
+                class="gst-badge badge bg-success ms-2"
+                style="display: none"
+              >
+                +18% GST
+              </span>
+            </p>
+          </div>
+        </div>
+      </a>
+    </div>
+    <% } %>
+  </div>
+</div>
