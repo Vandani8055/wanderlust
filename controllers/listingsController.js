@@ -1,5 +1,6 @@
 const Listing = require("../models/listing");
 const { geocodeNominatim } = require("../utils/geocode");
+const Fuse = require("fuse.js");
 // const geocode = require("./utils/geocode");
 
 // render All listings:
@@ -103,21 +104,32 @@ module.exports.deleteListing = async (req, res) => {
   res.redirect("/listings");
 };
 
+
+
+
+
 module.exports.searchListing = async (req, res) => {
   try {
-    const query = req.query.q; // from ?q=...
-    if (!query) {
-      return res.redirect("/listings");
-    }
+    const query = req.query.q;
+    if (!query) return res.redirect("/listings");
 
-    const allListings = await Listing.find({
-      title: {
-        $regex: query,
-        $options: "i",
-      },
+    // Get all listings
+    const listings = await Listing.find({});
+
+    const fuse = new Fuse(listings, {
+      keys: ["title", "description"],  // fields you want to search
+      threshold: 0.4,                 // smaller = strict, bigger = loose match
     });
 
-    res.render("listings/searchResult.ejs", { allListings, query });
+    const result = fuse.search(query);
+
+    const allListings = result.map(r => r.item);
+
+    res.render("listings/searchResult.ejs", {
+      allListings,
+      query
+    });
+
   } catch (err) {
     console.error("Search error:", err);
     res.status(500).send("Error searching listings");
