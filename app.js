@@ -90,11 +90,6 @@ app.use(flash());
 
 
 
-app.get("/", (req, res) => {
-    res.redirect("/listings");
-});
-
-
 // for each request passport initialize:
 app.use(passport.initialize());
 app.use(passport.session());        //for each req. of same user no need to login againg and again..(req.know : which session part is i am )
@@ -109,6 +104,12 @@ app.use( async(req, res , next) => {
   res.locals.currUser = req.user;   //login , signup
   next();
 });
+
+
+app.get("/", (req, res) => {
+    res.redirect("/listings");
+});
+
 
 
 app.use("/listings", listingRouter);
