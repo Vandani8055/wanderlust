@@ -33,6 +33,23 @@
 
 
 
+// button disable script:
+
+document.querySelectorAll('.needs-validation').forEach(form => {
+    const btn = form.querySelector('.btn-success');
+    
+    // Initial check (in case fields are pre-filled)
+    if (btn) btn.disabled = !form.checkValidity();
+
+    // Attach listeners to all inputs/selects/textareas inside the form
+    form.addEventListener('input', () => {
+        if (btn) {
+            const isValid = form.checkValidity();
+            btn.disabled = !isValid;
+            btn.classList.toggle('disabled', !isValid);
+        }
+    });
+});
 
 
 

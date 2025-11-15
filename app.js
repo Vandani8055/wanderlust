@@ -98,7 +98,7 @@ app.use(flash());
 // for each request passport initialize:
 app.use(passport.initialize());
 app.use(passport.session());        //for each req. of same user no need to login againg and again..(req.know : which session part is i am )
-passport.use(new LocalStrategy(User.authenticate()));   // pass model in it.
+passport.use(new LocalStrategy({ usernameField: "email" }, User.authenticate())); // pass model in it.
 
 passport.serializeUser(User.serializeUser());         //add info of user in to session
 passport.deserializeUser(User.deserializeUser());     //remove info of user in to session,when session over

@@ -12,7 +12,9 @@
           class="form-control"
           required
         />
-        <div class="valid-feedback">looks good!</div>
+        <div class="invalid-feedback">Please enter username</div>
+        <div class="valid-feedback">Filled</div>
+       
       </div>
 
       <div class="mb-3">
@@ -23,7 +25,11 @@
           type="email"
           class="form-control"
           required
+        
+          pattern=".+@.+\.(com|org|net|edu|gov|mil|[a-z]{2,3})"
         />
+        <div class="invalid-feedback">Please provide a valid email.</div>
+        <div class="valid-feedback">Filled</div>
       </div>
 
       <div class="mb-3">
@@ -35,8 +41,17 @@
           class="form-control"
           required
         />
+        <div class="invalid-feedback">Please enter your password.</div>
+        <div class="valid-feedback">Filled</div>
       </div>
-      <button class="btn btn-success">Submit</button>
+      <button class="btn btn-success rounded-pill disabled">Submit</button>
     </form>
   </div>
 </div>
+
+
+
+
+
+
+<!--do not use [a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$ this bcz no more strict -->

@@ -6,8 +6,8 @@ module.exports.renderSignupForm = (req, res) => {
 
 module.exports.signup = async (req, res) => {
   try {
-    let { username, email, password } = req.body;
-    const newUser = new User({ email, username });
+    let { email, password } = req.body;
+    const newUser = new User({ email });
     const registerUser = await User.register(newUser, password);
     console.log(registerUser);
     // auto login when sign up:
@@ -30,10 +30,13 @@ module.exports.renderLoginForm = (req, res) => {
 
 module.exports.login = (req, res) => {
   req.flash("success", "Welcome back to Wanderlust!");
-  // other vise when login with home : give me "page not found" bcz isLoggedin not triger redirectUtl not save..
-  let redirectUrl = res.locals.redirectUrl || "/listings";
+  
+  const redirectUrl = req.session.returnTo || "/listings";
+  delete req.session.returnTo;
+  
   res.redirect(redirectUrl);
 };
+
 
 module.exports.logout = (req, res, next) => {
   req.logout((err) => {

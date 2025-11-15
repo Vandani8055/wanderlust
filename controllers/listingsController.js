@@ -29,9 +29,6 @@ module.exports.showListing = async (req, res) => {
   res.render("listings/show.ejs", { listing });
 };
 
-
-
-
 module.exports.createListing = async (req, res) => {
   try {
     const { title, description, location, price, country } = req.body.listing;
@@ -96,6 +93,8 @@ module.exports.updateListing = async (req, res) => {
   res.redirect(`/listings/${id}`);
 };
 
+
+
 // Delete listing :
 module.exports.deleteListing = async (req, res) => {
   const { id } = req.params;
@@ -103,10 +102,6 @@ module.exports.deleteListing = async (req, res) => {
   req.flash("success", "Listing Deleted!🎉");
   res.redirect("/listings");
 };
-
-
-
-
 
 module.exports.searchListing = async (req, res) => {
   try {
@@ -117,19 +112,18 @@ module.exports.searchListing = async (req, res) => {
     const listings = await Listing.find({});
 
     const fuse = new Fuse(listings, {
-      keys: ["title", "description"],  // fields you want to search
-      threshold: 0.4,                 // smaller = strict, bigger = loose match
+      keys: ["title", "description"], // fields you want to search
+      threshold: 0.4, // smaller = strict, bigger = loose match
     });
 
     const result = fuse.search(query);
 
-    const allListings = result.map(r => r.item);
+    const allListings = result.map((r) => r.item);
 
     res.render("listings/searchResult.ejs", {
       allListings,
-      query
+      query,
     });
-
   } catch (err) {
     console.error("Search error:", err);
     res.status(500).send("Error searching listings");
