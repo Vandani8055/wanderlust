@@ -61,7 +61,7 @@ const store = MongoStore.create({
  touchAfter : 24 * 3600,
 });
 
-store.on("errror" , () => {
+store.on("error" , () => {
 console.log("ERROR in ONGO SESSION : " , err);
 });
 
@@ -130,6 +130,12 @@ app.use((err, req, res, next) => {
  const { statusCode = 500, message = "Something Went Wrong!" } = err;
  res.status(statusCode).render("error.ejs", { message });
 });
+
+
+
+// mongoose.connect(mongoURL)
+//   .then(() => console.log("✅ Connected to DB successfully!"))
+//   .catch(err => console.log("❌ Database connection error:", err));
 
 
 // ============================================================================

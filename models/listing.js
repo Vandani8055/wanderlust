@@ -7,7 +7,7 @@ const listingSchema = new Schema({
   description: { type: String, required: true },
   price: { type: Number, required: true, min: 0 },
   location: { type: String, required: true },
-  country: { type: String, required: true },
+ 
   image: {
     url: { type: String, default: "" },
     filename: { type: String, default: "listingimage" },
@@ -25,6 +25,13 @@ const listingSchema = new Schema({
       default: [],
     },
   },
+ tags: {
+  type: [String],
+  required: true,
+  set: v => v.map(t => t.toLowerCase().trim())
+}
+
+
 });
 
 

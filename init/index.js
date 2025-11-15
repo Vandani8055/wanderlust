@@ -1,62 +1,45 @@
 // -----------------------------------------------------------------------------
 // IMPORTS & DEPENDENCIES
 // -----------------------------------------------------------------------------
-const mongoose = require('mongoose');
-const initData = require('./data.js');
-const Listing = require('../models/listing.js');
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
+const mongoose = require('mongoose');
+const Listing = require('../models/listing.js');
+const User = require('../models/user.js');
+const initData = require('./data.js');
 
 // -----------------------------------------------------------------------------
 // DATABASE CONNECTION SETUP
 // -----------------------------------------------------------------------------
-
-// 💡 FIX: The database name ('wanderlust') MUST be specified in the MONGO_URL
-// The connection string is structured as: mongodb+srv://<username>:<password>@<cluster-url>/<databaseName>
-// I am assuming the database you want to use is 'wanderlust', based on your Compass screenshot.
 const mongoURL = process.env.ATLAS_DB_URL;
+if (!mongoURL) throw new Error('ATLAS_DB_URL is not defined in .env!');
 
-
-async function main() {
-  // Pass the URL with the correct database name
-  await mongoose.connect(mongoURL);
-}
-
-
-
-main()
-  .then(() => {
-    console.log('Connected to DB successfully!');
-  })
-  .catch((err) => {
-    // Check console for specific error details if connection fails
-    console.error('Database connection error:', err);
-  });
-
+mongoose.connect(mongoURL)
+  .then(() => console.log('✅ Connected to DB successfully!'))
+  .catch(err => console.error('❌ Database connection error:', err));
 
 // -----------------------------------------------------------------------------
 // INITIALIZE DATABASE WITH SAMPLE DATA
 // -----------------------------------------------------------------------------
-
-// DELETE AND INSERT SAMPLE DATA TO DB:
 const initDB = async () => {
   try {
-    // 1. Delete all existing documents
-    await Listing.deleteMany({}); 
+    await Listing.deleteMany({}); // clear listings
+    const user = await User.findOne(); // get any existing user
+    if (!user) throw new Error('No users found! Create a user first.');
 
-    initData.data = initData.data.map((obj) => ({...obj, owner : "69139c59834d926bccbfa8f8"}));
+    const listingsSeed = initData.data.map(obj => ({ ...obj, owner: user._id }));
+    await Listing.insertMany(listingsSeed);
 
-    // 2. Insert the sample data
-    // Assuming initData.data is an array of Listing objects
-    await Listing.insertMany(initData.data); 
-    
-    console.log("Data was initialized successfully and should now be visible in the 'wanderlust' database!");
-  } catch (error) {
-    console.error("Error initializing data:", error);
+    console.log(`📌 Inserted ${listingsSeed.length} listings. Database initialization complete!`);
+  } catch (err) {
+    console.error('❌ Error initializing data:', err);
+  } finally {
+    await mongoose.connection.close();
+    console.log('🔒 Database connection closed.');
   }
 };
 
-// Call the initialization function after connecting to the DB
-// initDB();    //only run one when database is empty:
-
-
-
+// Call the initialization function
+// initDB();
+// 

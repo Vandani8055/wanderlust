@@ -3,7 +3,6 @@
   <h1 class="col-6 offset-3">Login on Wanderlust</h1>
   <div class="col-6 offset-3">
     <form action="/login" method="POST" class="needs-validation" novalidate>
-
       <div class="mb-3">
         <label for="email" class="form-lable">Email : </label><br />
         <input
@@ -12,8 +11,8 @@
           type="email"
           class="form-control"
           required
-        
-          pattern=".+@.+\.(com|org|net|edu|gov|mil|[a-z]{2,3})"
+          **pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+          **
         />
         <div class="invalid-feedback">Please provide a valid email.</div>
         <div class="valid-feedback">Filled</div>

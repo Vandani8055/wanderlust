@@ -1,19 +1,35 @@
 const Listing = require("../models/listing");
 const { geocodeNominatim } = require("../utils/geocode");
-const Fuse = require("fuse.js");
+const Fuse = require("fuse.js");        //for loose search in search bar 
 // const geocode = require("./utils/geocode");
+const pluralize = require("pluralize"); // ⬅️ add this      / / for tags search loosly
 
 // render All listings:
+// for icons : change will be needed...
+// render All listings with tags filter:
 module.exports.index = async (req, res) => {
-  const allListings = await Listing.find({});
-  res.render("listings/index.ejs", { allListings });
+  const { tags } = req.query;
+
+  let filter = {};
+  if (tags && tags !== "all") {
+    filter = { tags: { $in: [tags.toLowerCase()] } };
+  }
+
+  const allListings = await Listing.find(filter);
+
+  res.render("listings/index.ejs", { allListings, tags: tags || "all" });
 };
+
+
 
 // New route :
 module.exports.renderNewForm = (req, res) => {
   // router.get("/listings/new" , (req, res) => { not use "/" bcz view create above
   res.render("listings/new.ejs");
 };
+
+
+
 
 // Show Listhing : (one)
 module.exports.showListing = async (req, res) => {
@@ -31,7 +47,7 @@ module.exports.showListing = async (req, res) => {
 
 module.exports.createListing = async (req, res) => {
   try {
-    const { title, description, location, price, country } = req.body.listing;
+    const { title, description, location, price , tags : []} = req.body.listing;
     const geoData = await geocodeNominatim(location);
     console.log("🌍 Geocoded result:", geoData);
 
@@ -53,6 +69,11 @@ module.exports.createListing = async (req, res) => {
         filename: req.file?.filename || "listingimage",
       },
     });
+
+    if (req.body.tags) {
+  req.body.tags = req.body.tags.map(t => t.trim().toLowerCase());
+}
+
 
     await newListing.save();
     req.flash("success", "Successfully created a new listing!");
@@ -87,6 +108,10 @@ module.exports.updateListing = async (req, res) => {
     let url = req.file.path;
     let filename = req.file.filename;
     listing.image = { url, filename };
+    if (req.body.tags) {
+  req.body.tags = req.body.tags.map(t => t.trim().toLowerCase());
+}
+
     await listing.save();
   }
   req.flash("success", "Listing Updated! 🎉");

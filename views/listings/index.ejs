@@ -2,60 +2,56 @@
 
 <div class="container-fluid mt-4">
   <div id="filters">
-    <div class="filter">
+
+    <div class="filter" data-tag="all">
+      <div><i class="fa-solid fa-globe"></i></div>
+      <p>All</p>
+    </div>
+
+    <div class="filter" data-tag="brand-new">
+      <div><i class="fa-solid fa-face-grin-hearts"></i></div>
+      <p>Brand new</p>
+    </div>
+
+    <div class="filter" data-tag="trending">
       <div><i class="fa-solid fa-fire"></i></div>
       <p>Trending</p>
     </div>
 
-    <div class="filter">
-      <div><i class="fa-solid fa-bed"></i></div>
-      <p>Rooms</p>
+    <div class="filter" data-tag="beach">
+      <div><i class="fa-solid fa-umbrella-beach"></i></div>
+      <p>Beach</p>
     </div>
 
-    <div class="filter">
-      <div><i class="fa-solid fa-mountain-city"></i></div>
-      <p>Iconic Cities</p>
-    </div>
-
-    <div class="filter">
-      <div><i class="fa-solid fa-mountain"></i></div>
-      <p>Mountains</p>
-    </div>
-
-    <div class="filter">
-      <div><i class="fa-solid fa-gopuram"></i></div>
-      <p>Castel</p>
-    </div>
-
-    <div class="filter">
+    <div class="filter" data-tag="arctic">
       <div><i class="fa-solid fa-snowman"></i></div>
       <p>Arctic</p>
     </div>
 
-    <div class="filter">
+    <div class="filter" data-tag="mountain">
+      <div><i class="fa-solid fa-mountain"></i></div>
+      <p>Mountains</p>
+    </div>
+
+    <div class="filter" data-tag="pools">
       <div><i class="fa-solid fa-person-swimming"></i></div>
       <p>Amazing Pools</p>
     </div>
 
-    <div class="filter">
+    <div class="filter" data-tag="camping">
       <div><i class="fa-solid fa-tents"></i></div>
       <p>Camping</p>
     </div>
 
-    <div class="filter">
-      <div><i class="fa-solid fa-cow"></i></div>
-      <p>Farms</p>
+    <div class="filter" data-tag="tiny-houses">
+      <div><i class="fa-solid fa-house"></i></div>
+      <p>Tiny houses</p>
     </div>
 
-    <!-- <div class="filter">
-      <div><i class="fa-solid fa-landmark-dome"></i></div>
-      <p>Domes</p>
+    <div class="filter" data-tag="luxury-hotels">
+      <div><i class="fa-solid fa-gopuram"></i></div>
+      <p>Luxury hotels</p>
     </div>
-
-    <div class="filter">
-      <div><i class="fa-solid fa-ship"></i></div>
-      <p>Boats</p>
-    </div> -->
 
     <div class="text-toggle mb-4">
       <div class="form-check form-switch">
@@ -69,8 +65,9 @@
 
   <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-1 mt-3">
     <% for (let listing of allListings) { %>
-    <div class="col mb-4">
-      <a href="/listings/<%= listing._id %>" class="listing-link">
+    <div class="col mb-4 listing-card" data-tags='<%= JSON.stringify(listing.tags) %>'>
+     <a href="/listings/<%= listing._id %>" class="listing-link">
+
         <div
           class="card attractive-card hover-lift shadow-lg rounded-4 overflow-hidden"
         >
@@ -81,40 +78,18 @@
               class="card-img-top listing-img"
             />
 
-
-
-
-
-            
-
-
-
-
-
-
-
-<!-- wishlist btn  -->
+            <!-- wishlist btn  -->
             <button class="wishlist-btn border-0" data-id="<%= listing._id %>">
               <i
                 class="<%= currUser && currUser.wishlist.includes(listing._id) ? 'fa-solid' : 'fa-regular' %> fa-heart heart-icon"
               ></i>
             </button>
 
-
-            
             <span
               class="position-absolute px-3 py-2 badge text-white fw-bold shadow-sm price-tag"
             >
               &#x20B9;<%= listing.price.toLocaleString("en-IN") %> / night
             </span>
-
-            <% if (listing.isNew) { %>
-            <span
-              class="position-absolute new-badge badge bg-success text-white fw-bold shadow-sm"
-            >
-              New
-            </span>
-            <% } %>
           </div>
 
           <!-- gor gst : -->
@@ -123,6 +98,7 @@
 
             <p class="card-text text-muted"><%= listing.location %></p>
 
+         
             <p
               class="card-text price-text"
               data-base-price="<%= listing.price %>"
@@ -150,3 +126,40 @@
     <% } %>
   </div>
 </div>
+
+
+
+
+
+
+
+<script>
+  const n = t => (t||"").toLowerCase().replace(/[^a-z]/g,"").replace(/(es|s)$/,"");
+
+  document.querySelectorAll(".filter").forEach(f =>
+    f.onclick = () => {
+      const sel = n(f.dataset.tag);
+      document.querySelectorAll(".listing-card").forEach(card => {
+        let tags = [];
+        try { tags = JSON.parse(card.dataset.tags||"[]").map(n); } catch(e){}
+        card.style.display = sel==="all" || tags.includes(sel) ? "" : "none";
+      });
+    }
+  );
+</script>
+
+
+
+<!-- <style>
+  #filters .filter {
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 12px;
+    transition: 0.25s ease;
+  }
+  #filters .filter.active {
+    background: #222;
+    color: white;
+    transform: scale(1.08);
+  }
+</style> -->

@@ -24,11 +24,21 @@
     />
     <div class="card-body">
       <p class="card-text">
-        <strong>Owner:</strong><i><%= listing.owner.username %></i><br>
+        <strong>Owner:</strong> <%= listing.owner.username %><br />
         <strong>Description:</strong> <%= listing.description %><br />
         <strong>Price:</strong> ₹<%= listing.price.toLocaleString("en-IN") %><br />
         <strong>Location:</strong> <%= listing.location %><br />
         <strong>Country:</strong> <%= listing.country %><br />
+           <!-- Show listing tags -->
+  <div class="tags mt-2">
+    <% if (listing.tags && listing.tags.length > 0) { %>
+      <strong>Tags:</strong> 
+      <% listing.tags.forEach(t => { %>
+        <span class="badge bg-dark me-1"><%= t %></span>
+      <% }) %>
+    <% } %>
+  </div>
+
       </p>
     </div>
   </div>
