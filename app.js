@@ -4,10 +4,8 @@
 
 // Env REquire : 
 if(process.env.NODE_ENV != 'production'){
-  require('dotenv').config();
+require('dotenv').config();
 }
-
-
 
 const express = require("express");
 const app = express();
@@ -32,18 +30,17 @@ const flash = require('connect-flash');
 // DATABASE CONNECTION
 // ============================================================================
 
-
 const mongoURL = process.env.ATLAS_DB_URL;
 async function main() {
-  await mongoose.connect(mongoURL);
+await mongoose.connect(mongoURL);
 }
 
 main()
-  .then(() => console.log("✅ Connected to DB successfully!"))
-  .catch((err) => console.log("❌ DB connection error:", err));
+ .then(() => console.log("✅ Connected to DB successfully!"))
+ .catch((err) => console.log("❌ DB connection error:", err));
 
 // ============================================================================
-// APP CONFIGURATION
+// APP CONFIGURATION & MIDDLEWARE
 // ============================================================================
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -57,89 +54,87 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 // Mongo -session -store:
 const store = MongoStore.create({
-  mongoUrl : mongoURL,
-  crypto : { 
-    secret : process.env.SECRET,
-  },
-  touchAfter : 24 * 3600,
+ mongoUrl : mongoURL,
+ crypto : { 
+  secret : process.env.SECRET,
+ },
+ touchAfter : 24 * 3600,
 });
 
 store.on("errror" , () => {
-  console.log("ERROR in ONGO SESSION : " , err);
+console.log("ERROR in ONGO SESSION : " , err);
 });
 
 
 // FOR express session: 
 const sessionOptions = {
-  store : store,
-  secret : process.env.SECRET,
-  resave : false ,
-  saveUninitialized : true,
-  cookie : {
-    expires : Date.now() + 7 * 24 * 60 * 60 * 1000,
-    maxAge : 7 * 24 * 60 * 60 * 1000,
-    httpOnly : true
-  },
+ store : store,
+ secret : process.env.SECRET,
+ resave : false ,
+ saveUninitialized : true,
+ cookie : {
+  expires : Date.now() + 7 * 24 * 60 * 60 * 1000,
+  maxAge : 7 * 24 * 60 * 60 * 1000,
+  httpOnly : true
+ },
 };
-
-
 
 
 app.use(session(sessionOptions));
 app.use(flash());
 
 
-
-// for each request passport initialize:
+// PASSPORT CONFIGURATION
 app.use(passport.initialize());
-app.use(passport.session());        //for each req. of same user no need to login againg and again..(req.know : which session part is i am )
-passport.use(new LocalStrategy({ usernameField: "email" }, User.authenticate())); // pass model in it.
+app.use(passport.session()); 
+passport.use(new LocalStrategy({ usernameField: "email" }, User.authenticate())); 
 
-passport.serializeUser(User.serializeUser());         //add info of user in to session
-passport.deserializeUser(User.deserializeUser());     //remove info of user in to session,when session over
+passport.serializeUser(User.serializeUser()); 
+passport.deserializeUser(User.deserializeUser());
 
+// Res Locals Middleware
 app.use( async(req, res , next) => {
-  res.locals.success = req.flash("success");
-  res.locals.error = req.flash("error");
-  res.locals.currUser = req.user;   //login , signup
-  next();
+ res.locals.success = req.flash("success");
+ res.locals.error = req.flash("error");
+ res.locals.currUser = req.user; 
+ next();
 });
 
 
+// ============================================================================
+// ROUTES (Route Handlers)
+// ============================================================================
+
+// Root Route - Redirects to the main listings page
 app.get("/", (req, res) => {
-    res.redirect("/listings");
+ res.redirect("/listings");
 });
 
-
-
+// Use Router files for specific paths
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/" , userRouter);
+
 
 // ============================================================================
 // ERROR HANDLING MIDDLEWARE
 // ============================================================================
 
-// Handle invalid routes (404)
-app.all(/.*/, (req, res, next) => {
-  next(new ExpressError(404, "Page Not Found!"));
+// Handle invalid routes (404) - MUST BE THE LAST ROUTE DEFINITION
+app.all(/.*/, (req, res, next) => { // Use the RegEx /.*/ instead of "*"
+    next(new ExpressError(404, "Page Not Found!"));
 });
 
 // Centralized error handler
 app.use((err, req, res, next) => {
-  const { statusCode = 500, message = "Something Went Wrong!" } = err;
-  res.status(statusCode).render("error.ejs", { message });
+ const { statusCode = 500, message = "Something Went Wrong!" } = err;
+ res.status(statusCode).render("error.ejs", { message });
 });
 
-mongoose.connection.on("connected", () => {
-  console.log("Connected to DB:", mongoose.connection.name);
-  console.log("📂 Current DB name:", mongoose.connection.name);
-  console.log("📡 Host:", mongoose.connection.host);
-});
 
 // ============================================================================
 // SERVER SETUP
 // ============================================================================
 app.listen(8080, () => {
-  console.log("🚀 Server is running on http://localhost:8080");
+ console.log("🚀 Server is running on http://localhost:8080");
 });
