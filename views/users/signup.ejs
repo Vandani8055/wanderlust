@@ -23,7 +23,7 @@
       <div class="mb-3">
         <label for="password" class="form-label">Password:</label>
         <div class="password-field">
-          <input type="password" id="password" name="password" class="form-control" required />
+          <input type="password" id="password" name="password" class="form-control" minlength="8" required />
           <span class="fa fa-eye toggle-password"></span>
           <div class="invalid-feedback">Please provide a valid password.</div>
           <div class="valid-feedback">Filled</div>
@@ -33,7 +33,7 @@
       <div class="mb-3">
         <label for="confirmPassword" class="form-label">Confirm Password:</label>
         <div class="password-field">
-          <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required oninput="
+          <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" minlength="8" required oninput="
                             this.setCustomValidity(
                                 this.value !== document.getElementById('password').value 
                                 ? 'Passwords do not match' 
@@ -46,7 +46,7 @@
         </div>
       </div>
 
-      <button class="btn btn-success rounded-pill disabled">Submit</button>
+      <button class="btn btn-success rounded-pill "disabled>Submit</button>
     </form>
   </div>
 </div>

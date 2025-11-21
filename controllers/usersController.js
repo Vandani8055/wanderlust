@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const passport = require("passport"); // ✅ ADDED
 
 module.exports.renderSignupForm = (req, res) => {
   res.render("users/signup.ejs");
@@ -30,12 +31,12 @@ module.exports.renderLoginForm = (req, res) => {
 
 module.exports.login = (req, res) => {
   req.flash("success", "Welcome back to Wanderlust!");
-
   const redirectUrl = req.session.returnTo || "/listings";
   delete req.session.returnTo;
-
   res.redirect(redirectUrl);
 };
+
+
 
 module.exports.logout = (req, res, next) => {
   req.logout((err) => {

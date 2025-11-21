@@ -1,30 +1,23 @@
 // =============================================================================
-// FORM VALIDATION SCRIPT : BOOTSTAP
+// FORM VALIDATION SCRIPT : BOOTSTRAP (CORRECTED VERSION)
 // =============================================================================
-// Example starter JavaScript for disabling form submissions if there are invalid fields
+// ✅ FIXED: Removed syntax errors & invalid <script> tag
+// ✅ FIXED: Improved button enable/disable logic
+// ✅ FIXED: Eye toggle script now valid JS
 
 (function () {
   "use strict";
 
-  // ---------------------------------------------------------------------------
-  // Fetch all forms that we want to apply custom Bootstrap validation styles to
-  // ---------------------------------------------------------------------------
   const forms = document.querySelectorAll(".needs-validation");
 
-  // ---------------------------------------------------------------------------
-  // Loop over each form and prevent submission if validation fails
-  // ---------------------------------------------------------------------------
   Array.prototype.slice.call(forms).forEach(function (form) {
     form.addEventListener(
       "submit",
       function (event) {
-        // If form is invalid, prevent submission and stop event propagation
         if (!form.checkValidity()) {
           event.preventDefault();
           event.stopPropagation();
         }
-
-        // Always add Bootstrap's validation feedback class
         form.classList.add("was-validated");
       },
       false
@@ -32,58 +25,70 @@
   });
 })();
 
-// button disable script:
+// =============================================================================
+// BUTTON DISABLE / ENABLE SCRIPT (LIVE VALIDATION)
+// =============================================================================
 
-document.querySelectorAll(".needs-validation").forEach((form) => {
+document.querySelectorAll(".needs-validation").forEach(form => {
   const btn = form.querySelector(".btn-success");
 
-  // Initial check (in case fields are pre-filled)
-  if (btn) btn.disabled = !form.checkValidity();
-
-  // Attach listeners to all inputs/selects/textareas inside the form
   form.addEventListener("input", () => {
-    if (btn) {
-      const isValid = form.checkValidity();
-      btn.disabled = !isValid;
-      btn.classList.toggle("disabled", !isValid);
+    const pass = form.querySelector("#password");
+    const confirm = form.querySelector("#confirmPassword");
+
+    let valid = form.checkValidity();
+
+    if (confirm) {
+      confirm.setCustomValidity(
+        pass.value === confirm.value ? "" : "Passwords do not match"
+      );
+      valid = valid && pass.value === confirm.value;
     }
+
+    btn.disabled = !valid;
   });
 });
 
-// <!-- CALCULATING GST  -->
+
+
+
+
+// =============================================================================
+// GST PRICE TOGGLE SCRIPT
+// =============================================================================
 
 const toggle = document.getElementById("toggle-switch");
 
-toggle.addEventListener("change", () => {
-  const priceItems = document.querySelectorAll(".price-text");
+if (toggle) {
+  toggle.addEventListener("change", () => {
+    const priceItems = document.querySelectorAll(".price-text");
 
-  priceItems.forEach((item) => {
-    const base = Number(item.dataset.basePrice);
-    const gst = Number(item.dataset.gstPrice);
+    priceItems.forEach((item) => {
+      const base = Number(item.dataset.basePrice);
+      const gst = Number(item.dataset.gstPrice);
 
-    // DOM manipulation:
-    const finalPrice = item.querySelector(".price-amount");
-    const oldPrice = item.querySelector(".old-price");
-    const gstBadge = item.querySelector(".gst-badge");
+      const finalPrice = item.querySelector(".price-amount");
+      const oldPrice = item.querySelector(".old-price");
+      const gstBadge = item.querySelector(".gst-badge");
 
-    if (toggle.checked) {
-      // ON: Show price + GST
-      finalPrice.innerHTML = `₹${gst.toLocaleString("en-IN")}`;
-      oldPrice.style.display = "inline";
-      gstBadge.style.display = "inline";
-
-      oldPrice.style.textDecoration = "line-through";
-      oldPrice.style.opacity = "0.6";
-    } else {
-      // OFF: Show base price
-      finalPrice.innerHTML = `₹${base.toLocaleString("en-IN")}`;
-      oldPrice.style.display = "none";
-      gstBadge.style.display = "none";
-    }
+      if (toggle.checked) {
+        finalPrice.innerHTML = `₹${gst.toLocaleString("en-IN")}`;
+        oldPrice.style.display = "inline";
+        gstBadge.style.display = "inline";
+        oldPrice.style.textDecoration = "line-through";
+        oldPrice.style.opacity = "0.6";
+      } else {
+        finalPrice.innerHTML = `₹${base.toLocaleString("en-IN")}`;
+        oldPrice.style.display = "none";
+        gstBadge.style.display = "none";
+      }
+    });
   });
-});
+}
 
-// For wish listing :
+// =============================================================================
+// WISHLIST FUNCTIONALITY
+// =============================================================================
 
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".wishlist-btn").forEach((btn) => {
@@ -111,16 +116,17 @@ function toggleWishlist(btn) {
   icon.classList.toggle("fa-regular");
 }
 
-// Eve button close open :
-<script>
-  document.querySelectorAll(".toggle-password").forEach((icon) ={" "}
-  {icon.addEventListener("click", () => {
-    let input = icon.previousElementSibling;
+// =============================================================================
+// 👁️ PASSWORD EYE TOGGLE (COMPATIBLE WITH LIVE CHECK)
+// =============================================================================
+
+document.querySelectorAll(".toggle-password").forEach((icon) => {
+  icon.addEventListener("click", () => {
+    const input = icon.previousElementSibling;
+    if (!input) return;
 
     input.type = input.type === "password" ? "text" : "password";
-
     icon.classList.toggle("fa-eye-slash");
     icon.classList.toggle("fa-eye");
-  })}
-  )
-</script>;
+  });
+});
