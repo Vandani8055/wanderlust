@@ -30,13 +30,12 @@ module.exports.renderLoginForm = (req, res) => {
 
 module.exports.login = (req, res) => {
   req.flash("success", "Welcome back to Wanderlust!");
-  
+
   const redirectUrl = req.session.returnTo || "/listings";
   delete req.session.returnTo;
-  
+
   res.redirect(redirectUrl);
 };
-
 
 module.exports.logout = (req, res, next) => {
   req.logout((err) => {
@@ -57,7 +56,6 @@ module.exports.showAllWishlist = async (req, res) => {
   });
 };
 
-
 module.exports.wishlistAddRemove = async (req, res) => {
   if (!req.user) return res.status(401).json({ error: "Login required" });
 
@@ -72,4 +70,4 @@ module.exports.wishlistAddRemove = async (req, res) => {
 
   await user.save();
   res.json({ wishlist: user.wishlist });
-}
+};

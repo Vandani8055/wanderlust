@@ -1,77 +1,102 @@
  <% layout('/layouts/boilerplate') %>
-<!-- occupie 12 col -->
-<div class="row mt-3">
-<!-- occupies 7 8 col -->
- <div class="col-8 offset-2">
-  <h3>Create new listing:</h3>
-  <form action="/listings" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
-    <div class="mb-3">
-      <label for="title" class="form-lable">Title:</label>
-      <input name="listing[title]" placeholder="Add a catchy title" type="text" class="form-control" required/>
-      <div class="valid-feedback">Title looks good!</div>
-    </div>
-    
-    <div class="mb-3">
-      <label for="description" class="form-lable">Description:</label>
-      <textarea name="listing[description]" placeholder="Enter description" class="form-control" required></textarea>
-      <div class="invalid-feedback">Please enter a short description!</div>
-    </div>
-    
-  
-    <div class="mb-3">
-    <label for="image" class="form-label">Upload Image</label>
-    <input type="file" name="listing[image]" class="form-control" required>
-    </div>
+ <!-- occupie 12 col -->
+ <div class="row mt-3">
+   <!-- occupies 7 8 col -->
+   <div class="col-8 offset-2">
+     <h3>Create new listing:</h3>
+     <form action="/listings" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
+       <div class="mb-3">
+         <label for="title" class="form-lable">Title:</label>
+         <input name="listing[title]" placeholder="Add a catchy title" type="text" class="form-control" required />
+         <div class="invalid-feedback">Please add title!</div>
+         <div class="valid-feedback">Title looks good!</div>
+
+       </div>
+
+       <div class="mb-3">
+         <label for="description" class="form-lable">Description:</label>
+         <textarea name="listing[description]" placeholder="Enter description" class="form-control" required></textarea>
+         <div class="invalid-feedback">Please enter a short description!</div>
+       </div>
+
+
+       <div class="mb-3">
+         <label for="image" class="form-label">Upload Image</label>
+         <input type="file" name="listing[image]" class="form-control" required>
+         <div class="invalid-feedback">Please upload image!</div>
+       </div>
 
 
 
-    <div class="row">
-      <div class="mb-3 col-md-4">
-        <label for="price" class="form-lable">Price:</label>
-        <input name="listing[price]" placeholder="1200"  class="form-control" required/>
-        <div class="invalid-feedback">Price should be valid!</div>
-      </div>
+       <div class="row">
+         <div class="mb-3 col-md-4">
+           <label for="price" class="form-lable">Price:</label>
+           <input name="listing[price]" placeholder="1200" class="form-control" required />
+           <div class="invalid-feedback">Price should be valid!</div>
+         </div>
 
-      <div class="mb-3 col-md-8">
-        <label for="country" class="form-lable">Country:</label>
-        <input name="listing[country]" placeholder="India" type="text" class="form-control" required/>
-        <div class="invalid-feedback">Country name should be valid!</div>
-      </div>
-    </div>
-
-
-    <div class="mb-3">
-  <label for="location">Location</label>
-  <input
-    type="text"
-    name="listing[location]"
-    id="location"
-    class="form-control"
-    placeholder="Enter city or place"
-    required
-  />
-</div>
+         <div class="mb-3 col-md-8">
+           <label for="country" class="form-lable">Country:</label>
+           <input name="listing[country]" placeholder="India" type="text" class="form-control" required />
+           <div class="invalid-feedback">Country name should be valid!</div>
+         </div>
+       </div>
 
 
-<div class="mb-3">
-  <label for="tags" class="form-label">Tags</label>
-  <select name="listing[tags]" id="tags" class="form-select" multiple required>
-    <option value="brand-new">Brand New</option>
-    <option value="trending">Trending</option>
-    <option value="beach">Beach</option>
-    <option value="arctic">Arctic</option>
-    <option value="mountain">Mountains</option>
-    <option value="pools">Amazing Pools</option>
-    <option value="camping">Camping</option>
-    <option value="tiny-houses">Tiny Houses</option>
-    <option value="luxury-hotels">Luxury Hotels</option>
-  </select>
-  <div class="form-text">Hold CTRL (Windows) or CMD (Mac) to select multiple.</div>
-</div>
+       <div class="mb-3">
+         <label for="location">Location</label>
+         <input type="text" name="listing[location]" id="location" class="form-control" placeholder="Enter city or place" required />
+         <div class="invalid-feedback">Please enter location!</div>
+       </div>
 
-  
 
-    <button class="btn btn-dark add-btn mb-3">Add</button><br><br>
-  </form>
-</div>
-</div>
+       <!-- Tags as Checkboxes -->
+       <div class="mb-3">
+         <label class="form-label">Tags</label>
+         <div class="d-flex flex-wrap gap-2">
+           <div class="form-check">
+             <input class="form-check-input" type="checkbox" name="listing[tags][]" value="brand-new" id="tag-brand-new">
+             <label class="form-check-label" for="tag-brand-new">Brand New</label>
+           </div>
+           <div class="form-check">
+             <input class="form-check-input" type="checkbox" name="listing[tags][]" value="trending" id="tag-trending">
+             <label class="form-check-label" for="tag-trending">Trending</label>
+           </div>
+           <div class="form-check">
+             <input class="form-check-input" type="checkbox" name="listing[tags][]" value="beach" id="tag-beach">
+             <label class="form-check-label" for="tag-beach">Beach</label>
+           </div>
+           <div class="form-check">
+             <input class="form-check-input" type="checkbox" name="listing[tags][]" value="arctic" id="tag-arctic">
+             <label class="form-check-label" for="tag-arctic">Arctic</label>
+           </div>
+           <div class="form-check">
+             <input class="form-check-input" type="checkbox" name="listing[tags][]" value="mountain" id="tag-mountain">
+             <label class="form-check-label" for="tag-mountain">Mountains</label>
+           </div>
+           <div class="form-check">
+             <input class="form-check-input" type="checkbox" name="listing[tags][]" value="pools" id="tag-pools">
+             <label class="form-check-label" for="tag-pools">Amazing Pools</label>
+           </div>
+           <div class="form-check">
+             <input class="form-check-input" type="checkbox" name="listing[tags][]" value="camping" id="tag-camping">
+             <label class="form-check-label" for="tag-camping">Camping</label>
+           </div>
+           <div class="form-check">
+             <input class="form-check-input" type="checkbox" name="listing[tags][]" value="tiny-houses" id="tag-tiny-houses">
+             <label class="form-check-label" for="tag-tiny-houses">Tiny Houses</label>
+           </div>
+           <div class="form-check">
+             <input class="form-check-input" type="checkbox" name="listing[tags][]" value="luxury-hotels" id="tag-luxury-hotels">
+             <label class="form-check-label" for="tag-luxury-hotels">Luxury Hotels</label>
+           </div>
+         </div>
+
+       </div>
+
+
+
+       <button class="btn btn-dark add-btn mb-3">Add</button><br><br>
+     </form>
+   </div>
+ </div>

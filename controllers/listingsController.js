@@ -1,6 +1,6 @@
 const Listing = require("../models/listing");
 const { geocodeNominatim } = require("../utils/geocode");
-const Fuse = require("fuse.js");        //for loose search in search bar 
+const Fuse = require("fuse.js"); //for loose search in search bar
 // const geocode = require("./utils/geocode");
 const pluralize = require("pluralize"); // ⬅️ add this      / / for tags search loosly
 
@@ -20,16 +20,11 @@ module.exports.index = async (req, res) => {
   res.render("listings/index.ejs", { allListings, tags: tags || "all" });
 };
 
-
-
 // New route :
 module.exports.renderNewForm = (req, res) => {
   // router.get("/listings/new" , (req, res) => { not use "/" bcz view create above
   res.render("listings/new.ejs");
 };
-
-
-
 
 // Show Listhing : (one)
 module.exports.showListing = async (req, res) => {
@@ -47,19 +42,36 @@ module.exports.showListing = async (req, res) => {
 
 module.exports.createListing = async (req, res) => {
   try {
-    const { title, description, location, price , tags : []} = req.body.listing;
-    const geoData = await geocodeNominatim(location);
-    console.log("🌍 Geocoded result:", geoData);
+    let { title, description, location, price, country, tags } =
+      req.body.listing;
 
+    // Normalize location
+    location = location
+      .trim()
+      .toLowerCase()
+      .split(/\s+/)
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+
+    // // Ensure tags is always array
+    // if (tags && !Array.isArray(tags)) tags = [tags];
+    // tags = tags.map(t => t.trim().toLowerCase());
+
+    // Geocode
     let geometry = { type: "Point", coordinates: [] };
-    if (geoData) {
-      geometry.coordinates = [geoData.lon, geoData.lat];
+    try {
+      const geoData = await geocodeNominatim(location);
+      if (geoData) geometry.coordinates = [geoData.lon, geoData.lat];
+    } catch (err) {
+      console.warn("⚠️ Geocode failed, saving listing without geometry:", err);
     }
 
+    // Save listing
     const newListing = new Listing({
       title,
       description,
       location,
+      tags,
       price,
       country,
       geometry,
@@ -70,11 +82,6 @@ module.exports.createListing = async (req, res) => {
       },
     });
 
-    if (req.body.tags) {
-  req.body.tags = req.body.tags.map(t => t.trim().toLowerCase());
-}
-
-
     await newListing.save();
     req.flash("success", "Successfully created a new listing!");
     res.redirect(`/listings/${newListing._id}`);
@@ -84,7 +91,6 @@ module.exports.createListing = async (req, res) => {
     res.redirect("/listings/new");
   }
 };
-
 // render edit form :
 module.exports.renderEditForm = async (req, res) => {
   const { id } = req.params;
@@ -109,16 +115,14 @@ module.exports.updateListing = async (req, res) => {
     let filename = req.file.filename;
     listing.image = { url, filename };
     if (req.body.tags) {
-  req.body.tags = req.body.tags.map(t => t.trim().toLowerCase());
-}
+      req.body.tags = req.body.tags.map((t) => t.trim().toLowerCase());
+    }
 
     await listing.save();
   }
   req.flash("success", "Listing Updated! 🎉");
   res.redirect(`/listings/${id}`);
 };
-
-
 
 // Delete listing :
 module.exports.deleteListing = async (req, res) => {

@@ -39,8 +39,6 @@ router
   )
   .delete(isLoggedIn, isOwner, wrapAsync(listingController.deleteListing));
 
-
-  
 // Edit Listing Form
 router.get(
   "/:id/edit",
@@ -48,8 +46,5 @@ router.get(
   isOwner,
   wrapAsync(listingController.renderEditForm)
 );
-
-
-
 
 module.exports = router;

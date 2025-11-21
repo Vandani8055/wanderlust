@@ -6,7 +6,7 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
 
-  username:String,
+  username: String,
   wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Listing" }],
 });
 // Tell passport-local-mongoose to use "email" as username field

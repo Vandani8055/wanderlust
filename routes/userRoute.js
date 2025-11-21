@@ -26,8 +26,7 @@ router
     usersController.login
   );
 
-
-  // wishlist 
+// wishlist
 router.post("/wishlist/:listingId", usersController.wishlistAddRemove);
 router.get("/wishlist", isLoggedIn, usersController.showAllWishlist);
 

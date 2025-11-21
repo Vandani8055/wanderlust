@@ -1,6 +1,4 @@
-<nav
-  class="navbar navbar-expand-md navbar-light bg-body-light border-bottom sticky-top"
->
+<nav class="navbar navbar-expand-md navbar-light bg-body-light border-bottom sticky-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="/listings">
       <i class="fa-solid fa-compass"></i>
@@ -13,9 +11,8 @@
 
 
 
-   
-      
-<!-- wishlist -->
+
+    <!-- wishlist -->
     <a href="/wishlist" class="nav-wishlist">
       <i class="fa-solid fa-heart"></i>
       <% if (currUser?.wishlist?.length) { %>
@@ -27,19 +24,10 @@
 
 
 
-<!-- search -->
+    <!-- search -->
     <div class="navbar-nav mx-auto">
-      <form
-        class="d-flex align-items-center"
-        method="GET"
-        action="/listings/search"
-      >
-        <input
-          class="form-control me-2"
-          type="search"
-          placeholder="Search destinations"
-          name="q"
-        />
+      <form class="d-flex align-items-center" method="GET" action="/listings/search">
+        <input class="form-control me-2" type="search" placeholder="Search destinations" name="q" />
         <button class="btn btn-search" type="submit">
           <i class="fa-solid fa-magnifying-glass mt-1"></i>Search
         </button>

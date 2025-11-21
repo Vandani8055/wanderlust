@@ -13,10 +13,10 @@
       <p>Brand new</p>
     </div>
 
-    <div class="filter" data-tag="trending">
+    <!-- <div class="filter" data-tag="trending">
       <div><i class="fa-solid fa-fire"></i></div>
-      <p>Trending</p>
-    </div>
+      <p>Cheapest</p>
+    </div> -->
 
     <div class="filter" data-tag="beach">
       <div><i class="fa-solid fa-umbrella-beach"></i></div>
@@ -66,28 +66,18 @@
   <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-1 mt-3">
     <% for (let listing of allListings) { %>
     <div class="col mb-4 listing-card" data-tags='<%= JSON.stringify(listing.tags) %>'>
-     <a href="/listings/<%= listing._id %>" class="listing-link">
+      <a href="/listings/<%= listing._id %>" class="listing-link">
 
-        <div
-          class="card attractive-card hover-lift shadow-lg rounded-4 overflow-hidden"
-        >
+        <div class="card attractive-card hover-lift shadow-lg rounded-4 overflow-hidden">
           <div class="position-relative">
-            <img
-              src="<%= listing.image.url %>"
-              alt="<%= listing.title %>"
-              class="card-img-top listing-img"
-            />
+            <img src="<%= listing.image.url %>" alt="<%= listing.title %>" class="card-img-top listing-img" />
 
             <!-- wishlist btn  -->
             <button class="wishlist-btn border-0" data-id="<%= listing._id %>">
-              <i
-                class="<%= currUser && currUser.wishlist.includes(listing._id) ? 'fa-solid' : 'fa-regular' %> fa-heart heart-icon"
-              ></i>
+              <i class="<%= currUser && currUser.wishlist.includes(listing._id) ? 'fa-solid' : 'fa-regular' %> fa-heart heart-icon"></i>
             </button>
 
-            <span
-              class="position-absolute px-3 py-2 badge text-white fw-bold shadow-sm price-tag"
-            >
+            <span class="position-absolute px-3 py-2 badge text-white fw-bold shadow-sm price-tag">
               &#x20B9;<%= listing.price.toLocaleString("en-IN") %> / night
             </span>
           </div>
@@ -98,12 +88,8 @@
 
             <p class="card-text text-muted"><%= listing.location %></p>
 
-         
-            <p
-              class="card-text price-text"
-              data-base-price="<%= listing.price %>"
-              data-gst-price="<%= (listing.price * 1.18).toFixed(0) %>"
-            >
+
+            <p class="card-text price-text" data-base-price="<%= listing.price %>" data-gst-price="<%= (listing.price * 1.18).toFixed(0) %>">
               <span class="final-price fw-bold text-dark price-amount">
                 ₹<%= listing.price.toLocaleString("en-IN") %>
               </span>
@@ -112,10 +98,7 @@
                 ₹<%= listing.price.toLocaleString("en-IN") %>
               </span>
 
-              <span
-                class="gst-badge badge bg-success ms-2"
-                style="display: none"
-              >
+              <span class="gst-badge badge bg-success ms-2" style="display: none">
                 +18% GST
               </span>
             </p>
@@ -131,18 +114,19 @@
 
 
 
-
-
+<!-- multiple tags display in created listing and filter in navbar  -->
 <script>
-  const n = t => (t||"").toLowerCase().replace(/[^a-z]/g,"").replace(/(es|s)$/,"");
+  const n = t => (t || "").toLowerCase().replace(/[^a-z]/g, "").replace(/(es|s)$/, "");
 
   document.querySelectorAll(".filter").forEach(f =>
     f.onclick = () => {
       const sel = n(f.dataset.tag);
       document.querySelectorAll(".listing-card").forEach(card => {
         let tags = [];
-        try { tags = JSON.parse(card.dataset.tags||"[]").map(n); } catch(e){}
-        card.style.display = sel==="all" || tags.includes(sel) ? "" : "none";
+        try {
+          tags = JSON.parse(card.dataset.tags || "[]").map(n);
+        } catch (e) {}
+        card.style.display = sel === "all" || tags.includes(sel) ? "" : "none";
       });
     }
   );
@@ -150,16 +134,3 @@
 
 
 
-<!-- <style>
-  #filters .filter {
-    cursor: pointer;
-    padding: 5px 10px;
-    border-radius: 12px;
-    transition: 0.25s ease;
-  }
-  #filters .filter.active {
-    background: #222;
-    color: white;
-    transform: scale(1.08);
-  }
-</style> -->

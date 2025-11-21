@@ -429,61 +429,78 @@ h4 {
   font-weight: 600;
 }
 
+/* Eye button */
 
+.password-field {
+  position: relative;
+}
 
+.toggle-password {
+  position: absolute;
+  right: 15px;
+  top: 45%;
+  transform: translateY(-30%);
+  cursor: pointer;
+  color: #888;
+  z-index: 2;
+  font-size: 1.1rem;
+  transition: color 0.1s ease-in-out;
+}
+
+.toggle-password:hover {
+  color: #555;
+}
+
+.password-field .form-control {
+  padding-right: 40px;
+}
 
 /* =================================
   WISHLIST:
    ================================= */
 
+.wishlist-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  z-index: 10;
+  height: 30px;
+  width: 30px;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
 
-              .wishlist-btn {
-                position: absolute;
-                top: 10px;
-                right: 15px;
-                z-index: 10;
-                height: 30px;
-                width: 30px;
-                display: flex;
-                align-items: center;
-                background: #fff;
-                border: none;
-                border-radius: 50%;
-                cursor: pointer;
-              }
+.wishlist-btn i {
+  font-size: 15px;
+  color: #000;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+}
 
-              .wishlist-btn i {
-                font-size: 15px;
-                color: #000;
-                text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
-              }
+.wishlist-active i {
+  color: #fe424d !important;
+  font-weight: 900;
+}
 
-              .wishlist-active i {
-                color: #fe424d !important;
-                font-weight: 900;
-              }
-            
-
-              .nav-wishlist {
-        position: relative;
-        font-size: 22px;
-        color: #fe424d !important;
-      }
-      .wl-count {
-        position: absolute;
-        top: -6px;
-        right: -8px;
-        background: #fe424d;
-        color: #fff;
-        font-size: 11px;
-        padding: 1px 6px;
-        border-radius: 50%;
-        font-weight: 700;
-      }
-    
-
-
-
+.nav-wishlist {
+  position: relative;
+  font-size: 22px;
+  color: #fe424d !important;
+}
+.wl-count {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: #fe424d;
+  color: #fff;
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 50%;
+  font-weight: 700;
+}
 
 /* =================================
    RESPONSIVE DESIGN
