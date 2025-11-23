@@ -3,10 +3,10 @@
 <div class="container-fluid mt-4">
   <div id="filters">
 
-    <!-- <div class="filter" data-tag="all">
+    <div class="filter" data-tag="all">
       <div><i class="fa-solid fa-globe"></i></div>
       <p>All</p>
-    </div> -->
+    </div>
 
     <div class="filter" data-tag="brand-new">
       <div><i class="fa-solid fa-face-grin-hearts"></i></div>
@@ -77,9 +77,9 @@
               <i class="<%= currUser && currUser.wishlist.includes(listing._id) ? 'fa-solid' : 'fa-regular' %> fa-heart heart-icon"></i>
             </button>
 
-            <span class="position-absolute px-3 py-2 badge text-white fw-bold shadow-sm price-tag">
+            <!-- <span class="position-absolute px-3 py-2 badge text-white fw-bold shadow-sm price-tag">
               &#x20B9;<%= listing.price.toLocaleString("en-IN") %> / night
-            </span>
+            </span> -->
           </div>
 
           <!-- gor gst : -->
