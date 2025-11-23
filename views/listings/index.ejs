@@ -115,7 +115,7 @@
 
 
 <!-- multiple tags display in created listing and filter in navbar  -->
-<script>
+<!-- <script>
   const n = t => (t || "").toLowerCase().replace(/[^a-z]/g, "").replace(/(es|s)$/, "");
 
   document.querySelectorAll(".filter").forEach(f =>
@@ -130,7 +130,28 @@
       });
     }
   );
-</script>
+</script> -->
 
+
+<script>
+  const normalize = t => (t || "").toLowerCase().replace(/[^a-z]/g, "").replace(/(es|s)$/, "");
+
+  document.querySelectorAll(".filter").forEach(f => {
+    f.onclick = () => {
+      // Remove active from all filters
+      document.querySelectorAll(".filter").forEach(btn => btn.classList.remove("active"));
+
+      // Add active to clicked filter
+      f.classList.add("active");
+
+      const sel = normalize(f.dataset.tag);
+      document.querySelectorAll(".listing-card").forEach(card => {
+        let tags = [];
+        try { tags = JSON.parse(card.dataset.tags || "[]").map(normalize); } catch(e) {}
+        card.style.display = sel === "all" || tags.includes(sel) ? "" : "none";
+      });
+    };
+  });
+</script>
 
 

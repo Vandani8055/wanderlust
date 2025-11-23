@@ -145,10 +145,22 @@ nav.navbar {
   transition: opacity 0.2s, transform 0.2s;
   flex-shrink: 0;
 }
+
+.filter.active {
+    color: black;
+    
+    opacity: 1;
+  transform: scale(1.05);
+  }
+
 .filter:hover {
   opacity: 1;
   transform: scale(1.05);
 }
+
+
+
+
 
 .filter div {
   font-size: 1.2rem;
