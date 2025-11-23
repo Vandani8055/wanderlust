@@ -141,7 +141,7 @@ module.exports.searchListing = async (req, res) => {
     const listings = await Listing.find({});
 
     const fuse = new Fuse(listings, {
-      keys: ["title", "description"], // fields you want to search
+      keys: ["title", "description", "tags"], // fields you want to search
       threshold: 0.4, // smaller = strict, bigger = loose match
     });
 

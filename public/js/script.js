@@ -121,12 +121,20 @@ function toggleWishlist(btn) {
 // =============================================================================
 
 document.querySelectorAll(".toggle-password").forEach((icon) => {
+  // Set initial icon state to "eye-slash" (closed)
+  icon.classList.remove("fa-eye");
+  icon.classList.add("fa-eye-slash");
+
   icon.addEventListener("click", () => {
     const input = icon.previousElementSibling;
     if (!input) return;
 
+    // Toggle input type
     input.type = input.type === "password" ? "text" : "password";
-    icon.classList.toggle("fa-eye-slash");
+
+    // Toggle icon between open and closed
     icon.classList.toggle("fa-eye");
+    icon.classList.toggle("fa-eye-slash");
   });
 });
+
