@@ -147,20 +147,16 @@ nav.navbar {
 }
 
 .filter.active {
-    color: black;
-    
-    opacity: 1;
+  color: black;
+
+  opacity: 1;
   transform: scale(1.05);
-  }
+}
 
 .filter:hover {
   opacity: 1;
   transform: scale(1.05);
 }
-
-
-
-
 
 .filter div {
   font-size: 1.2rem;
@@ -212,6 +208,7 @@ nav.navbar {
 
 .attractive-card {
   border: none;
+  overflow: hidden;
   transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
   background-color: #fff;
   /* width: 18rem; smaller width */
@@ -228,13 +225,14 @@ nav.navbar {
 
 .listing-img {
   height: 10rem;
+  border-radius: inherit;
   object-fit: cover;
   transition: transform 0.4s ease;
 }
 .attractive-card:hover .listing-img {
-  transform: scale(1.05);
+  transform: scale(1);
   filter: brightness(1);
-  border-radius: 1rem !important;
+  
 }
 
 .price-tag {
