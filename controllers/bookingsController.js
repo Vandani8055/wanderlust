@@ -105,3 +105,11 @@ module.exports.bookingSuccess = async (req, res) => {
     res.status(500).send("Booking process failed");
   }
 };
+
+
+
+
+
+
+
+

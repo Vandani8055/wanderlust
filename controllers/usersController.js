@@ -1,16 +1,21 @@
 const User = require("../models/userModel");
 const passport = require("passport"); // ✅ ADDED
+const sendWelcomeEmail = require('../nodemailer');
 
 module.exports.renderSignupForm = (req, res) => {
   res.render("users/signup.ejs");
 };
 
-module.exports.signup = async (req, res) => {
+module.exports.signup = async (req, res, next) => {
   try {
     let { email, password } = req.body;
     const newUser = new User({ email });
     const registerUser = await User.register(newUser, password);
     console.log(registerUser);
+
+    // Send welcome email
+    sendWelcomeEmail(email).catch(err => console.log("Email error:", err));
+
     // auto login when sign up:
     req.login(registerUser, (err) => {
       if (err) {

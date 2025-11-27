@@ -7,4 +7,6 @@ router.get("/success", isLoggedIn, bookingsController.bookingSuccess);
 router.get("/:listingId", isLoggedIn, bookingsController.showBookingForm);
 router.post("/:listingId", isLoggedIn, bookingsController.createStripeSession);
 
+
+
 module.exports = router;
