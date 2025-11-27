@@ -1,0 +1,438 @@
+<%/* SAFE PROFILE PAGE - FIXED VERSION - Prevents: Cannot read properties of
+undefined (reading 'length') - Handles empty data with friendly messages - Uses
+theme: linear-gradient(90deg, #ff385c, #ff7a8a) */%>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Profile</title>
+  </head>
+  <body>
+    <% const listings = user.listings || []; const wishlist = user.wishlist ||
+    []; const reviews = user.reviews || []; const bookings = user.bookings ||
+    []; %>
+
+    <div class="profile-wrapper">
+      <div class="profile-card">
+        <!-- HEADER -->
+        <div class="profile-header">
+          <div class="profile-image">
+            <img
+              src="<%= user.profileImage || 'https://via.placeholder.com/90' %>"
+            />
+          </div>
+          <div class="profile-info">
+            <h2><%= user.username %></h2>
+            <span><%= user.email %></span>
+            <div class="profile-bio">
+              <%= user.bio || 'Traveller & Explorer' %>
+            </div>
+          </div>
+        </div>
+
+        <!-- STATS -->
+        <div class="profile-stats">
+          <div class="stat-box">
+            <strong><%= listings.length %></strong>
+            <span>Listings</span>
+          </div>
+          <div class="stat-box">
+            <strong><%= bookings.length %></strong>
+            <span>Bookings</span>
+          </div>
+          <div class="stat-box">
+            <strong><%= reviews.length %></strong>
+            <span>Reviews</span>
+          </div>
+        </div>
+
+        <!-- ACTION -->
+        <div class="profile-actions">
+          <a href="/edit" class="edit-btn">Edit Profile</a>
+        </div>
+
+        <!-- TABS -->
+        <button class="tab-btn active" onclick="showSection('listings', this)">
+          Listings
+        </button>
+        <button class="tab-btn" onclick="showSection('wishlist', this)">
+          Wishlist
+        </button>
+        <button class="tab-btn" onclick="showSection('reviews', this)">
+          Reviews
+        </button>
+        <button class="tab-btn" onclick="showSection('bookings', this)">
+          Bookings
+        </button>
+
+        <!-- CONTENT -->
+        <div class="section-content">
+          <!-- LISTINGS -->
+          <div id="listings">
+            <% if(listings.length === 0){ %>
+            <div class="empty-msg">You haven’t added any listings yet 🌴</div>
+            <% } else { %> <% listings.forEach(item => { %>
+            <div class="card">
+              <span><%= item.title %></span>
+              <a href="/listings/<%= item._id %>" class="view-btn">View</a>
+            </div>
+            <% }) %> <% } %>
+          </div>
+
+          <!-- WISHLIST -->
+          <div id="wishlist" style="display: none">
+            <% if(wishlist.length === 0){ %>
+            <div class="empty-msg">
+              Your wishlist is waiting for dream stays ❤️
+            </div>
+            <% } else { %> <% wishlist.forEach(item => { %>
+            <div class="card">
+              <span><%= item.title %></span>
+              <a href="/listings/<%= item._id %>">View</a>
+            </div>
+            <% }) %> <% } %>
+          </div>
+
+          <!-- REVIEWS -->
+          <div id="reviews" style="display: none">
+            <% if(reviews.length === 0){ %>
+            <div class="empty-msg">
+              <p>No reviews yet 🌟</p>
+            </div>
+            <% } %> <% reviews.forEach(r => { %>
+            <div class="card review-card">
+              <h5><%= r.listing?.title || "Listing removed" %></h5>
+              <p>⭐ <%= r.rating %></p>
+              <p><%= r.comment %></p>
+            </div>
+            <% }) %>
+          </div>
+
+          <!-- BOOKINGS -->
+          <!-- BOOKINGS -->
+          <div id="bookings" style="display: none">
+            <% if(bookings.length === 0){ %>
+            <div class="empty-msg">
+              No bookings yet — plan your next trip ✈️
+            </div>
+            <% } else { %> <% bookings.forEach(b => { %>
+            <div class="card">
+              <div>
+                <strong><%= b.listing?.title || "Listing removed" %></strong
+                ><br />
+                <small
+                  >Check-in: <%= new Date(b.checkIn).toLocaleDateString()
+                  %></small
+                >
+              </div>
+
+              <% if(b.listing){ %>
+              <a class="view-btn" href="/listings/<%= b.listing._id %>">
+                View
+              </a>
+              <% } else { %>
+              <span style="color: #999">Unavailable</span>
+              <% } %>
+            </div>
+            <% }) %> <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<style>
+  /*
+|---------------------------------------------------------
+| VERSION 5 REWORKED: PINK GRADIENT FEED LAYOUT
+| Accent Theme: linear-gradient(90deg, #ff385c, #ff7a8a)
+| Primary Color: #ff385c (Bright Pink/Red)
+|---------------------------------------------------------
+*/
+
+/* --- Global & Layout --- */
+body {
+    margin: 0;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background: #fdfdfd; /* Pure white background feel */
+    color: #1c1c1c;
+}
+
+.profile-wrapper {
+    min-height: 100vh;
+    padding: 30px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.profile-card {
+    width: 100%;
+    max-width: 700px; /* Narrower, fixed-width for a 'feed' feel */
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+}
+
+/* --- Header & Identity --- */
+.profile-header {
+    /* Accent color bar at the very top */
+    border-top: 5px solid #ff385c;
+    background: #fff;
+    padding: 30px 40px 10px;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    color: #1c1c1c;
+}
+
+.profile-image img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid #f0f0f0;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-image img:hover {
+    transform: scale(1.05);
+}
+
+.profile-info h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.profile-info span {
+    font-size: 16px;
+    color: #666;
+    opacity: 1;
+    margin-top: 2px;
+}
+
+.profile-bio {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #444;
+    background: #fff5f6; /* Very light pink background */
+    padding: 8px 15px;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+/* --- Stats Section --- */
+.profile-stats {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px 40px;
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.stat-box {
+    text-align: center;
+    padding: 0 10px;
+}
+
+.stat-box strong {
+    font-size: 24px;
+    font-weight: 800;
+    color: #ff385c; /* Primary Pink Accent */
+    line-height: 1.2;
+}
+
+.stat-box span {
+    font-size: 13px;
+    color: #777;
+    margin-top: 4px;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* --- Actions & Button --- */
+.profile-actions {
+    text-align: right;
+    padding: 15px 40px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.edit-btn {
+    /* Using your requested gradient */
+    background: linear-gradient(90deg, #ff385c, #ff7a8a);
+    color: white;
+    padding: 8px 25px;
+    border-radius: 4px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    border: none;
+}
+
+.edit-btn:hover {
+    /* Darker shade/stronger shadow on hover */
+    box-shadow: 0 4px 10px rgba(255, 56, 92, 0.4);
+    transform: translateY(-1px);
+}
+
+/* --- Tabs & Content --- */
+.section-tabs {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 2px solid #f0f0f0;
+    background: #fff;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 18px 10px;
+    border: none;
+    background: none;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    font-size: 15px;
+    transition: color 0.3s;
+}
+
+.tab-btn:hover {
+    color: #ff385c;
+}
+
+.tab-btn.active {
+    color: #ff385c;
+    border-bottom: 3px solid #ff385c;
+}
+
+.section-content {
+    padding: 20px 40px;
+    min-height: 300px;
+}
+
+/* --- Card Styles (Feed Items) --- */
+.card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 18px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    border-color: #ff7a8a; /* Highlight border with lighter pink on hover */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.empty-msg {
+    padding: 40px;
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    font-size: 16px;
+}
+
+/* --- View Button (Accent Color) --- */
+.view-btn {
+    /* Using your requested gradient */
+    background: linear-gradient(90deg, #ff385c, #ff7a8a);
+    color: white;
+    margin-top: 0;
+    height: 30px;
+    width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.3s ease;
+    flex-shrink: 0;
+}
+
+.view-btn:hover {
+    transform: none;
+    /* Stronger shadow using the primary color */
+    box-shadow: 0 3px 10px rgba(255, 56, 92, 0.4);
+    /* Slightly darker/more prominent gradient */
+    background: linear-gradient(90deg, #e03250, #e66f7e);
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .profile-card {
+        border-radius: 0;
+    }
+    .profile-header, .profile-stats, .profile-actions, .section-content {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    .profile-info {
+        margin-top: 15px;
+    }
+}
+</style>
+
+<script>
+  function showSection(id, btn) {
+    // Hide all sections
+    document
+      .querySelectorAll(".section-content > div")
+      .forEach((sec) => (sec.style.display = "none"));
+
+    // Show selected section
+    document.getElementById(id).style.display = "block";
+
+    // Remove active from all buttons
+    document
+      .querySelectorAll(".tab-btn")
+      .forEach((b) => b.classList.remove("active"));
+
+    // Add active to clicked button
+    btn.classList.add("active");
+  }
+</script>
+
+
+
+
+<style>
+  .view-btn {
+  background: linear-gradient(90deg, #ff385c, #ff7a8a);
+  color: white;
+  margin-top: 0.5rem;
+  height: 1.5rem;
+  width: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.view-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(255,56,92,0.3);
+}
+
+</style>

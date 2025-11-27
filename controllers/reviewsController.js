@@ -1,19 +1,41 @@
-const Listing = require("../models/listing.js");
-const Review = require("../models/review.js");
+const Listing = require("../models/listingModel.js");
+const Review = require("../models/reviewModel.js");
+const User = require('./../models/userModel.js');
 
 module.exports.createReview = async (req, res) => {
-  let listing = await Listing.findById(req.params.id);
-  let newReview = new Review(req.body.review);
-  //when came new review then store "author":
-  newReview.author = req.user._id; // login user is author of review:
-  console.log(newReview);
-  listing.reviews.push(newReview); // This adds the new Review document's _id to the listing's reviews array
+
+  const listing = await Listing.findById(req.params.id);
+
+  /* ================= 🎯 CRITICAL CHANGE START ================= */
+
+  const newReview = new Review({
+    rating: req.body.review.rating,
+    comment: req.body.review.comment,
+    author: req.user._id,
+    listing: listing._id     // ✅✅ THIS IS THE MOST IMPORTANT LINE
+  });
+
+  /* ================= 🎯 CRITICAL CHANGE END =================== */
+
+  // ✅ store review id inside listing
+  listing.reviews.push(newReview._id);
 
   await newReview.save();
-  await listing.save(); // <--- This line saves the updated listing with the new review ID
-  req.flash("success", "New Review Created!🎉");
+
+  // ✅ store review id inside USER for profile page
+  await User.findByIdAndUpdate(req.user._id, {
+    $push: { reviews: newReview._id }
+  });
+
+  await listing.save();
+
+  req.flash("success", "New Review Created! 🎉");
   res.redirect(`/listings/${listing._id}`);
 };
+
+
+
+
 
 module.exports.deleteReview = async (req, res) => {
   let { id, reviewId } = req.params;

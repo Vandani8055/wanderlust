@@ -4,10 +4,14 @@
   <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-1 mt-3">
     <% if (wishlist.length === 0) { %>
     <div class="text-center mt-5">
+     
+    
       <h4>No Wishlist Yet 😢</h4>
-      <p>Add some properties by clicking the ❤️ button</p>
+      <p>Add some properties by clicking the <span class="heart-icon">❤️</span> button</p>
     </div>
-    <% } %> <% wishlist.forEach(listing => { %>
+    <% } %>
+    
+    <% wishlist.forEach(listing => { %>
     <div class="col mb-4">
       <a href="/listings/<%= listing._id %>" class="listing-link">
         <div
@@ -53,3 +57,82 @@
     <% }) %>
   </div>
 </div>
+
+
+
+
+<style>
+ 
+/*
+|---------------------------------------------------------
+| ALTERNATIVE EMPTY WISHLIST MESSAGE STYLING (Defined Box)
+| Focus: Clear visual boundary and friendly color scheme.
+|---------------------------------------------------------
+*/
+
+/*
+|---------------------------------------------------------
+| MINIMALIST EMPTY WISHLIST MESSAGE STYLING (High-End & Clean)
+| Focus: Minimalism, generous whitespace, and clean lines.
+|---------------------------------------------------------
+*/
+
+/*
+|---------------------------------------------------------
+| FINAL PROFESSIONAL EMPTY WISHLIST MESSAGE STYLING
+| Focus: Minimalism, High Contrast, and Clean Lines.
+|---------------------------------------------------------
+*/
+
+.text-center.mt-5 {
+    /* Large vertical padding for clean whitespace */
+    padding: 100px 0; 
+    margin-top: 60px !important;
+    margin-bottom: 60px;
+    width: 100%;
+    
+    /* Ensure a pure white background and remove all decorative borders/shadows */
+    background-color: transparent; 
+    border: none;
+    box-shadow: none;
+}
+
+/* Optional: Add a subtle visual divider before the message content */
+.text-center.mt-5::before {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background-color: #e0e0e0; /* Very subtle light gray line */
+    margin: 0 auto 30px auto;
+    border-radius: 2px;
+}
+
+.text-center.mt-5 h4 {
+    /* Main Heading: Strong, serious, and highly readable */
+    font-size: 36px; 
+    font-weight: 800; /* Extra bold */
+    color: #1e293b; /* Deep, professional dark text */
+    margin-bottom: 10px;
+}
+
+.text-center.mt-5 p {
+    /* Secondary Text: Clear instruction, slightly lighter color */
+    font-size: 18px; 
+    font-weight: 400; /* Regular weight */
+    color: #475569; /* Muted slate gray */
+    margin-top: 10px;
+    line-height: 1.6;
+    max-width: 60%; /* Ensure text doesn't stretch too wide */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Heart Icon Styling (uses your red accent for the call-to-action) */
+.heart-icon {
+    color: #fe424d; 
+    font-size: 24px;
+    vertical-align: middle;
+    font-weight: 700;
+}
+</style>

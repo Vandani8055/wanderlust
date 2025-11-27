@@ -23,7 +23,9 @@ const flash = require('connect-flash');
 // Authentication
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
-const User = require("./models/user.js"); // Assuming User model for Passport
+const User = require("./models/userModel.js"); // Assuming User model for Passport
+const Booking = require("./models/bookingModel.js");
+
 
 // Utilities & Error Handling
 const ExpressError = require("./utils/ExpressError.js");
@@ -32,6 +34,8 @@ const ExpressError = require("./utils/ExpressError.js");
 const listingRouter = require("./routes/listingRoute.js");
 const reviewRouter = require("./routes/reviewRoute.js");
 const userRouter = require("./routes/userRoute.js");
+const bookingRoutes = require("./routes/bookingRoute.js");
+const staticRoutes = require("./routes/staticRoute.js");
 
 
 // ============================================================================
@@ -98,6 +102,12 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session()); 
 
+// Make current user available in all EJS files
+app.use((req, res, next) => {
+  res.locals.currUser = req.user;
+  next();
+});
+
 // Use LocalStrategy with the User model's authenticate method (custom login field)
 passport.use(new LocalStrategy({ usernameField: "email" }, User.authenticate())); 
 
@@ -131,6 +141,8 @@ app.get("/", (req, res) => {
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter); // Nested reviews route
 app.use("/", userRouter); // User authentication routes
+app.use("/bookings", bookingRoutes); // User authentication routes
+app.use("/", staticRoutes);
 
 
 // ============================================================================

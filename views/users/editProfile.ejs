@@ -1,0 +1,305 @@
+<div class="profile-wrapper">
+  <div class="profile-card edit-profile-card">
+
+    <div class="edit-top-bar"></div>
+
+    <div class="edit-header">
+      <h1>Edit Profile</h1>
+      <span>Manage your personal information</span>
+    </div>
+
+   <form action="/edit?_method=PUT" method="POST" enctype="multipart/form-data" class="edit-form">
+
+
+      <!-- Profile Photo -->
+      <div class="form-group photo-upload">
+        <label>Profile Photo</label>
+        <div class="photo-preview">
+          <img id="photoPreview" src="<%= user.profileImage || '/images/default-user.jpg' %>" alt="Profile Photo">
+        </div>
+        <input type="file" name="profileImage" id="profileImage" accept="image/*">
+      </div>
+
+      <div class="form-group">
+        <label>Username</label>
+        <input 
+          type="text" 
+          name="username" 
+          value="<%= user.username %>" 
+          
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input 
+          type="email" 
+          value="<%= user.email %>" 
+          readonly
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Bio</label>
+        <textarea name="bio" rows="4"><%= user.bio || "" %></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-save">Save Changes</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+
+
+<style>
+    /* GENERAL BODY */
+bod/*
+|---------------------------------------------------------
+| VERSION 2: BOLD, HIGH-CONTRAST EDIT FORM
+| Accent Theme: linear-gradient(90deg, #ff385c, #ff7a8a)
+|---------------------------------------------------------
+*/
+
+/* GENERAL BODY */
+body {
+    margin: 0;
+    /* Clean, high-contrast background */
+    background: #fcfcfc;
+    font-family: "Inter", "Helvetica Neue", sans-serif;
+    color: #1e293b; /* Darker text for high contrast */
+}
+
+/* MAIN WRAPPER */
+.profile-wrapper {
+    max-width: 800px; /* Slightly wider card */
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+/* CARD */
+.profile-card {
+    background: #ffffff;
+    border-radius: 10px; /* Sharper corners */
+    padding: 0; /* Remove padding from card and rely on internal elements */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    border: none;
+    transition: none; /* Removed hover effects for a stable, high-end look */
+}
+
+.profile-card:hover {
+    transform: none;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* TOP ACCENT BAR */
+.edit-top-bar {
+    height: 10px; /* Thicker bar */
+    background: linear-gradient(90deg, #ff385c, #ff7a8a);
+    border-radius: 10px 10px 0 0;
+    margin-bottom: 0;
+}
+
+/* HEADER */
+.edit-header {
+    padding: 30px 40px 20px;
+    border-bottom: 1px solid #e0e0e0; /* Segment header from form */
+}
+
+.edit-header h1 {
+    margin: 0;
+    font-size: 26px; /* Larger title */
+    font-weight: 700;
+}
+
+.edit-header span {
+    font-size: 15px;
+    color: #64748b;
+    margin-top: 5px;
+}
+
+/* FORM */
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    padding: 30px 40px;
+}
+
+/* FORM GROUPS - High contrast, segmented fields */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    padding: 15px 0; /* Add vertical padding */
+    border-bottom: 1px solid #f0f0f0; /* Subtle separator line */
+    gap: 0; /* Remove gap */
+}
+/* Ensure the last one doesn't have a border */
+.edit-form > .form-group:last-of-type {
+    border-bottom: none;
+}
+
+/* LABELS */
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b;
+    margin-bottom: 5px; /* Separate label from input */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* TEXT INPUTS AND TEXTAREA */
+.form-group input,
+.form-group textarea {
+    padding: 10px 0; /* Remove side padding, rely on form padding */
+    font-size: 16px; /* Larger text size */
+    border-radius: 0;
+    border: none;
+    border-bottom: 2px solid #e2e2e2; /* Underline input style */
+    background: none;
+    outline: none;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #ff385c;
+    background: none;
+    box-shadow: none;
+}
+
+/* READONLY INPUT */
+.form-group input[readonly] {
+    background: none;
+    color: #94a3b8; /* Muted color */
+    cursor: default;
+}
+
+/* PROFILE PHOTO UPLOAD */
+.photo-upload {
+    display: flex;
+    flex-direction: row; /* Layout label and photo horizontally */
+    align-items: center;
+    gap: 30px;
+    padding: 20px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.photo-upload label {
+    flex-shrink: 0;
+}
+
+/* --- PROFILE PHOTO UPLOAD FIX --- */
+.photo-preview {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%; /* Ensure it's a perfect circle */
+    overflow: hidden; /* Crucial: Clips content outside the circle */
+    border: 3px solid #ff385c;
+    box-shadow: 0 0 0 5px rgba(255, 56, 92, 0.1);
+    transition: border-color 0.3s ease;
+    flex-shrink: 0; /* Prevents the preview from shrinking if other content is wide */
+}
+
+.photo-preview img {
+    width: 100%; /* Make image fill the container */
+    height: 100%; /* Make image fill the container */
+    object-fit: cover; /* This is key: Crops the image to fill the space without distortion */
+    display: block; /* Removes any default inline spacing issues */
+}
+
+/* Ensure the file input is not interfering with its placement */
+#profileImage {
+    margin-top: 0; /* Remove top margin that might push things down */
+    align-self: center; /* Vertically align with the photo preview */
+}
+
+/* Updated photo-upload flex behavior */
+.photo-upload {
+    display: flex;
+    flex-direction: row; /* Keep it horizontal */
+    align-items: center; /* Vertically align items */
+    gap: 20px; /* Adjust gap between elements */
+    padding: 20px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+#profileImage {
+    padding: 0;
+    margin-top: 10px;
+    border: none;
+    flex-grow: 1; /* Allow file input to take space */
+}
+
+/* BUTTON SECTION */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #f0f0f0;
+}
+
+/* SAVE BUTTON */
+.btn-save {
+    background: linear-gradient(135deg, #ff385c, #ff6b81);
+    color: white;
+    padding: 14px 40px;
+    border-radius: 6px; /* Sharper button corners */
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+.btn-save:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(255, 56, 92, 0.4);
+}
+
+/* FILE INPUT STYLE */
+.form-group input[type="file"] {
+    padding: 0;
+    border: none;
+    cursor: pointer;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+    .profile-wrapper {
+        margin: 30px auto;
+    }
+    
+    .edit-header, .edit-form {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .photo-upload {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .photo-upload label {
+        margin-bottom: 0;
+    }
+    
+    .photo-preview {
+        width: 80px;
+        height: 80px;
+    }
+
+    .form-actions {
+        justify-content: center;
+    }
+}
+
+</style>

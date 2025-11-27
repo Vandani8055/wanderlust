@@ -1,8 +1,12 @@
-const Listing = require("../models/listing");
+const Listing = require("../models/listingModel");
+const User = require("../models/userModel");
 const { geocodeNominatim } = require("../utils/geocode");
 const Fuse = require("fuse.js"); //for loose search in search bar
 // const geocode = require("./utils/geocode");
 const pluralize = require("pluralize"); // ⬅️ add this      / / for tags search loosly
+
+
+
 
 // render All listings:
 // for icons : change will be needed...
@@ -17,14 +21,20 @@ module.exports.index = async (req, res) => {
 
   const allListings = await Listing.find(filter);
 
-  res.render("listings/index.ejs", { allListings, tags: tags || "all" });
+  res.render("listings/mainOverview.ejs", { allListings, tags: tags || "all" });
 };
+
+
+
 
 // New route :
 module.exports.renderNewForm = (req, res) => {
   // router.get("/listings/new" , (req, res) => { not use "/" bcz view create above
-  res.render("listings/new.ejs");
+  res.render("listings/createListing.ejs");
 };
+
+
+
 
 // Show Listhing : (one)
 module.exports.showListing = async (req, res) => {
@@ -37,8 +47,15 @@ module.exports.showListing = async (req, res) => {
     return res.redirect("/listings");
   }
   // console.log(listing);
-  res.render("listings/show.ejs", { listing });
+//   res.render("listings/listingPage.ejs", { listing });
+// };
+res.render("listings/listingPage", {
+    listing,
+    user: req.user   // ✅ THIS IS THE FIX
+  });
 };
+
+
 
 module.exports.createListing = async (req, res) => {
   try {
@@ -83,14 +100,28 @@ module.exports.createListing = async (req, res) => {
     });
 
     await newListing.save();
+
+
+     /* ======================= 🔥 CRITICAL ADDITION 🔥 ======================= */
+    await User.findByIdAndUpdate(req.user._id, {
+      $push: { listings: newListing._id }     // ✅ THIS LINK MAKES PROFILE UPDATE
+    });
+    /* ======================================================================= */
+
+    
     req.flash("success", "Successfully created a new listing!");
     res.redirect(`/listings/${newListing._id}`);
   } catch (err) {
     console.error("❌ Error creating listing:", err);
     req.flash("error", "Failed to create listing — check location name.");
-    res.redirect("/listings/new");
+    res.redirect("/listings/createListing");
   }
 };
+
+
+
+
+
 // render edit form :
 module.exports.renderEditForm = async (req, res) => {
   const { id } = req.params;
@@ -101,8 +132,13 @@ module.exports.renderEditForm = async (req, res) => {
   }
   let originalImageUrl = listing.image.url;
   originalImageUrl = originalImageUrl.replace("/upload", "/upload/w_250");
-  res.render("listings/edit.ejs", { listing, originalImageUrl });
+  res.render("listings/editListing.ejs", { listing, originalImageUrl });
 };
+
+
+
+
+
 
 // update Listing :
 module.exports.updateListing = async (req, res) => {
@@ -123,6 +159,11 @@ module.exports.updateListing = async (req, res) => {
   req.flash("success", "Listing Updated! 🎉");
   res.redirect(`/listings/${id}`);
 };
+
+
+
+
+
 
 // Delete listing :
 module.exports.deleteListing = async (req, res) => {

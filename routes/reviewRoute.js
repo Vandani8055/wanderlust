@@ -7,8 +7,8 @@ const {
   isLoggedIn,
   isReviewAuthor,
 } = require("../middleware.js");
-const Review = require("../models/review.js");
-const Listing = require("../models/listing.js");
+const Review = require("../models/reviewModel.js");
+const Listing = require("../models/listingModel.js");
 const reviewController = require("../controllers/reviewsController.js");
 
 // Create Review

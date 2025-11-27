@@ -1,8 +1,9 @@
 <nav class="navbar navbar-expand-md navbar-light bg-body-light border-bottom sticky-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/listings">
-      <i class="fa-solid fa-compass"></i>
+    <a class="navbar-brand d-flex align-items-center" href="/listings">
+      <img src="/images/brandlogo.png" alt="Wanderlust Logo" class="navbar-logo">
     </a>
+
 
     <div class="navbar-nav">
       <a class="nav-link" href="/listings">Explore</a>
@@ -40,9 +41,53 @@
       <% if (!currUser) { %>
       <a class="btn btn-login me-2" href="/login">Login</a>
       <a class="btn btn-signup" href="/signup">Sign Up</a>
-      <% } %> <% if (currUser) { %>
+      <% } %>
+
+      <% if (currUser) { %>
+      
+      <a href="/profile" class="nav-link profile-nav">
+        <img src="<%= currUser.profileImage || '/images/default-user.jpg' %>" 
+         alt="Profile" 
+         class="nav-profile-img">
+      </a>
+
       <a class="btn btn-logout" href="/logout">Logout</a>
       <% } %>
+
     </div>
   </div>
 </nav>
+
+
+
+<style>
+  .nav-profile-img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #ff385c;
+  transition: transform 0.2s ease;
+}
+
+.nav-profile-img:hover {
+  transform: scale(1.1);
+}
+
+
+
+
+
+.navbar-logo {
+  height: 4.2rem;
+  width: 4.5rem;
+  margin-top: 0.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  /* box-shadow: 0 2px 8px rgba(0,0,0,0.15); */
+ 
+}
+
+
+
+</style>

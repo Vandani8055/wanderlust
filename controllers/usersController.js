@@ -1,4 +1,4 @@
-const User = require("../models/user");
+const User = require("../models/userModel");
 const passport = require("passport"); // ✅ ADDED
 
 module.exports.renderSignupForm = (req, res) => {
@@ -35,6 +35,67 @@ module.exports.login = (req, res) => {
   delete req.session.returnTo;
   res.redirect(redirectUrl);
 };
+
+
+
+
+// USER PROFILE :
+module.exports.profilePage = async (req, res) => {
+  const user = await User.findById(req.user._id)
+    .populate("listings")
+    .populate("wishlist")
+    .populate({
+      path: "reviews",
+      populate: { path: "listing" }
+    })
+    .populate({
+      path: "bookings",
+       populate: { path: "listing" }
+    });
+
+  // Ensure arrays always exist
+  user.listings = user.listings || [];
+  user.wishlist = user.wishlist || [];
+  user.bookings = user.bookings || [];
+  user.reviews = user.reviews || [];
+
+  res.render("users/profile.ejs", { user });
+};
+
+
+
+// / SHOW EDIT FORM
+module.exports.renderEditProfile = async (req, res) => {
+  const user = await User.findById(req.user._id);
+  res.render("users/editProfile.ejs", { user });
+};
+
+// UPDATE PROFILE
+module.exports.updateProfile = async (req, res) => {
+  try {
+    const { username, bio } = req.body;
+    const updateData = { username, bio };
+
+    // If user uploaded a new image, save its Cloudinary URL
+    if (req.file) {
+      updateData.profileImage = req.file.path; // multer-storage-cloudinary automatically gives URL in path
+    }
+
+    await User.findByIdAndUpdate(req.user._id, updateData);
+
+    req.flash("success", "Profile updated successfully!");
+    res.redirect("/profile");
+  } catch (e) {
+    req.flash("error", e.message);
+    res.redirect("/edit");
+  }
+};
+
+
+
+
+
+
 
 
 

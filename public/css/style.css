@@ -13,6 +13,16 @@ body {
   flex: 1;
 }
 
+
+
+
+
+
+
+
+
+
+
 /* =================================
    NAVBAR STYLES
    ================================= */
@@ -22,6 +32,7 @@ nav.navbar {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
   padding: 0.8rem 1.8rem;
   transition: all 0.3s ease-in-out;
+  height: 4.3rem;
 }
 
 .navbar-brand {
@@ -110,6 +121,13 @@ nav.navbar {
   color: #fff !important;
 }
 
+
+
+
+
+
+
+
 /* =================================
    FILTER BAR STYLES
    ================================= */
@@ -196,9 +214,21 @@ nav.navbar {
   font-size: 0.8rem;
 }
 
+
+
+
+
+
+
+
+
 /* =================================
    CARD & LISTING STYLES
    ================================= */
+  .row{
+    width: 80rem !important;
+    margin-left: -6rem !important;
+  }
 .listing-link {
   text-decoration: none;
   color: inherit;
@@ -211,7 +241,7 @@ nav.navbar {
   overflow: hidden;
   transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
   background-color: #fff;
-  /* width: 18rem; smaller width */
+  /* width: 18rem;  */
   border-radius: 12px !important;
 }
 
@@ -270,12 +300,22 @@ nav.navbar {
 .price-amount {
   font-size: 0.8rem !important;
 }
+
+
+
+
+
+
+
+
 /* =================================
    FOOTER STYLES
    ================================= */
 .f-info {
   display: flex;
   flex-wrap: wrap;
+  margin-top: 5rem;
+  height: 7rem;
   justify-content: space-around;
   align-items: center;
   background: #f5f5f5;
@@ -284,6 +324,17 @@ nav.navbar {
   font-size: 0.95rem;
   color: #444;
 }
+
+
+/* Logo styling */
+.f-info-logo img {
+  height: 5rem;
+  width: 5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 30rem;
+}
+
 
 .f-info-socials i {
   margin: 0 0.7rem;
@@ -319,91 +370,347 @@ nav.navbar {
   }
 }
 
+
+
+
+
+
+
 /* =================================
-   SHOW PAGE & FORM STYLES
+   LISTING PAGE : (OVERVIEW OF LISTING)
    ================================= */
-.btns {
-  display: flex;
-  gap: 1rem;
+
+
+/* --- GLOBAL & LAYOUT --- */
+body {
+    background-color: #fcfcfc;
 }
 
-.show-card {
-  padding-left: 0;
-  padding-right: 0;
+.row.mt-3 {
+    padding: 0 60px; /* Spacious side padding */
 }
 
-.add-btn,
-.edit-btn {
-  background-color: #fe424d !important;
-  border: none !important;
+h3, h4 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    color: #0f172a; /* Deep Navy/Slate */
+    margin-bottom: 1.5rem;
+}
+h3 {
+    text-align: left;
+    font-size: 40px;
+    padding-left: 0;
+    margin-bottom: 30px;
 }
 
-.show-card {
-  border: none;
-  border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-  overflow: hidden;
-  transition: all 0.3s ease;
+/* --- MAIN LISTING CARD --- */
+.card.col-6.offset-3.show-card {
+    width: 80%;
+    max-width: 1000px;
+    margin-left: 0;
+    margin-right: auto;
+    border: 1px solid #eeeeee;
+    border-radius: 16px;
+    background: #fff;
+    /* Soft, layered shadow for elevation */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    padding: 0;
 }
 .show-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+    transform: none;
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.1);
 }
 
 .show-img {
-  width: 100%;
-  height: 420px;
-  object-fit: cover;
-  border-bottom: 3px solid #fe424d;
+    width: 100%;
+    max-height: 60vh;
+    object-fit: cover;
+    border-bottom: 8px solid #fe424d;
+    transition: opacity 0.4s ease;
+}
+
+.card-body {
+    padding: 3.5rem;
+}
+
+/* Detail text styling */
+.card-text {
+    line-height: 1.7;
+    font-size: 1.05rem;
+    color: #334155;
+}
+.card-text strong {
+    font-weight: 700;
+    color: #1e293b;
+    display: inline-block;
+    min-width: 140px;
+    margin-bottom: 10px;
+}
+
+/* Price Highlight */
+.card-text strong:nth-child(5) {
+    font-size: 1.45rem;
+    color: #fe424d;
+    font-weight: 800;
+}
+
+.tags .badge {
+    background-color: #5a6474 !important;
+    font-weight: 500;
+    padding: 0.5em 1em;
+    border-radius: 20px;
+}
+
+/* --- ACTION BUTTONS --- */
+.btns {
+    display: flex;
+    gap: 1.5rem;
+    margin: 30px 0;
+    justify-content: flex-start;
+    padding-left: 0;
+    width: 80%;
+    max-width: 1000px;
+}
+
+.btns a, .btns button {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    height: 2rem;
+    padding: 0 25px;
+    width: auto !important;
+    border-radius: 50px !important;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white; /* Applies to all gradient buttons */
+}
+
+/* Purple Gradient (Book Now/Edit) */
+.add-btn, .edit-btn, .btn-primary {
+    background: linear-gradient(135deg, #5a40ee, #3366ff) !important;
+    border: none !important;
+}
+
+/* Slate Gradient (Dark Button) */
+.btn-dark {
+    background: linear-gradient(180deg, #2d3748, #3c4a63) !important;
+}
+
+/* Red Gradient (Danger/Delete) */
+.btn-danger {
+    background: linear-gradient(180deg, #ef4444, #f56c6c) !important;
+    border: none !important;
+}
+
+.btns a:hover, .btns button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(148, 140, 196, 0.4); /* Default hover shadow */
+}
+.btn-dark:hover {
+    box-shadow: 0 10px 20px rgba(45, 55, 72, 0.4);
+}
+.btn-danger:hover {
+    box-shadow: 0 10px 20px rgba(239, 68, 68, 0.4);
+}
+
+/* --- MAP & CONTAINER --- */
+.col-8.offset-3 {
+    width: 100%;
+    margin-left: 0;
+    padding: 0;
+    margin-top: 50px;
+}
+
+#map {
+    height: 500px !important;
+    width: 100% !important;
+    border-radius: 16px !important;
+    margin-top: 3rem !important;
+    margin-bottom: 3rem !important;
+    margin-left: 0 !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* --- REVIEW SECTION: WRAPPER & FORM --- */
+
+.review-section-wrapper {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 3rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(230, 230, 230, 0.5);
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.col-8.offset-3 > h4 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 20px;
+    padding-left: 0;
 }
 
 form.needs-validation {
-  background: #fafafa;
-  border: 1px solid #eee;
-  border-radius: 10px;
-  padding: 1.5rem;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
 }
+
+form.needs-validation label {
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 8px;
+    display: block;
+}
+
 form.needs-validation textarea {
-  border-radius: 8px;
-  resize: none;
-  transition: all 0.2s ease;
+    border-radius: 10px;
+    padding: 15px;
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    transition: all 0.25s ease;
 }
+
 form.needs-validation textarea:focus {
-  border-color: #fe424d;
-  box-shadow: 0 0 0 0.2rem rgba(254, 66, 77, 0.25);
+    background-color: #f5f5f5;
+    box-shadow: 0 0 0 4px rgba(89, 64, 238, 0.2);
+    background: #fff;
 }
 
+/* Submit Review Button */
+form.needs-validation .btn-outline-dark {
+    font-weight: 700;
+    padding: 4px 15px;
+    border-radius: 50px;
+    letter-spacing: 0.5px;
+    color: #5a40ee !important;
+    border: 2px solid #5a40ee !important;
+    transition: all 0.3s ease;
+}
+
+form.needs-validation .btn-outline-dark:hover {
+    background: #5a40ee !important;
+    color: white !important;
+    box-shadow: 0 8px 15px rgba(89, 64, 238, 0.3);
+}
+
+/* --- REVIEW LIST STYLING --- */
+.col-8.offset-3 > p { /* All Reviews header */
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.col-8.offset-3 .row { /* Review Cards Container */
+    margin-left: 0;
+    margin-right: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+/* Individual Review Card */
 .card.col-5 {
-  border: none;
-  border-radius: 12px;
-  background: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.25s ease;
+    width: calc(50% - 1.5rem);
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+    padding: 20px;
+    margin: 0 !important;
+    transition: all 0.3s ease;
 }
+
 .card.col-5:hover {
-  transform: translateY(-3px);
-}
-.card-body h5 {
-  color: #000;
-  font-weight: 600;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
 }
 
-.starability-slot label {
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-.starability-slot label:hover {
-  transform: scale(1.1);
+.card-body h5 { /* Author Title */
+    color: #1e293b;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
 }
 
-h3,
-h4 {
-  font-weight: 600;
-  color: #222;
-  margin-bottom: 0.8rem;
+.card-text { /* Comment Text */
+    color: #475569;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
+
+/* Delete Button on Review Card */
+.card.col-5 .btn-sm.btn-dark {
+    background-color: #f1f5f9 !important;
+    color: #475569 !important;
+    border: none;
+    font-weight: 600;
+    padding: 6px 15px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.card.col-5 .btn-sm.btn-dark:hover {
+    background-color: #ef4444 !important;
+    color: white !important;
+}
+
+/* --- RESPONSIVE ADJUSTMENTS --- */
+@media (max-width: 1200px) {
+    .row.mt-3 {
+        padding: 0 30px;
+    }
+    .card.col-6.offset-3.show-card, .btns {
+        width: 95%;
+    }
+}
+
+@media (max-width: 992px) {
+    .card.col-5 {
+        width: 100%; /* Full width for review cards on tablets */
+        margin-right: 0 !important;
+    }
+    .col-8.offset-3 .row {
+        gap: 1rem;
+    }
+    .review-section-wrapper {
+        padding: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .row.mt-3 {
+        padding: 0 15px;
+    }
+    .card.col-6.offset-3.show-card, .btns {
+        width: 100%;
+    }
+    .btns {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .btns a, .btns button {
+        width: 100% !important;
+    }
+    .card-body {
+        padding: 2rem 1.5rem;
+    }
+}
+
+
+
+
+
+
 
 /* =================================
    FORM (NEW LISTING)
@@ -464,6 +771,11 @@ h4 {
 .password-field .form-control {
   padding-right: 40px;
 }
+
+
+
+
+
 
 /* =================================
   WISHLIST:

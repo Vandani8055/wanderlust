@@ -19,7 +19,7 @@
       <p class="card-text">
         <strong>Owner:</strong> <%= listing.owner.username %><br />
         <strong>Description:</strong> <%= listing.description %><br />
-        <strong>Price:</strong> ₹<%= listing.price.toLocaleString("en-IN") %><br />
+        <strong>Price:</strong><%= listing.price.toLocaleString("en-IN") %><br />
         <strong>Location:</strong> <%= listing.location %><br />
         <strong>Country:</strong> <%= listing.country %><br />
         <!-- Show listing tags -->
@@ -39,24 +39,37 @@
   <!-- currUser must have in locals othervise not (if error in midd.then currUser not save that's why) -->
 
   <% if(currUser && currUser._id.equals(listing.owner._id)) { %>
-  <div class="btns">
-    <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark rounded-pill col-1 offset-3 mt-3 mb-3">Edit</a>
+<div class="btns">
+  
+  <a href="/listings/<%= listing._id %>/edit"
+     class="btn btn-dark rounded-pill mt-3 mb-3">
+     Edit
+  </a>
 
-    <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
-      <button class="btn btn-danger rounded-pill offset-3 mt-3 mb-3">Delete</button>
-    </form>
-  </div>
-  <% } %>
+  <a href="/bookings/<%= listing._id %>"
+     class="btn btn-primary rounded-pill mt-3 mb-3">
+     Book Now
+  </a>
+
+  <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" style="display:inline;">
+    <button class="btn btn-danger rounded-pill mt-3 mb-3">
+      Delete
+    </button>
+  </form>
+
+</div>
+<% } %>
+
 
   <hr>
 
   <style>
     #map {
       height: 40rem;
-      width: 60rem;
+      width: 50rem;
       border-radius: 15px;
       margin-top: 1rem;
-      margin-left: 5rem;
+      margin-left: 10rem;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     }
   </style>
@@ -93,7 +106,7 @@
     <h4>Leave a Review</h4>
     <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
 
-      <div class="mb-3 mt-3">
+      <div class="mb-3 mt-3 ">
         <label for="rating" class="form-label"><strong>Rating:</strong></label>
         <fieldset class="starability-slot">
           <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
@@ -129,11 +142,6 @@
           <h5 class="card-title">Author : <%= review.author.username %></h5>
           <p class="starability-result" data-rating="<%= review.rating %>"></p>
           <p class="card-text"><%= review.comment %></p>
-
-
-
-
-          </p>
         </div>
         <form class="mb-3 mt-3" method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
           <button class="btn btn-sm btn-dark">Delete</button>
@@ -143,3 +151,7 @@
     </div>
   </div>
 </div>
+
+
+
+

@@ -3,12 +3,34 @@ const Schema = mongoose.Schema;
 const passportLocalMongoose = require("passport-local-mongoose");
 
 //username,passwor:automatically done by  "passportLocalMongoose"
-const userSchema = new mongoose.Schema({
-  email: { type: String, required: true, unique: true },
-
+const userSchema = new Schema({
   username: String,
-  wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Listing" }],
+  email: String,
+  profileImage: String,
+  bio: String,
+
+  listings: [{
+    type: Schema.Types.ObjectId,
+    ref: "Listing"
+  }],
+
+  wishlist: [{
+    type: Schema.Types.ObjectId,
+    ref: "Listing"
+  }],
+
+  reviews: [{
+    type: Schema.Types.ObjectId,
+    ref: "Review"
+  }],
+
+  bookings: [{
+    type: Schema.Types.ObjectId,
+    ref: "Booking"
+  }]
 });
+
+
 // Tell passport-local-mongoose to use "email" as username field
 userSchema.plugin(passportLocalMongoose, {
   usernameField: "email",
