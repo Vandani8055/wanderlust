@@ -489,7 +489,7 @@ h3 {
 }
 
 /* Purple Gradient (Book Now/Edit) */
-.add-btn, .edit-btn, .btn-primary {
+.add-btn, .edit-btn  {
     background: linear-gradient(135deg, #5a40ee, #3366ff) !important;
     border: none !important;
 }

@@ -1,17 +1,18 @@
-<nav class="navbar navbar-expand-md navbar-light bg-body-light border-bottom sticky-top">
+<nav
+  class="navbar navbar-expand-md navbar-light bg-body-light border-bottom sticky-top"
+>
   <div class="container-fluid">
     <a class="navbar-brand d-flex align-items-center" href="/listings">
-      <img src="/images/brandlogo.png" alt="Wanderlust Logo" class="navbar-logo">
+      <img
+        src="/images/brandlogo.png"
+        alt="Wanderlust Logo"
+        class="navbar-logo"
+      />
     </a>
-
 
     <div class="navbar-nav">
       <a class="nav-link" href="/listings">Explore</a>
     </div>
-
-
-
-
 
     <!-- wishlist -->
     <a href="/wishlist" class="nav-wishlist">
@@ -21,35 +22,24 @@
       <% } %>
     </a>
 
-
-
-
-
     <!-- search -->
     <div class="navbar-nav mx-auto">
-      <form class="d-flex align-items-center" method="GET" action="/listings/search">
-        <input 
-    type="text" 
-    name="query" 
-    id="searchInput"
-    class="form-control"
-    placeholder="Search destinations..."
-  />
-
-  <!-- 🎤 VOICE BUTTON (NEW) -->
-  <button type="button" id="voiceBtn" class="btn btn-outline-secondary ms-2" title="Voice Search">
-    🎤
-  </button>
-
-  <button type="submit" class="btn btn-primary ms-2">Search</button>
-
+      <form
+        class="d-flex align-items-center"
+        method="GET"
+        action="/listings/search"
+      >
+        <input
+          type="text"
+          name="q"
+          id="searchInput"
+          class="form-control"
+          placeholder="Search destinations..."
+          required
+        />
+        <button type="submit" class="btn btn-primary ms-2 rounded-pill ">Search</button>
       </form>
     </div>
-
-
-
-
-
 
     <div class="navbar-nav ms-auto align-items-center">
       <a class="nav-link" href="/listings/new">Airbnb Your Home</a>
@@ -57,89 +47,93 @@
       <% if (!currUser) { %>
       <a class="btn btn-login me-2" href="/login">Login</a>
       <a class="btn btn-signup" href="/signup">Sign Up</a>
-      <% } %>
+      <% } %> <% if (currUser) { %>
 
-      <% if (currUser) { %>
-      
       <a href="/profile" class="nav-link profile-nav">
-        <img src="<%= currUser.profileImage || '/images/default-user.jpg' %>" 
-         alt="Profile" 
-         class="nav-profile-img">
+        <img
+          src="<%= currUser.profileImage || '/images/default-user.jpg' %>"
+          alt="Profile"
+          class="nav-profile-img"
+        />
       </a>
 
       <a class="btn btn-logout" href="/logout">Logout</a>
       <% } %>
-
     </div>
   </div>
 </nav>
 
-
-
 <style>
   .nav-profile-img {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 1px solid #ff385c;
-  transition: transform 0.2s ease;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ff385c;
+    transition: transform 0.2s ease;
+  }
+
+  
+
+  .nav-profile-img:hover {
+    transform: scale(1.1);
+  }
+
+  .navbar-logo {
+    height: 4.2rem;
+    width: 4.5rem;
+    margin-top: 0.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+    /* box-shadow: 0 2px 8px rgba(0,0,0,0.15); */
+  }
+
+
+
+
+  .btn.btn-primary {
+  background-color: #ff385c; 
+  border: none;
+  color: #fff;
+  display: flex;
+  align-items: center;      
+  justify-content: center;            
+  height: 2rem;
+  font-size: 1rem !important;
+  border-radius: 25px;
+  font-weight: 500;
+  text-align: center;
+  transition: all 0.3s ease;
 }
 
-.nav-profile-img:hover {
-  transform: scale(1.1);
+.btn.btn-primary:hover,
+.btn.btn-primary:focus,
+.btn.btn-primary:active {
+  background-color: #fff;       
+  color: #ff385c;               
+  box-shadow: 0 0 0 0.15rem #ff385c; 
 }
 
 
 
 
-
-.navbar-logo {
-  height: 4.2rem;
-  width: 4.5rem;
-  margin-top: 0.5rem;
-  border-radius: 50%;
-  object-fit: cover;
-  /* box-shadow: 0 2px 8px rgba(0,0,0,0.15); */
- 
+/* Search Input */
+#searchInput {
+  border-radius: 25px;
+  /* padding: 4px 10px; */
+  height: 2rem;
+  transition: all 0.3s ease;
 }
+
+/* Hover / Focus / Active */
+#searchInput:hover,
+#searchInput:focus,
+#searchInput:active {
+  border: 2px solid #ff385c;         
+  box-shadow: 0 0 0 0.15rem rgba(255, 56, 92, 0.25); /* subtle theme glow */
+}
+
+
 </style>
 
 
-
-
-
-
-
-
-
-<script>
-  const voiceBtn = document.getElementById("voiceBtn");
-  const searchInput = document.getElementById("searchInput");
-
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-  if (SpeechRecognition) {
-    const recognition = new SpeechRecognition();
-    recognition.lang = "en-US";
-
-    voiceBtn.addEventListener("click", () => {
-      recognition.start();
-      voiceBtn.innerText = "🎙️";
-    });
-
-    recognition.onresult = (event) => {
-      const spokenText = event.results[0][0].transcript;
-
-      // ✅ THIS LINE CONNECTS VOICE TO YOUR EXISTING BACKEND
-      searchInput.value = spokenText;
-
-      // ✅ Auto-submit your current Fuse search
-      searchInput.form.submit();
-    };
-
-    recognition.onend = () => {
-      voiceBtn.innerText = "🎤";
-    };
-  }
-</script>

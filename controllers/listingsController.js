@@ -182,36 +182,6 @@ module.exports.deleteListing = async (req, res) => {
 
 
 
-// module.exports.searchListing = async (req, res) => {
-//   try {
-//     const query = req.query.q;
-//     if (!query) return res.redirect("/listings");
-
-//     // Get all listings
-//     const listings = await Listing.find({});
-
-//     const fuse = new Fuse(listings, {
-//       keys: ["title", "description", "tags"], // fields you want to search
-//       threshold: 0.4, // smaller = strict, bigger = loose match
-//     });
-
-//     const result = fuse.search(query);
-
-//     const allListings = result.map((r) => r.item);
-
-//     res.render("listings/searchResult.ejs", {
-//       allListings,
-//       query,
-//     });
-//   } catch (err) {
-//     console.error("Search error:", err);
-//     res.status(500).send("Error searching listings");
-//   }
-// };
-
-
-
-
 module.exports.searchListing = async (req, res) => {
   try {
     const query = req.query.q;
@@ -220,37 +190,12 @@ module.exports.searchListing = async (req, res) => {
     // Get all listings
     const listings = await Listing.find({});
 
-    // ================= 🔥 NEW : Clean voice query =================
-    let cleanQuery = query
-      .toLowerCase()
-      .replace(/under|below|less than|more than|above|rs|₹/g, "")
-      .trim();
-    // =============================================================
-
-    // ================= 🔥 NEW : Detect price from voice ==========
-    let priceLimit = null;
-    const numberMatch = query.match(/\d+/);
-    if (numberMatch) {
-      priceLimit = parseInt(numberMatch[0]);
-    }
-
-    let filteredListings = listings;
-
-    if (priceLimit) {
-      filteredListings = listings.filter(l => l.price <= priceLimit);
-    }
-    // =============================================================
-
-    const fuse = new Fuse(filteredListings, {
-      keys: ["title", "description", "tags"],
-      threshold: 0.25,            // ✅ CHANGED from 0.4 (more accurate)
-      ignoreLocation: true,       // ✅ NEW
+    const fuse = new Fuse(listings, {
+      keys: ["title", "description", "tags"], // search fields
+      threshold: 0.4, // loose matching
     });
 
-    // ================= ✅ CHANGED =================
-    const result = fuse.search(cleanQuery); // was: query
-    // ============================================
-
+    const result = fuse.search(query);
     const allListings = result.map((r) => r.item);
 
     res.render("listings/searchResult.ejs", {
