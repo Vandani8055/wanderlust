@@ -26,7 +26,7 @@ const sendWelcomeEmail =  async(toEmail, name) => {
     if (err) {
       console.error("Error sending email:", err);
     } else {
-      console.log("Email sent successfully:", info.response);
+      // console.log("Email sent successfully:", info.response);
     }
   });
 };

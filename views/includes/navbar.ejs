@@ -28,12 +28,28 @@
     <!-- search -->
     <div class="navbar-nav mx-auto">
       <form class="d-flex align-items-center" method="GET" action="/listings/search">
-        <input class="form-control me-2" type="search" placeholder="Search destinations" name="q" />
-        <button class="btn btn-search" type="submit">
-          <i class="fa-solid fa-magnifying-glass mt-1"></i>Search
-        </button>
+        <input 
+    type="text" 
+    name="query" 
+    id="searchInput"
+    class="form-control"
+    placeholder="Search destinations..."
+  />
+
+  <!-- 🎤 VOICE BUTTON (NEW) -->
+  <button type="button" id="voiceBtn" class="btn btn-outline-secondary ms-2" title="Voice Search">
+    🎤
+  </button>
+
+  <button type="submit" class="btn btn-primary ms-2">Search</button>
+
       </form>
     </div>
+
+
+
+
+
 
     <div class="navbar-nav ms-auto align-items-center">
       <a class="nav-link" href="/listings/new">Airbnb Your Home</a>
@@ -87,7 +103,43 @@
   /* box-shadow: 0 2px 8px rgba(0,0,0,0.15); */
  
 }
-
-
-
 </style>
+
+
+
+
+
+
+
+
+
+<script>
+  const voiceBtn = document.getElementById("voiceBtn");
+  const searchInput = document.getElementById("searchInput");
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (SpeechRecognition) {
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+
+    voiceBtn.addEventListener("click", () => {
+      recognition.start();
+      voiceBtn.innerText = "🎙️";
+    });
+
+    recognition.onresult = (event) => {
+      const spokenText = event.results[0][0].transcript;
+
+      // ✅ THIS LINE CONNECTS VOICE TO YOUR EXISTING BACKEND
+      searchInput.value = spokenText;
+
+      // ✅ Auto-submit your current Fuse search
+      searchInput.form.submit();
+    };
+
+    recognition.onend = () => {
+      voiceBtn.innerText = "🎤";
+    };
+  }
+</script>

@@ -59,7 +59,7 @@ module.exports.createStripeSession = async (req, res) => {
     res.redirect(303, session.url);
 
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     res.status(500).send("Stripe session creation failed");
   }
 };
@@ -101,7 +101,7 @@ module.exports.bookingSuccess = async (req, res) => {
     res.render("users/success", { listing, checkIn, checkOut, booking });
 
   } catch (err) {
-    console.error(err);
+    // console.error(err);
     res.status(500).send("Booking process failed");
   }
 };
