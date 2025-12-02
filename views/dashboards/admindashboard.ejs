@@ -1,218 +1,203 @@
-<!-- IMPORTANT: Ensure these are in your main HTML/Layout file's <head> -->
-<!-- 1. Font Awesome for Icons -->
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-  xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-/>
-<!-- 2. Chart.js for Charts -->
+<!-- HEAD REQUIREMENTS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <body>
   <aside class="sidebar">
     <div class="logo"><i class="fas fa-rocket"></i> Wanderlust Admin</div>
     <ul class="menu" id="menu-list">
-      <li data-section="dashboard" class="active">
-        <a href="#"><i class="fas fa-chart-line"></i> Dashboard</a>
-      </li>
-      <li data-section="users">
-        <a href="#"><i class="fas fa-users"></i> Users</a>
-      </li>
-      <li data-section="listings">
-        <a href="#"><i class="fas fa-house-chimney"></i> Listings</a>
-      </li>
-      <li data-section="reviews">
-        <a href="#"><i class="fas fa-star"></i> Reviews</a>
-      </li>
-      <li data-section="bookings">
-        <a href="#"><i class="fas fa-calendar-check"></i> Bookings</a>
-      </li>
+      <li data-section="dashboard" class="active"><a href="#"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+      <li data-section="users"><a href="#"><i class="fas fa-users"></i> Users</a></li>
+      <li data-section="listings"><a href="#"><i class="fas fa-house-chimney"></i> Listings</a></li>
+      <li data-section="reviews"><a href="#"><i class="fas fa-star"></i> Reviews</a></li>
+      <li data-section="bookings"><a href="#"><i class="fas fa-calendar-check"></i> Bookings</a></li>
     </ul>
 
     <div class="sidebar-footer">
-      <a href="/admin/edit" class="action-link"
-        ><i class="fas fa-user-gear"></i> Edit Profile</a
-      >
-      <a href="/listings" class="action-link"
-        ><i class="fas fa-arrow-left"></i> Back to Listings</a
-      >
+      <a href="/admin/edit" class="action-link"><i class="fas fa-user-gear"></i> Edit Profile</a>
+      <a href="/listings" class="action-link"><i class="fas fa-arrow-left"></i> Back to Listings</a>
     </div>
   </aside>
 
   <div class="main-container">
     <header class="dashboard-header">
       <div class="header-status">
-        Welcome, <%= admin?.username || "Admin User" %>&nbsp;&nbsp;&nbsp;
+        Welcome, <%= admin?.username || "Admin User" %>
       </div>
+
       <div class="user-menu-wrapper">
         <div class="user-info">
           <div class="user-text">
-            
-            <span class="role"
-              ><%= admin?.role || "System Administrator" %></span
-            >
+            <span class="role"><%= admin?.role || "System Administrator" %></span>
           </div>
-          <img
-            src="<%= admin?.profileImage ? admin.profileImage : '/images/admin-avatar.png' %>"
-            class="avatar"
-            alt="Admin Avatar"
-          />
+          <img src="<%= admin?.profileImage || '/images/admin-avatar.png' %>" class="avatar" />
           <i class="fas fa-angle-down dropdown-arrow"></i>
         </div>
 
         <div class="dropdown-menu">
-          <a href="/admin/edit" class="dropdown-item"
-            ><i class="fas fa-user-gear"></i> Edit Profile</a
-          >
-          <a href="/listings" class="dropdown-item"
-            ><i class="fas fa-arrow-left"></i> Back to Listings</a
-          >
+          <a href="/admin/edit" class="dropdown-item"><i class="fas fa-user-gear"></i> Edit Profile</a>
+          <a href="/listings" class="dropdown-item"><i class="fas fa-arrow-left"></i> Back to Listings</a>
           <div class="dropdown-divider"></div>
-          <a href="/logout" class="dropdown-item logout-btn"
-            ><i class="fas fa-sign-out-alt"></i> Logout</a
-          >
+          <a href="/logout" class="dropdown-item logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
       </div>
     </header>
+
     <main class="main-content">
+
+      <!-- DASHBOARD -->
       <section class="section" id="dashboard">
         <h2 class="section-title">Overview Metrics</h2>
+
         <div class="metrics-grid">
-          <div class="metric-card">
-            <i class="fas fa-users card-icon"></i>
-            <span class="metric-value"><%= totalUsers %></span>
-            <span class="metric-label">Total Users</span>
-          </div>
-          <div class="metric-card">
-            <i class="fas fa-house-chimney card-icon"></i>
-            <span class="metric-value"><%= totalListings %></span>
-            <span class="metric-label">Total Listings</span>
-          </div>
-          <div class="metric-card">
-            <i class="fas fa-star card-icon"></i>
-            <span class="metric-value"><%= totalReviews %></span>
-            <span class="metric-label">Reviews Count</span>
-          </div>
-          <div class="metric-card">
-            <i class="fas fa-dollar-sign card-icon"></i>
-            <span class="metric-value">$<%= monthlyRevenue %></span>
-            <span class="metric-label">Monthly Revenue</span>
-          </div>
+          <div class="metric-card"><i class="fas fa-users card-icon"></i><span class="metric-value"><%= totalUsers %></span><span class="metric-label">Total Users</span></div>
+          <div class="metric-card"><i class="fas fa-house-chimney card-icon"></i><span class="metric-value"><%= totalListings %></span><span class="metric-label">Total Listings</span></div>
+          <div class="metric-card"><i class="fas fa-star card-icon"></i><span class="metric-value"><%= totalReviews %></span><span class="metric-label">Reviews Count</span></div>
+          <div class="metric-card"><i class="fas fa-dollar-sign card-icon"></i><span class="metric-value">$<%= monthlyRevenue %></span><span class="metric-label">Monthly Revenue</span></div>
         </div>
 
-        <!-- NEW CHART SECTION START -->
-  
-        <h2 class="section-title"> Monthly Revenue Trend</h2>
-    
+        <h2 class="section-title">Monthly Revenue Trend</h2>
         <div class="card-list-item chart-container">
           <canvas id="revenueChart"></canvas>
         </div>
-        
-        <!-- NEW CHART SECTION END -->
       </section>
 
+      <!-- USERS -->
       <section class="section" id="users">
         <h2 class="section-title">User Management</h2>
         <% if(users.length === 0){ %>
-        <div class="empty-msg">No users yet 🚫</div>
-        <% } else { %> <% users.forEach(user => { %>
+          <div class="empty-msg">No users yet 🚫</div>
+        <% } else { users.forEach(user => { %>
         <div class="card-list-item">
-          <span>**<%= user.username %>** (<%= user.email %>)</span>
-          <a href="/admin/users/<%= user._id %>" class="view-btn"
-            >View Details</a
-          >
+          <span><%= user.username %> (<%= user.email %>)</span>
+
+          <div class="actions">
+            <a href="/admin/users/<%= user._id %>" class="view-btn rounded-pill">View</a>
+            <button class="edit-btn rounded-pill" data-id="<%= user._id %>" data-type="user">Edit</button>
+            <button class="delete-btn rounded-pill" data-id="<%= user._id %>" data-type="user">Delete</button>
+          </div>
         </div>
-        <% }) %> <% } %>
+        <% }) } %>
       </section>
 
+      <!-- LISTINGS -->
       <section class="section" id="listings">
         <h2 class="section-title">Active Listings</h2>
         <% if(listings.length === 0){ %>
-        <div class="empty-msg">No listings yet 🚫</div>
-        <% } else { %> <% listings.forEach(item => { %>
+          <div class="empty-msg">No listings yet 🚫</div>
+        <% } else { listings.forEach(item => { %>
         <div class="card-list-item">
-          <span>**<%= item.title %>**</span>
-          <a href="/listings/<%= item._id %>" class="view-btn">View Listing</a>
+          <span><%= item.title %></span>
+
+          <div class="actions">
+            <a href="/listings/<%= item._id %>" class="view-btn rounded-pill">View</a>
+            <button class="edit-btn rounded-pill" data-id="<%= item._id %>" data-type="listing">Edit</button>
+            <button class="delete-btn rounded-pill" data-id="<%= item._id %>" data-type="listing">Delete</button>
+          </div>
         </div>
-        <% }) %> <% } %>
+        <% }) } %>
       </section>
 
+      <!-- REVIEWS -->
       <section class="section" id="reviews">
         <h2 class="section-title">Recent Reviews</h2>
         <% if(reviews.length === 0){ %>
-        <div class="empty-msg">No reviews yet 🚫</div>
-        <% } else { %> <% reviews.forEach(r => { %>
-        <div class="card-list-item review-item">
-          <div>
-            <strong><%= r.listing?.title || "Listing removed" %></strong>
-            <span class="rating-pill">⭐ <%= r.rating %></span>
+          <div class="empty-msg">No reviews yet 🚫</div>
+        <% } else { reviews.forEach(r => { %>
+        <div class="card-list-item">
+          <span><strong><%= r.listing?.title || "Listing removed" %></strong> ⭐ <%= r.rating %></span>
+
+          <div class="actions">
+            <a href="/admin/reviews/<%= r._id %>" class="view-btn rounded-pill">Moderate</a>
+            <button class="delete-btn rounded-pill" data-id="<%= r._id %>" data-type="review">Delete</button>
           </div>
-          <a href="/admin/reviews/<%= r._id %>" class="view-btn">Moderate</a>
         </div>
-        <% }) %> <% } %>
+        <% }) } %>
       </section>
 
+      <!-- BOOKINGS -->
       <section class="section" id="bookings">
         <h2 class="section-title">Latest Bookings</h2>
         <% if(bookings.length === 0){ %>
-        <div class="empty-msg">No bookings yet 🚫</div>
-        <% } else { %> <% bookings.forEach(b => { %>
+          <div class="empty-msg">No bookings yet 🚫</div>
+        <% } else { bookings.forEach(b => { %>
         <div class="card-list-item">
-          <strong
-            >Booking for: <%= b.listing?.title || "Listing removed" %></strong
-          >
-          <a href="/admin/bookings/<%= b._id %>" class="view-btn"
-            >View Booking</a
-          >
+          <span>Booking for: <%= b.listing?.title || "Listing removed" %></span>
+
+          <div class="actions">
+            <a href="/admin/bookings/<%= b._id %>" class="view-btn rounded-pill">View</a>
+            <button class="delete-btn rounded-pill" data-id="<%= b._id %>" data-type="booking">Delete</button>
+          </div>
         </div>
-        <% }) %> <% } %>
+        <% }) } %>
       </section>
+
     </main>
   </div>
 
   <script>
-  // ======= USER DROPDOWN =======
-  const userMenu = document.querySelector(".user-menu-wrapper");
-  userMenu.addEventListener("click", () => userMenu.classList.toggle("open"));
-  document.addEventListener("click", (e) => {
-    if (!userMenu.contains(e.target)) userMenu.classList.remove("open");
-  });
+  // <!-- ===== SHORT SCRIPT FOR EDIT/DELETE BUTTONS ONLY ===== -->
 
-  // ======= SIDEBAR SECTION SWITCHING =======
-  const menuItems = document.querySelectorAll(".menu li");
-  const sections = document.querySelectorAll(".section");
 
-  const showSection = (id) => {
-    sections.forEach((s) => (s.style.display = "none"));
-    const el = document.getElementById(id);
-    if (el) el.style.display = "block";
-  };
+    document.addEventListener("click", (e) => {
+      if (e.target.classList.contains("edit-btn")) {
+        const id = e.target.dataset.id;
+        const type = e.target.dataset.type;
+        window.location.href = `/admin/${type}/edit/${id}`;
+      }
 
-  // Default section
-  showSection("dashboard");
+      if (e.target.classList.contains("delete-btn")) {
+        const id = e.target.dataset.id;
+        const type = e.target.dataset.type;
 
-  menuItems.forEach((item) => {
-    item.addEventListener("click", (e) => {
-      e.preventDefault();
-
-      menuItems.forEach((i) => i.classList.remove("active"));
-      item.classList.add("active");
-
-      showSection(item.dataset.section);
+        if (confirm(`Delete this ${type}?`)) {
+          window.location.href = `/admin/${type}/delete/${id}`;
+        }
+      }
     });
-  });
 
-  // ======= REVENUE CHART =======
-  const ctx = document.getElementById("revenueChart");
-  if (ctx) {
-    new Chart(ctx, {
-      type: "line",
-      data: {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-        datasets: [
-          {
+
+
+
+    // ======= USER DROPDOWN =======
+    const userMenu = document.querySelector(".user-menu-wrapper");
+    userMenu.addEventListener("click", () => userMenu.classList.toggle("open"));
+    document.addEventListener("click", (e) => {
+      if (!userMenu.contains(e.target)) userMenu.classList.remove("open");
+    });
+
+    // ======= SIDEBAR SECTION SWITCHING =======
+    const menuItems = document.querySelectorAll(".menu li");
+    const sections = document.querySelectorAll(".section");
+
+    const showSection = (id) => {
+      sections.forEach((s) => (s.style.display = "none"));
+      const el = document.getElementById(id);
+      if (el) el.style.display = "block";
+    };
+
+    // Default section
+    showSection("dashboard");
+
+    menuItems.forEach((item) => {
+      item.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        menuItems.forEach((i) => i.classList.remove("active"));
+        item.classList.add("active");
+
+        showSection(item.dataset.section);
+      });
+    });
+
+    // ======= REVENUE CHART =======
+    const ctx = document.getElementById("revenueChart");
+    if (ctx) {
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+          datasets: [{
             label: "Monthly Revenue ($)",
             data: [5000, 7500, 6000, 9000, 10500, 12450, 11000],
             borderColor: "#ff385c",
@@ -222,139 +207,153 @@
             fill: true,
             pointRadius: 5,
             pointBackgroundColor: "#ff385c",
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          y: { title: { display: true, text: "Revenue (USD)" }, grid: { color: "#e9ecef" } },
-          x: { grid: { display: false } },
+          }, ],
         },
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              label: (ctx) =>
-                `${ctx.dataset.label}: ${new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                }).format(ctx.parsed.y)}`,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              title: {
+                display: true,
+                text: "Revenue (USD)"
+              },
+              grid: {
+                color: "#e9ecef"
+              },
+            },
+            x: {
+              grid: {
+                display: false
+              }
+            },
+          },
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              callbacks: {
+                label: (ctx) =>
+                  `${ctx.dataset.label}: ${new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  }).format(ctx.parsed.y)}`,
+              },
             },
           },
         },
-      },
-    });
-  }
-</script>
-
+      });
+    }
+  </script>
 </body>
-
-
-
-
 
 <style>
   /* --- FULL WANDERLUST LIGHT MODE CSS (Final Version) --- */
 
-/* Base Variables for Light Theme */
-:root {
-  --sidebar-width: 240px;
-  --main-bg: #f5f6f8; /* Very subtle off-white background */
-  --card-bg: #ffffff; /* Pure white for cards */
-  --accent-start: #ff385c; /* Pink */
-  --accent-end: #ff7a8a; /* Lighter Pink/Coral */
-  --primary-gradient: linear-gradient(90deg, var(--accent-start), var(--accent-end));
-  --text-dark: #343a40;
-  --text-muted: #6c757d;
-  --border-color: #e9ecef;
-  --shadow-light: 0 6px 15px rgba(0, 0, 0, 0.08);
-}
+  /* Base Variables for Light Theme */
+  :root {
+    --sidebar-width: 240px;
+    --main-bg: #f5f6f8;
+    /* Very subtle off-white background */
+    --card-bg: #ffffff;
+    /* Pure white for cards */
+    --accent-start: #ff385c;
+    /* Pink */
+    --accent-end: #ff7a8a;
+    /* Lighter Pink/Coral */
+    --primary-gradient: linear-gradient(90deg,
+        var(--accent-start),
+        var(--accent-end));
+    --text-dark: #343a40;
+    --text-muted: #6c757d;
+    --border-color: #e9ecef;
+    --shadow-light: 0 6px 15px rgba(0, 0, 0, 0.08);
+  }
 
-/* RESET */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
+  /* RESET */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
 
-body {
-  display: flex; 
-  background: var(--main-bg);
-  color: var(--text-dark);
-  min-height: 100vh;
-}
+  body {
+    display: flex;
+    background: var(--main-bg);
+    color: var(--text-dark);
+    min-height: 100vh;
+  }
 
-/* --- 1. SIDEBAR (Fixed for Large Screens) --- */
-.sidebar {
-  width: var(--sidebar-width);
-  height: 100vh;
-  background: var(--primary-gradient);
-  color: #fff;
-  padding: 25px 20px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.3s;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
-  z-index: 200;
-}
+  /* --- 1. SIDEBAR (Fixed for Large Screens) --- */
+  .sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--primary-gradient);
+    color: #fff;
+    padding: 25px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 200;
+  }
 
-.sidebar .logo {
-  font-size: 26px;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 50px;
-  color: #fff;
-  letter-spacing: 1px;
-}
+  .sidebar .logo {
+    font-size: 26px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 50px;
+    color: #fff;
+    letter-spacing: 1px;
+  }
 
-.sidebar ul {
-  list-style: none;
-}
+  .sidebar ul {
+    list-style: none;
+  }
 
-.sidebar ul li {
-  margin-bottom: 12px;
-}
+  .sidebar ul li {
+    margin-bottom: 12px;
+  }
 
-.sidebar ul li a {
-  color: rgba(255, 255, 255, 0.75);
-  text-decoration: none;
-  padding: 12px 18px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 500;
-  transition: all 0.3s;
-  position: relative;
-}
+  .sidebar ul li a {
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    transition: all 0.3s;
+    position: relative;
+  }
 
-.sidebar ul li.active a {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
-  font-weight: 600;
-}
+  .sidebar ul li.active a {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-weight: 600;
+  }
 
-.sidebar ul li a:hover:not(.active) {
-  background: rgba(0, 0, 0, 0.1);
-  color: #fff;
-}
+  .sidebar ul li a:hover:not(.active) {
+    background: rgba(0, 0, 0, 0.1);
+    color: #fff;
+  }
 
-.sidebar-footer {
+  .sidebar-footer {
     padding-top: 20px;
     margin-top: auto;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
     display: flex;
     flex-direction: column;
     gap: 10px;
-}
+  }
 
-.sidebar-footer .action-link {
+  .sidebar-footer .action-link {
     color: rgba(255, 255, 255, 0.8);
     font-size: 14px;
     text-decoration: none;
@@ -363,106 +362,112 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-}
-.sidebar-footer .action-link:hover {
+  }
+
+  .sidebar-footer .action-link:hover {
     color: #fff;
     text-decoration: underline;
-}
+  }
 
-/* --- 2. MAIN LAYOUT (Fixed Sidebar Offset) --- */
+  /* --- 2. MAIN LAYOUT (Fixed Sidebar Offset) --- */
 
-.main-container {
+  .main-container {
     /* Offset for fixed sidebar */
-  margin-left: var(--sidebar-width);
-  width: calc(100% - var(--sidebar-width));
-}
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+  }
 
-/* HEADER (Sticky) */
-.dashboard-header {
- position: sticky; 
- top: 0;
- height: 70px;
- background: var(--card-bg);
- display: flex;
- align-items: center;
- justify-content: flex-end;
- padding: 0 30px;
- box-shadow: 0 2px 8px rgba(0,0,0,0.05);
- z-index: 100;
- border-bottom: 1px solid var(--border-color);
-}
-
-/* --- User Info & Dropdown --- */
-.user-menu-wrapper {
-    position: relative; 
-    cursor: pointer;
-    user-select: none;
-}
-
-.user-info {
+  /* HEADER (Sticky) */
+  .dashboard-header {
+    position: sticky;
+    top: 0;
+    height: 70px;
+    background: var(--card-bg);
     display: flex;
     align-items: center;
-    gap: 10px; 
+    justify-content: flex-end;
+    padding: 0 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    z-index: 100;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  /* --- User Info & Dropdown --- */
+  .user-menu-wrapper {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     padding: 5px;
     border-radius: 8px;
     transition: background 0.2s;
-}
+  }
 
-.user-menu-wrapper.open .user-info, .user-info:hover {
-    background: var(--border-color); 
-}
+  .user-menu-wrapper.open .user-info,
+  .user-info:hover {
+    background: var(--border-color);
+  }
 
-.user-info .avatar {
- border: 2px solid var(--accent-start);
- width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-.user-info .user-text {
+  .user-info .avatar {
+    border: 2px solid var(--accent-start);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .user-info .user-text {
     line-height: 1.2;
-}
-.user-info .username {
+  }
+
+  .user-info .username {
     font-weight: 600;
     font-size: 14px;
-}
-.user-info .role {
+  }
+
+  .user-info .role {
     color: var(--text-muted);
     font-size: 12px;
-}
-.dropdown-arrow {
+  }
+
+  .dropdown-arrow {
     color: var(--text-muted);
     transition: transform 0.2s;
-}
+  }
 
-.user-menu-wrapper.open .dropdown-arrow {
+  .user-menu-wrapper.open .dropdown-arrow {
     transform: rotate(180deg);
-}
+  }
 
-.dropdown-menu {
+  .dropdown-menu {
     position: absolute;
-    top: 100%; 
+    top: 100%;
     right: 0;
     width: 220px;
-    background: var(--card-bg); 
+    background: var(--card-bg);
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     overflow: hidden;
     z-index: 1000;
-    
-    display: none; 
+
+    display: none;
     opacity: 0;
     transform: translateY(10px);
     transition: opacity 0.2s, transform 0.2s;
-}
+  }
 
-.user-menu-wrapper.open .dropdown-menu {
+  .user-menu-wrapper.open .dropdown-menu {
     display: block;
     opacity: 1;
     transform: translateY(0);
-}
+  }
 
-.dropdown-item {
+  .dropdown-item {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -471,257 +476,305 @@ body {
     color: var(--text-dark);
     font-size: 14px;
     transition: background 0.2s, color 0.2s;
-}
+  }
 
-.dropdown-item i {
+  .dropdown-item i {
     width: 15px;
     color: var(--text-muted);
-}
+  }
 
-.dropdown-item:hover {
-    background: var(--main-bg); 
-    color: var(--accent-start); 
-}
-.dropdown-item:hover i {
+  .dropdown-item:hover {
+    background: var(--main-bg);
     color: var(--accent-start);
-}
+  }
 
-.dropdown-divider {
+  .dropdown-item:hover i {
+    color: var(--accent-start);
+  }
+
+  .dropdown-divider {
     height: 1px;
     background: var(--border-color);
     margin: 5px 0;
-}
+  }
 
-.logout-btn {
-    color: var(--accent-start); 
-}
-.logout-btn:hover {
+  .logout-btn {
+    color: var(--accent-start);
+  }
+
+  .logout-btn:hover {
     background: rgba(255, 56, 92, 0.1);
-}
+  }
 
-/* MAIN CONTENT (Large Screen Spacing) */
-.main-content {
- padding: 30px;
- /* Space for the sticky header (70px header + 30px margin) */
- padding-top: 100px; 
-}
+  /* MAIN CONTENT (Large Screen Spacing) */
+  .main-content {
+    padding: 30px;
+    /* Space for the sticky header (70px header + 30px margin) */
+    padding-top: 100px;
+  }
 
-.section-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--text-dark);
-  margin-bottom: 25px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid var(--border-color);
-}
+  .section-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border-color);
+  }
 
-/* --- 3. METRIC CARDS & LISTS --- */
+  /* --- 3. METRIC CARDS & LISTS --- */
 
-.metrics-grid {
- display: grid;
- grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
- gap: 25px;
- margin-bottom: 40px;
-}
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+  }
 
-.metric-card {
- background: var(--card-bg);
- padding: 25px;
- border-radius: 12px;
- box-shadow: var(--shadow-light);
- /* Accent Border */
- border-left: 5px solid var(--accent-start); 
- display: flex;
- flex-direction: column;
- align-items: flex-start;
- gap: 8px;
- transition: transform 0.3s, border-left-color 0.3s;
-}
+  .metric-card {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-light);
+    /* Accent Border */
+    border-left: 5px solid var(--accent-start);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    transition: transform 0.3s, border-left-color 0.3s;
+  }
 
-.metric-card:hover {
- transform: translateY(-4px);
- box-shadow: 0 8px 20px rgba(0,0,0,0.15);
- border-left-color: var(--accent-end);
-}
+  .metric-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    border-left-color: var(--accent-end);
+  }
 
-/* FIX: Ensures icons are visible and styled correctly */
-.card-icon, .metric-card i {
- font-size: 24px;
- color: var(--accent-start); 
- background: rgba(255, 56, 92, 0.1);
- padding: 10px;
- border-radius: 8px;
-  display: inline-block;
-}
+  /* FIX: Ensures icons are visible and styled correctly */
+  .card-icon,
+  .metric-card i {
+    font-size: 24px;
+    color: var(--accent-start);
+    background: rgba(255, 56, 92, 0.1);
+    padding: 10px;
+    border-radius: 8px;
+    display: inline-block;
+  }
 
-.metric-value {
- font-size: 30px;
- font-weight: 700;
- color: var(--text-dark);
-}
+  .metric-value {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--text-dark);
+  }
 
-.metric-label {
- font-size: 13px;
- color: var(--text-muted);
- text-transform: uppercase;
- letter-spacing: 0.5px;
-}
+  .metric-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
 
-/* --- CHART CONTAINER STYLE --- */
-.chart-container {
-    height: 400px; 
+  /* --- CHART CONTAINER STYLE --- */
+  .chart-container {
+    height: 400px;
     padding: 30px;
     margin-top: 20px;
-}
+  }
 
-.card-list-item {
- background: var(--card-bg);
- margin-bottom: 12px;
- padding: 15px 20px;
- border-radius: 8px;
- display: flex;
- justify-content: space-between;
- align-items: center;
- box-shadow: 0 2px 5px rgba(0,0,0,0.05);
- border: 1px solid var(--border-color);
- transition: all 0.3s;
-}
+  .card-list-item {
+    background: var(--card-bg);
+    margin-bottom: 12px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s;
+  }
 
-.card-list-item:hover {
- border-color: var(--accent-start);
- box-shadow: 0 4px 10px rgba(255, 56, 92, 0.1);
-}
+  .card-list-item:hover {
+    border-color: var(--accent-start);
+    box-shadow: 0 4px 10px rgba(255, 56, 92, 0.1);
+  }
 
-.card-list-item strong {
-  font-weight: 600;
-  color: var(--text-dark);
-}
+  .card-list-item strong {
+    font-weight: 600;
+    color: var(--text-dark);
+  }
 
-.rating-pill {
-  background: #2ecc71;
-  color: #fff;
-  font-size: 12px;
-  padding: 3px 8px;
-  border-radius: 4px;
-  margin-left: 10px;
-  font-weight: 600;
-}
+  .rating-pill {
+    background: #2ecc71;
+    color: #fff;
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-left: 10px;
+    font-weight: 600;
+  }
 
-.view-btn {
-  background: var(--primary-gradient);
-  color: #fff;
-  padding: 8px 16px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  transition: opacity 0.3s;
-  box-shadow: 0 4px 10px rgba(255, 56, 92, 0.3);
+  .view-btn {
+    background: linear-gradient(135deg, #4f7cff, #6ca8ff);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: opacity 0.3s;
+    box-shadow: 0 4px 10px rgba(79, 124, 255, 0.35);
 }
-
 .view-btn:hover {
- opacity: 0.85;
-}
-
-.empty-msg {
- padding: 25px;
- background: var(--card-bg);
- border-radius: 8px;
- border: 1px dashed var(--border-color);
- color: var(--text-muted);
- text-align: center;
- font-size: 16px;
+    opacity: 0.85;
 }
 
 
+.edit-btn {
+    background: linear-gradient(135deg, #e5e5e5, #c9c9c9);
+    color: #333;
+    padding: 5px 10px;
+    border: none;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: opacity 0.3s;
+    box-shadow: 0 4px 10px rgba(150, 150, 150, 0.25);
+}
+.edit-btn:hover {
+    opacity: 0.85;
+}
 
 
+.delete-btn {
+    background: linear-gradient(135deg, #ff385c, #d91b42);
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: opacity 0.3s;
+    box-shadow: 0 4px 10px rgba(255, 56, 92, 0.35);
+}
+.delete-btn:hover {
+    opacity: 0.85;
+}
 
 
+  .empty-msg {
+    padding: 25px;
+    background: var(--card-bg);
+    border-radius: 8px;
+    border: 1px dashed var(--border-color);
+    color: var(--text-muted);
+    text-align: center;
+    font-size: 16px;
+  }
 
-/* 🛠️ 4. RESPONSIVE FIXES 🛠️ */
-@media(max-width: 992px){
-  /* 1. Reset body stacking to column flow */
-  body {
+  /* 🛠️ 4. RESPONSIVE FIXES 🛠️ */
+  @media (max-width: 992px) {
+
+    /* 1. Reset body stacking to column flow */
+    body {
       flex-direction: column;
-  }
+    }
 
-  /* 2. Turn fixed sidebar into a regular flow element */
- .sidebar { 
-  width: 100%;
-  height: auto;
-  position: relative; 
-  box-shadow: none;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-    padding-top: 15px; 
-    padding-bottom: 15px;
- }
-
-  /* 3. Re-organize sidebar children for horizontal layout */
- .sidebar .logo { 
-      margin-bottom: 15px; 
-      margin-right: 20px; 
-      text-align: left; 
-      width: 100%; 
-  }
- .sidebar ul.menu { 
-   flex-direction: row; 
-   flex-wrap: wrap; 
-   gap: 5px;
-   margin-bottom: 15px;
-   border-right: none;
-      display: flex; 
-      width: 100%; 
- }
- .sidebar ul li {
-   margin-bottom: 0;
- }
- .sidebar ul li a { padding: 8px 12px; }
- .sidebar-footer { 
-   margin-top: 15px; 
-   border-top: 1px solid rgba(255, 255, 255, 0.2);
-   display: flex;
+    /* 2. Turn fixed sidebar into a regular flow element */
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+      box-shadow: none;
       flex-direction: row;
-   gap: 15px;
+      flex-wrap: wrap;
+      align-items: center;
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+
+    /* 3. Re-organize sidebar children for horizontal layout */
+    .sidebar .logo {
+      margin-bottom: 15px;
+      margin-right: 20px;
+      text-align: left;
+      width: 100%;
+    }
+
+    .sidebar ul.menu {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 15px;
+      border-right: none;
+      display: flex;
+      width: 100%;
+    }
+
+    .sidebar ul li {
+      margin-bottom: 0;
+    }
+
+    .sidebar ul li a {
+      padding: 8px 12px;
+    }
+
+    .sidebar-footer {
+      margin-top: 15px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      flex-direction: row;
+      gap: 15px;
       padding-top: 15px;
       width: 100%;
- }
-
-  /* 4. Reset main-container positioning and size */
- .main-container {
-  margin-left: 0; 
-  width: 100%;
- }
-
-  /* 5. Fix header position and stacking */
- .dashboard-header {
-  position: sticky; 
-  top: 0; 
-  left: 0; 
-  justify-content: space-between;
-    width: 100%;
- }
-  
-  /* 6. Fix main-content padding - remove excessive top padding */
- .main-content { 
-      padding-top: 30px; 
-  }
-}
-
-/* Further refinements for small phones */
-@media(max-width: 576px) {
-    .sidebar .logo { font-size: 22px; }
-    .sidebar ul.menu { 
-        flex-direction: column; 
-        width: 100%;
     }
-    .sidebar ul li a { width: 100%; }
-    .sidebar-footer { flex-direction: column; gap: 5px; }
+
+    /* 4. Reset main-container positioning and size */
+    .main-container {
+      margin-left: 0;
+      width: 100%;
+    }
+
+    /* 5. Fix header position and stacking */
+    .dashboard-header {
+      position: sticky;
+      top: 0;
+      left: 0;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    /* 6. Fix main-content padding - remove excessive top padding */
+    .main-content {
+      padding-top: 30px;
+    }
+  }
+
+  /* Further refinements for small phones */
+  @media (max-width: 576px) {
+    .sidebar .logo {
+      font-size: 22px;
+    }
+
+    .sidebar ul.menu {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .sidebar ul li a {
+      width: 100%;
+    }
+
+    .sidebar-footer {
+      flex-direction: column;
+      gap: 5px;
+    }
 
     .metrics-grid {
-        grid-template-columns: 1fr;
+      grid-template-columns: 1fr;
     }
-}
+  }
 </style>
