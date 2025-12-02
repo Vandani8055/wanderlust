@@ -140,7 +140,8 @@ app.get("/", (req, res) => {
 // Use Router files for specific paths
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter); // Nested reviews route
-app.use("/", userRouter); // User authentication routes
+app.use("/", userRouter);
+
 app.use("/bookings", bookingRoutes); // User authentication routes
 app.use("/", staticRoutes);
 

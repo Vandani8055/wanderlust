@@ -1,0 +1,299 @@
+<% layout('/layouts/boilerplate') %>
+
+<div class="host-wrapper">
+  <div class="host-card">
+
+    <!-- Top Accent Bar -->
+    <div class="host-top-bar"></div>
+
+    <!-- Header -->
+    <div class="host-header">
+      <h1>Host Dashboard</h1>
+      <span>Manage your listings, bookings & earnings</span>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="host-stats">
+      <div class="stat-box">
+        <strong><%= totalListings %></strong>
+        <span>Listings</span>
+      </div>
+      <div class="stat-box">
+        <strong><%= totalBookings %></strong>
+        <span>Bookings</span>
+      </div>
+      <div class="stat-box">
+        <strong>₹12222</strong>
+        <span>Earnings (This Month)</span>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="host-actions">
+      <a href="/host/listings/new" class="host-btn">+ Add New Listing</a>
+      <a href="/host/profile" class="host-btn-outline">Edit Profile</a>
+    </div>
+
+    <!-- Content Tabs -->
+    <div class="host-tabs">
+      <button class="tab-btn active" data-tab="listings">My Listings</button>
+      <button class="tab-btn" data-tab="bookings">Bookings</button>
+      <button class="tab-btn" data-tab="reviews">Guest Reviews</button>
+    </div>
+
+    <!-- TAB CONTENT -->
+    <div class="host-content">
+
+      <!-- LISTINGS -->
+      <div class="tab-section active" id="listings">
+        <% if(listings.length === 0) { %>
+          <p class="empty-msg">No listings added yet.</p>
+        <% } else { %>
+          <% listings.forEach(listing => { %>
+            <div class="dash-card">
+              <div>
+                <h3><%= listing.title %></h3>
+                <p><%= listing.location %></p>
+              </div>
+              <a href="/host/listings/<%= listing._id %>" class="view-btn">View</a>
+            </div>
+          <% }) %>
+        <% } %>
+      </div>
+
+      <!-- BOOKINGS -->
+      <div class="tab-section" id="bookings">
+        <% if(bookings.length === 0) { %>
+          <p class="empty-msg">No bookings yet.</p>
+        <% } else { %>
+          <% bookings.forEach(book => { %>
+            <div class="dash-card">
+              <div>
+                <h3><%= book.user.username %></h3>
+                <p>For: <%= book.listing.title %></p>
+                <p>Date: <%= book.date %></p>
+              </div>
+              <a href="/host/bookings/<%= book._id %>" class="view-btn">View</a>
+            </div>
+          <% }) %>
+        <% } %>
+      </div>
+
+      <!-- REVIEWS -->
+      <div class="tab-section" id="reviews">
+        <% if(reviews.length === 0) { %>
+          <p class="empty-msg">No reviews yet.</p>
+        <% } else { %>
+          <% reviews.forEach(r => { %>
+            <div class="dash-card">
+              <div>
+                <h3><%= r.user.username %></h3>
+                <p>"<%= r.text %>"</p>
+              </div>
+              <span class="rating">⭐ <%= r.rating %></span>
+            </div>
+          <% }) %>
+        <% } %>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll(".tab-btn");
+  const sections = document.querySelectorAll(".tab-section");
+
+  tabs.forEach(btn => {
+    btn.addEventListener("click", () => {
+      tabs.forEach(t => t.classList.remove("active"));
+      btn.classList.add("active");
+
+      sections.forEach(sec => sec.classList.remove("active"));
+      document.getElementById(btn.dataset.tab).classList.add("active");
+    });
+  });
+</script>
+
+
+
+
+
+
+
+<style>
+  /* WRAPPER */
+.host-wrapper {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+/* CARD */
+.host-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+/* TOP BAR */
+.host-top-bar {
+  height: 10px;
+  background: linear-gradient(90deg, #ff385c, #ff7a8a);
+}
+
+/* HEADER */
+.host-header {
+  padding: 30px 40px 15px;
+  border-bottom: 1px solid #e7e7e7;
+}
+
+.host-header h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.host-header span {
+  font-size: 14px;
+  color: #64748b;
+}
+
+/* STATS */
+.host-stats {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px 40px;
+  border-bottom: 1px solid #e7e7e7;
+}
+
+.stat-box {
+  text-align: center;
+}
+
+.stat-box strong {
+  font-size: 24px;
+  font-weight: 800;
+  color: #ff385c;
+}
+
+.stat-box span {
+  font-size: 12px;
+  color: #555;
+  text-transform: uppercase;
+}
+
+/* ACTION BUTTONS */
+.host-actions {
+  display: flex;
+  gap: 10px;
+  padding: 15px 40px;
+  border-bottom: 1px solid #e7e7e7;
+}
+
+.host-btn {
+  background: linear-gradient(90deg, #ff385c, #ff7a8a);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.host-btn-outline {
+  border: 2px solid #ff385c;
+  color: #ff385c;
+  padding: 8px 18px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* TABS */
+.host-tabs {
+  display: flex;
+  justify-content: space-around;
+  border-bottom: 2px solid #f0f0f0;
+  background: white;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 16px;
+  background: none;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  color: #666;
+}
+
+.tab-btn.active {
+  color: #ff385c;
+  border-bottom: 3px solid #ff385c;
+}
+
+/* CONTENT AREA */
+.host-content {
+  padding: 20px 40px;
+}
+
+.tab-section {
+  display: none;
+}
+
+.tab-section.active {
+  display: block;
+}
+
+/* CARDS */
+.dash-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px;
+  margin-bottom: 15px;
+  border: 1px solid #e4e4e4;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+}
+
+.view-btn {
+  background: linear-gradient(90deg, #ff385c, #ff7a8a);
+  color: white;
+  padding: 8px 20px;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+/* EMPTY MESSAGE */
+.empty-msg {
+  text-align: center;
+  color: #888;
+  padding: 40px 0;
+  font-style: italic;
+}
+
+/* RATING */
+.rating {
+  font-weight: 700;
+  font-size: 14px;
+  color: #ff385c;
+}
+
+/* RESPONSIVE */
+@media (max-width: 650px) {
+  .host-content {
+    padding: 20px;
+  }
+
+  .dash-card {
+    flex-direction: column;
+    text-align: left;
+    gap: 10px;
+  }
+}
+
+</style>

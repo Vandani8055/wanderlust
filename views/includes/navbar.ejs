@@ -49,13 +49,20 @@
       <a class="btn btn-signup" href="/signup">Sign Up</a>
       <% } %> <% if (currUser) { %>
 
-      <a href="/profile" class="nav-link profile-nav">
-        <img
-          src="<%= currUser.profileImage || '/images/default-user.jpg' %>"
-          alt="Profile"
-          class="nav-profile-img"
-        />
-      </a>
+      
+
+      <a href="<%= 
+      currUser?.role === 'admin' ? '/admin/dashboard' : 
+      currUser?.role === 'host' ? '/host/dashboard' : 
+      '/dashboard' 
+    %>" class="nav-link profile-nav">
+  <img
+    src="<%= currUser.profileImage || '/images/default-user.jpg' %>"
+    alt="Profile"
+    class="nav-profile-img"
+  />
+</a>
+
 
       <a class="btn btn-logout" href="/logout">Logout</a>
       <% } %>

@@ -27,7 +27,13 @@ const userSchema = new Schema({
   bookings: [{
     type: Schema.Types.ObjectId,
     ref: "Booking"
-  }]
+  }],
+  role: {
+    type: String,
+    enum: ["user", "host", "admin"],
+    default: "user",
+  }
+
 });
 
 

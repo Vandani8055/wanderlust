@@ -1,130 +1,121 @@
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Profile</title>
-  </head>
+<% layout('/layouts/boilerplate') %>
 
-  <body>
-    <% 
-      const listings = user.listings || []; 
-      const wishlist = user.wishlist || []; 
-      const reviews = user.reviews || []; 
-      const bookings = user.bookings || []; 
-    %>
+<% 
+  const listings = user.listings || []; 
+  const wishlist = user.wishlist || []; 
+  const reviews = user.reviews || []; 
+  const bookings = user.bookings || []; 
+%>
 
-    <div class="profile-wrapper">
-      <div class="profile-card">
-        <div class="profile-header">
-          <div class="profile-image">
-            <img src="<%= user.profileImage || 'https://via.placeholder.com/90' %>" />
-          </div>
-          <div class="profile-info">
-            <h2><%= user.username %></h2>
-            <span><%= user.email %></span>
-            <div class="profile-bio">
-              <%= user.bio || 'Traveller & Explorer' %>
-            </div>
-          </div>
-        </div>
-
-        <div class="profile-stats">
-          <div class="stat-box">
-            <strong><%= listings.length %></strong>
-            <span>Listings</span>
-          </div>
-          <div class="stat-box">
-            <strong><%= bookings.length %></strong>
-            <span>Bookings</span>
-          </div>
-          <div class="stat-box">
-            <strong><%= reviews.length %></strong>
-            <span>Reviews</span>
-          </div>
-        </div>
-
-        <div class="profile-actions">
-          <a href="/edit" class="edit-btn">Edit Profile</a>
-        </div>
-
-        <button class="tab-btn active" onclick="showSection('listings', this)">Listings</button>
-        <button class="tab-btn" onclick="showSection('wishlist', this)">Wishlist</button>
-        <button class="tab-btn" onclick="showSection('reviews', this)">Reviews</button>
-        <button class="tab-btn" onclick="showSection('bookings', this)">Bookings</button>
-
-        <div class="section-content">
-          <!-- LISTINGS -->
-          <div id="listings">
-            <% if(listings.length === 0){ %>
-              <div class="empty-msg">You haven’t added any listings yet 🌴</div>
-            <% } else { %>
-              <% listings.forEach(item => { %>
-                <div class="card">
-                  <span><%= item.title %></span>
-                  <a href="/listings/<%= item._id %>" class="view-btn">View</a>
-                </div>
-              <% }) %>
-            <% } %>
-          </div>
-
-          <!-- WISHLIST -->
-          <div id="wishlist" style="display: none">
-            <% if(wishlist.length === 0){ %>
-              <div class="empty-msg">Your wishlist is waiting ❤️</div>
-            <% } else { %>
-              <% wishlist.forEach(item => { %>
-                <div class="card">
-                  <span><%= item.title %></span>
-                  <a href="/listings/<%= item._id %>">View</a>
-                </div>
-              <% }) %>
-            <% } %>
-          </div>
-
-          <!-- REVIEWS -->
-          <div id="reviews" style="display: none">
-            <% if(reviews.length === 0){ %>
-              <div class="empty-msg">No reviews yet 🌟</div>
-            <% } else { %>
-              <% reviews.forEach(r => { %>
-                <div class="card">
-                  <h5><%= r.listing?.title || "Listing removed" %></h5>
-                  <p>⭐ <%= r.rating %></p>
-                  <p><%= r.comment %></p>
-                </div>
-              <% }) %>
-            <% } %>
-          </div>
-
-          <!-- BOOKINGS -->
-          <div id="bookings" style="display: none">
-            <% if(bookings.length === 0){ %>
-              <div class="empty-msg">No bookings yet ✈️</div>
-            <% } else { %>
-              <% bookings.forEach(b => { %>
-                <div class="card">
-                  <div>
-                    <strong><%= b.listing?.title || "Listing removed" %></strong><br />
-                    <small>Check-in: <%= new Date(b.checkIn).toLocaleDateString() %></small><br />
-                    <small>Status: <strong><%= b.paymentStatus %></strong></small>
-                  </div>
-
-                  <div style="display: flex; gap: 10px; align-items: center">
-                    <% if(b.listing){ %>
-                      <a class="view-btn" href="/listings/<%= b.listing._id %>">View</a>
-                    <% } %>
-                  </div>
-                </div>
-              <% }) %>
-            <% } %>
-          </div>
+<div class="profile-wrapper">
+  <div class="profile-card">
+    <div class="profile-header">
+      <div class="profile-image">
+        <img src="<%= user.profileImage || 'https://via.placeholder.com/90' %>" />
+      </div>
+      <div class="profile-info">
+        <h2><%= user.username %></h2>
+        <span><%= user.email %></span>
+        <div class="profile-bio">
+          <%= user.bio || 'Traveller & Explorer' %>
         </div>
       </div>
     </div>
-  </body>
-</html>
+
+    <div class="profile-stats">
+      <div class="stat-box">
+        <strong><%= listings.length %></strong>
+        <span>Listings</span>
+      </div>
+      <div class="stat-box">
+        <strong><%= bookings.length %></strong>
+        <span>Bookings</span>
+      </div>
+      <div class="stat-box">
+        <strong><%= reviews.length %></strong>
+        <span>Reviews</span>
+      </div>
+    </div>
+
+    <div class="profile-actions">
+      <a href="/user/edit" class="edit-btn rounded-pill">Edit Profile</a>
+    </div>
+
+    <button class="tab-btn active" onclick="showSection('listings', this)">Listings</button>
+    <button class="tab-btn" onclick="showSection('wishlist', this)">Wishlist</button>
+    <button class="tab-btn" onclick="showSection('reviews', this)">Reviews</button>
+    <button class="tab-btn" onclick="showSection('bookings', this)">Bookings</button>
+
+    <div class="section-content">
+      <!-- LISTINGS -->
+      <div id="listings">
+        <% if(listings.length === 0){ %>
+          <div class="empty-msg">You haven’t added any listings yet 🌴</div>
+        <% } else { %>
+          <% listings.forEach(item => { %>
+            <div class="card">
+              <span><%= item.title %></span>
+              <a href="/listings/<%= item._id %>" class="view-btn">View</a>
+            </div>
+          <% }) %>
+        <% } %>
+      </div>
+
+      <!-- WISHLIST -->
+      <div id="wishlist" style="display: none">
+        <% if(wishlist.length === 0){ %>
+          <div class="empty-msg">Your wishlist is waiting ❤️</div>
+        <% } else { %>
+          <% wishlist.forEach(item => { %>
+            <div class="card">
+              <span><%= item.title %></span>
+              <a href="/listings/<%= item._id %>">View</a>
+            </div>
+          <% }) %>
+        <% } %>
+      </div>
+
+      <!-- REVIEWS -->
+      <div id="reviews" style="display: none">
+        <% if(reviews.length === 0){ %>
+          <div class="empty-msg">No reviews yet 🌟</div>
+        <% } else { %>
+          <% reviews.forEach(r => { %>
+            <div class="card">
+              <h5><%= r.listing?.title || "Listing removed" %></h5>
+              <p>⭐ <%= r.rating %></p>
+              <p><%= r.comment %></p>
+            </div>
+          <% }) %>
+        <% } %>
+      </div>
+
+      <!-- BOOKINGS -->
+      <div id="bookings" style="display: none">
+        <% if(bookings.length === 0){ %>
+          <div class="empty-msg">No bookings yet ✈️</div>
+        <% } else { %>
+          <% bookings.forEach(b => { %>
+            <div class="card">
+              <div>
+                <strong><%= b.listing?.title || "Listing removed" %></strong><br />
+                <small>Check-in: <%= new Date(b.checkIn).toLocaleDateString() %></small><br />
+                <small>Status: <strong><%= b.paymentStatus %></strong></small>
+              </div>
+
+              <div style="display: flex; gap: 10px; align-items: center">
+                <% if(b.listing){ %>
+                  <a class="view-btn" href="/listings/<%= b.listing._id %>">View</a>
+                <% } %>
+              </div>
+            </div>
+          <% }) %>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
@@ -261,7 +252,7 @@
 
   .edit-btn {
     /* Using your requested gradient */
-    background: linear-gradient(90deg, #ff385c, #ff7a8a);
+    background: linear-gradient(90deg, #ff385c, #ff7a8a) !important;
     color: white;
     padding: 8px 25px;
     border-radius: 4px;
@@ -277,6 +268,7 @@
     /* Darker shade/stronger shadow on hover */
     box-shadow: 0 4px 10px rgba(255, 56, 92, 0.4);
     transform: translateY(-1px);
+    color: #fff;
   }
 
   /* --- Tabs & Content --- */

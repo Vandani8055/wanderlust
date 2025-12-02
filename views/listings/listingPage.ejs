@@ -17,7 +17,7 @@
     <img src="<%= listing.image.url %>" alt="listing-image" class="card-img-top show-img listing-card" />
     <div class="card-body">
       <p class="card-text">
-        <strong>Owner:</strong> <%= listing.owner.username %><br />
+        <strong>Owner:</strong> <%= listing.owner?.username || "Unknown" %><br />
         <strong>Description:</strong> <%= listing.description %><br />
         <strong>Price:</strong><%= listing.price.toLocaleString("en-IN") %><br />
         <strong>Location:</strong> <%= listing.location %><br />
@@ -38,27 +38,24 @@
 
   <!-- currUser must have in locals othervise not (if error in midd.then currUser not save that's why) -->
 
-  <% if(currUser && currUser._id.equals(listing.owner._id)) { %>
-<div class="btns">
-  
-  <a href="/listings/<%= listing._id %>/edit"
-     class="btn btn-dark rounded-pill mt-3 mb-3">
-     Edit
-  </a>
+ <% if(currUser && listing.owner && (currUser._id.equals(listing.owner._id) || currUser.role === "admin")) { %>
+  <div class="btns">
+    <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark rounded-pill mt-3 mb-3">
+      Edit
+    </a>
 
-  <a href="/bookings/<%= listing._id %>"
-     class="btn btn-primary rounded-pill mt-3 mb-3">
-     Book Now
-  </a>
+    <a href="/bookings/<%= listing._id %>" class="btn btn-primary rounded-pill mt-3 mb-3">
+      Book Now
+    </a>
 
-  <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" style="display:inline;">
-    <button class="btn btn-danger rounded-pill mt-3 mb-3">
-      Delete
-    </button>
-  </form>
-
-</div>
+    <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" style="display:inline;">
+      <button class="btn btn-danger rounded-pill mt-3 mb-3">
+        Delete
+      </button>
+    </form>
+  </div>
 <% } %>
+
 
 
   <hr>

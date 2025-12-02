@@ -1,7 +1,5 @@
 <% layout('/layouts/boilerplate') %>
 
-
-
 <div class="row mt-3">
   <h1 class="col-6 offset-3">SignUp on Wanderlust</h1>
   <div class="col-6 offset-3">
@@ -46,7 +44,18 @@
         </div>
       </div>
 
-      <button class="btn btn-success rounded-pill "disabled>Submit</button>
+      <div class="mb-3">
+        <label for="password" class="form-label">Select Role:</label>
+        <div class="password-field">
+          <select name="role" required>
+            <option value="user">User</option>
+            <option value="host">Host</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn btn-success rounded-pill" disabled>Submit</button>
     </form>
   </div>
 </div>

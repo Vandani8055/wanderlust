@@ -41,7 +41,7 @@ module.exports.showListing = async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findById(id)
     .populate({ path: "reviews", populate: { path: "author" } })
-    .populate("owner"); // Pass data to EJS for specific listing
+    .populate("owner" , "username email"); // Pass data to EJS for specific listing
   if (!listing) {
     req.flash("error", "Listing you requested. Does not exist😬💥!");
     return res.redirect("/listings");
@@ -51,7 +51,7 @@ module.exports.showListing = async (req, res) => {
 // };
 res.render("listings/listingPage", {
     listing,
-    user: req.user   // ✅ THIS IS THE FIX
+    user: req.user  || null  // ✅ THIS IS THE FIX
   });
 };
 
