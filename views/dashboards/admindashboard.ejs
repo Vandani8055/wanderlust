@@ -1,8 +1,18 @@
 <!-- HEAD REQUIREMENTS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <body>
+  <% if (success && success.length > 0) { %>
+  <div class="alert alert-success"><%= success %></div>
+<% } %>
+
+<% if (error && error.length > 0) { %>
+  <div class="alert alert-danger"><%= error %></div>
+<% } %>
+
   <aside class="sidebar">
     <div class="logo"><i class="fas fa-rocket"></i> Wanderlust Admin</div>
     <ul class="menu" id="menu-list">
@@ -66,16 +76,19 @@
       <section class="section" id="users">
         <h2 class="section-title">User Management</h2>
         <% if(users.length === 0){ %>
-          <div class="empty-msg">No users yet 🚫</div>
+        <div class="empty-msg">No users & host yet 🚫</div>
         <% } else { users.forEach(user => { %>
         <div class="card-list-item">
           <span><%= user.username %> (<%= user.email %>)</span>
 
           <div class="actions">
             <a href="/admin/users/<%= user._id %>" class="view-btn rounded-pill">View</a>
-            <button class="edit-btn rounded-pill" data-id="<%= user._id %>" data-type="user">Edit</button>
-            <button class="delete-btn rounded-pill" data-id="<%= user._id %>" data-type="user">Delete</button>
+
+            <form action="/admin/users/<%= user._id %>/delete" method="POST" style="display:inline;">
+              <button class="delete-btn rounded-pill">Delete</button>
+            </form>
           </div>
+
         </div>
         <% }) } %>
       </section>
@@ -84,16 +97,19 @@
       <section class="section" id="listings">
         <h2 class="section-title">Active Listings</h2>
         <% if(listings.length === 0){ %>
-          <div class="empty-msg">No listings yet 🚫</div>
+        <div class="empty-msg">No listings yet 🚫</div>
         <% } else { listings.forEach(item => { %>
         <div class="card-list-item">
           <span><%= item.title %></span>
 
           <div class="actions">
             <a href="/listings/<%= item._id %>" class="view-btn rounded-pill">View</a>
-            <button class="edit-btn rounded-pill" data-id="<%= item._id %>" data-type="listing">Edit</button>
-            <button class="delete-btn rounded-pill" data-id="<%= item._id %>" data-type="listing">Delete</button>
+
+            <form action="/admin/listings/<%= item._id %>/delete" method="POST" style="display:inline;">
+              <button class="delete-btn rounded-pill">Delete</button>
+            </form>
           </div>
+
         </div>
         <% }) } %>
       </section>
@@ -102,15 +118,17 @@
       <section class="section" id="reviews">
         <h2 class="section-title">Recent Reviews</h2>
         <% if(reviews.length === 0){ %>
-          <div class="empty-msg">No reviews yet 🚫</div>
+        <div class="empty-msg">No reviews yet 🚫</div>
         <% } else { reviews.forEach(r => { %>
         <div class="card-list-item">
           <span><strong><%= r.listing?.title || "Listing removed" %></strong> ⭐ <%= r.rating %></span>
 
           <div class="actions">
-            <a href="/admin/reviews/<%= r._id %>" class="view-btn rounded-pill">Moderate</a>
-            <button class="delete-btn rounded-pill" data-id="<%= r._id %>" data-type="review">Delete</button>
+            <form action="/admin/reviews/<%= r._id %>/delete" method="POST" style="display:inline;">
+              <button class="delete-btn rounded-pill">Delete</button>
+            </form>
           </div>
+
         </div>
         <% }) } %>
       </section>
@@ -119,15 +137,19 @@
       <section class="section" id="bookings">
         <h2 class="section-title">Latest Bookings</h2>
         <% if(bookings.length === 0){ %>
-          <div class="empty-msg">No bookings yet 🚫</div>
+        <div class="empty-msg">No bookings yet 🚫</div>
         <% } else { bookings.forEach(b => { %>
         <div class="card-list-item">
           <span>Booking for: <%= b.listing?.title || "Listing removed" %></span>
 
           <div class="actions">
             <a href="/admin/bookings/<%= b._id %>" class="view-btn rounded-pill">View</a>
-            <button class="delete-btn rounded-pill" data-id="<%= b._id %>" data-type="booking">Delete</button>
+
+            <form action="/admin/bookings/<%= b._id %>/delete" method="POST" style="display:inline;">
+              <button class="delete-btn rounded-pill">Delete</button>
+            </form>
           </div>
+
         </div>
         <% }) } %>
       </section>
@@ -136,7 +158,7 @@
   </div>
 
   <script>
-  // <!-- ===== SHORT SCRIPT FOR EDIT/DELETE BUTTONS ONLY ===== -->
+    // <!-- ===== SHORT SCRIPT FOR EDIT/DELETE BUTTONS ONLY ===== -->
 
 
     document.addEventListener("click", (e) => {
@@ -625,13 +647,14 @@
     font-weight: 500;
     transition: opacity 0.3s;
     box-shadow: 0 4px 10px rgba(79, 124, 255, 0.35);
-}
-.view-btn:hover {
+  }
+
+  .view-btn:hover {
     opacity: 0.85;
-}
+  }
 
 
-.edit-btn {
+  .edit-btn {
     background: linear-gradient(135deg, #e5e5e5, #c9c9c9);
     color: #333;
     padding: 5px 10px;
@@ -642,13 +665,14 @@
     font-weight: 500;
     transition: opacity 0.3s;
     box-shadow: 0 4px 10px rgba(150, 150, 150, 0.25);
-}
-.edit-btn:hover {
+  }
+
+  .edit-btn:hover {
     opacity: 0.85;
-}
+  }
 
 
-.delete-btn {
+  .delete-btn {
     background: linear-gradient(135deg, #ff385c, #d91b42);
     color: #fff;
     padding: 5px 10px;
@@ -659,10 +683,11 @@
     font-weight: 500;
     transition: opacity 0.3s;
     box-shadow: 0 4px 10px rgba(255, 56, 92, 0.35);
-}
-.delete-btn:hover {
+  }
+
+  .delete-btn:hover {
     opacity: 0.85;
-}
+  }
 
 
   .empty-msg {

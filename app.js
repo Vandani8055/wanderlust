@@ -34,6 +34,7 @@ const ExpressError = require("./utils/ExpressError.js");
 const listingRouter = require("./routes/listingRoute.js");
 const reviewRouter = require("./routes/reviewRoute.js");
 const userRouter = require("./routes/userRoute.js");
+const adminRouter = require('./routes/adminRoute.js');
 const bookingRoutes = require("./routes/bookingRoute.js");
 const staticRoutes = require("./routes/staticRoute.js");
 
@@ -141,6 +142,7 @@ app.get("/", (req, res) => {
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter); // Nested reviews route
 app.use("/", userRouter);
+app.use("/admin", adminRouter);
 
 app.use("/bookings", bookingRoutes); // User authentication routes
 app.use("/", staticRoutes);
