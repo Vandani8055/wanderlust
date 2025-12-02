@@ -68,45 +68,6 @@ module.exports.login = (req, res) => {
 
 
 
-module.exports.hostDashboard = async (req, res) => {
-  try {
-    const hostId = req.user._id;
-
-    // Host's Listings
-    const listings = await Listing.find({ owner: hostId });
-
-    // Total Listings
-    const totalListings = listings.length;
-
-    // Host Bookings
-    const bookings = await Booking.find({ host: hostId });
-
-    // Total Bookings
-    const totalBookings = bookings.length;
-
-    // Monthly Earnings (example – adjust your Booking schema as needed)
-    const monthlyEarnings = bookings.reduce((sum, b) => {
-      return sum + (b.totalAmount || 0);
-    }, 0);
-
-    // Host Reviews
-    const reviews = await Review.find({ host: hostId });
-
-    res.render("dashboards/hostDashboard", {
-      listings,
-      bookings,
-      reviews,
-      totalListings,
-      totalBookings,
-      monthlyEarnings,
-    });
-
-  } catch (err) {
-    console.log(err);
-    res.send("Error loading host dashboard");
-  }
-};
-
 
 
 
@@ -167,12 +128,22 @@ module.exports.userDashboard = async (req, res) => {
   res.render("dashboards/userdashboard.ejs", { user });
 };
 
+
+
+
+
+
 // / SHOW EDIT FORM
 module.exports.renderEditProfile = async (req, res) => {
   const user = await User.findById(req.user._id);
   res.render("dashboards/editUserdashboard", { user });
 
 };
+
+
+
+
+
 
 // UPDATE PROFILE
 module.exports.updateProfile = async (req, res) => {

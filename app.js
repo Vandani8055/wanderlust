@@ -35,6 +35,7 @@ const listingRouter = require("./routes/listingRoute.js");
 const reviewRouter = require("./routes/reviewRoute.js");
 const userRouter = require("./routes/userRoute.js");
 const adminRouter = require('./routes/adminRoute.js');
+const hostRouter = require('./routes/hostRoute.js');
 const bookingRoutes = require("./routes/bookingRoute.js");
 const staticRoutes = require("./routes/staticRoute.js");
 
@@ -140,9 +141,10 @@ app.get("/", (req, res) => {
 
 // Use Router files for specific paths
 app.use("/listings", listingRouter);
-app.use("/listings/:id/reviews", reviewRouter); // Nested reviews route
+// app.use("/listings/:id/reviews", reviewRouter); // Nested reviews route
 app.use("/", userRouter);
 app.use("/admin", adminRouter);
+app.use("/host", hostRouter);
 
 app.use("/bookings", bookingRoutes); // User authentication routes
 app.use("/", staticRoutes);

@@ -74,7 +74,7 @@ module.exports.updateProfileAdmin = async (req, res) => {
     res.redirect("/admin/dashboard");
   } catch (e) {
     req.flash("error", e.message);
-    res.redirect("/user/edit");
+    res.redirect("/admin/edit");
   }
 };
 

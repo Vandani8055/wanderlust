@@ -41,14 +41,6 @@ router.get("/logout", usersController.logout);
    DASHBOARD ROUTES (ROLE-BASED)
 ================================ */
 
-// Host dashboard
-router.get("/host/dashboard", isLoggedIn, isHost, usersController.hostDashboard);
-router.get("/host/edit", isLoggedIn, usersController.renderEditProfile);
-router.put("/host/edit", isLoggedIn, upload.single("profileImage"), usersController.updateProfile);
-
-
-
-
 // User dashboard
 router.get("/dashboard", isLoggedIn, isUser, usersController.userDashboard);
 router.get("/user/edit", isLoggedIn, usersController.renderEditProfile);
