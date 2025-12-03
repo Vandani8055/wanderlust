@@ -10,21 +10,23 @@ const Booking = require('./../models/bookingModel');
 
 module.exports.adminDashboard = async (req, res) => {
   try {
-   const users = await User.find({
-  role: { $in: ["user", "host"] }
-});
+    const users = await User.find({
+      role: { $in: ["user", "host"] }
+    });
 
-   const listings = await Listing.find({});
+    const listings = await Listing.find({});
 
-    const reviews = await Review.find({});
+    // FIX: populate listing + filter deleted listing reviews
+    const allReviews = await Review.find({}).populate("listing");
+    const reviews = allReviews.filter(r => r.listing !== null);
+
     const bookings = await Booking.find({});
 
-    // Optional: totals for cards
     const totalUsers = users.length;
     const totalListings = listings.length;
-    const totalReviews = reviews.length;
+    const totalReviews = reviews.length;   // FIXED COUNT
     const totalBookings = bookings.length;
-    const monthlyRevenue = 12450; // or calculate dynamically
+    const monthlyRevenue = 12450;
 
     res.render("dashboards/adminDashboard", {
       admin: req.user || null,
@@ -33,11 +35,12 @@ module.exports.adminDashboard = async (req, res) => {
       totalReviews,
       totalBookings,
       monthlyRevenue,
-      users,       // ✅ pass full users array
-      listings,    // ✅ pass full listings array
-      reviews,     // ✅ pass full reviews array
-      bookings     // ✅ pass full bookings array
+      users,
+      listings,
+      reviews,     // now filtered
+      bookings
     });
+
   } catch (err) {
     console.log(err);
     res.send("Error loading admin dashboard");
@@ -83,7 +86,7 @@ module.exports.updateProfileAdmin = async (req, res) => {
 
 
 // ================================
-// ADMIN CRUD — USERS
+// ADMIN CRUD — USERS (usercontroller not have permittion it itself delete just logout )
 // ================================
 
 
@@ -105,20 +108,16 @@ module.exports.deleteUser = async (req, res) => {
 // ADMIN CRUD — LISTINGS
 // ================================
 
-module.exports.deleteListing = async (req, res) => {
-  await Listing.findByIdAndDelete(req.params.id);
-  res.redirect("/admin/dashboard");
-};
 
 
 // ================================
 // ADMIN CRUD — REVIEWS
 // ================================
 
-module.exports.deleteReview = async (req, res) => {
-  await Review.findByIdAndDelete(req.params.id);
-  res.redirect("/admin/dashboard");
-};
+// module.exports.deleteReview = async (req, res) => {
+//   await Review.findByIdAndDelete(req.params.id);
+//   res.redirect("/admin/dashboard");
+// };
 
 
 

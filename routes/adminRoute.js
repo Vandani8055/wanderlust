@@ -15,11 +15,9 @@ router.put("/edit", isLoggedIn, isAdmin, upload.single("profileImage"), adminCon
 // admin delete user 
 router.post("/users/:id/delete", isLoggedIn, isAdmin, adminController.deleteUser);
 
-// admin delete listing
-router.post("/listings/:id/delete", isLoggedIn, isAdmin, adminController.deleteListing);
 
 // admin delete review
-router.post("/reviews/:id/delete", isLoggedIn, isAdmin, adminController.deleteReview);
+// router.post("/reviews/:id/delete", isLoggedIn, isAdmin, adminController.deleteReview);
 
 // admin delete booking
 router.post("/bookings/:id/delete", isLoggedIn, isAdmin, adminController.deleteBooking);

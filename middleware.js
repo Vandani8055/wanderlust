@@ -36,6 +36,10 @@ module.exports.isUser = (req, res, next) => {
 
 
 
+
+
+
+
 // Login
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
@@ -55,17 +59,33 @@ module.exports.saveRedirectUrl = (req, res, next) => {
   next();
 };
 
-// if not owner the not "EDIT , UPDATE , DELETE Listings( Authorization )":
+
+
+// host and admin allow to delete listing : not user have right :
 module.exports.isOwner = async (req, res, next) => {
   const { id } = req.params;
   const listing = await Listing.findById(id);
-  // if curruser and owner not match then not edit the listing:
+
+  // Safety: If no listing found
+  if (!listing) {
+    req.flash("error", "Listing not found!");
+    return res.redirect("/listings");
+  }
+
+  // ✔ Allow admin full access
+  if (res.locals.currUser.role === "admin") {
+    return next();
+  }
+
+  // ✔ Check owner
   if (!listing.owner._id.equals(res.locals.currUser._id)) {
     req.flash("error", "You are not owner of this listing");
     return res.redirect(`/listings/${id}`);
   }
+
   next();
 };
+
 
 // ============================================================================
 // JOI VALIDATION MIDDLEWARE
@@ -96,10 +116,18 @@ module.exports.validateReview = (req, res, next) => {
   }
 };
 
+
+// Author and Admin can delete review other not have permition like host:
 // if not owner the not "EDIT , UPDATE , DELETE Reviews( Authorization )":
 module.exports.isReviewAuthor = async (req, res, next) => {
   const { id, reviewId } = req.params;
   const review = await Review.findById(reviewId);
+
+  // ALLOW ADMIN
+  if (req.user.role === "admin") {
+    return next();
+  }
+  
   // if curruser and owner not match then not edit the Review:
   if (!review.author._id.equals(res.locals.currUser._id)) {
     req.flash("error", "You are not owner of this review");

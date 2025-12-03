@@ -32,9 +32,13 @@ const listingSchema = new Schema({
   },
 });
 
+
+// when listing delete review of listing also delete : automatically
 listingSchema.post("findOneAndDelete", async (listing) => {
   if (listing) {
-    await Review.deleteMany({ _id: { $in: listing.reviews } });
+    // await Review.deleteMany({ _id: { $in: listing.reviews } });
+    await Review.deleteMany({ listing: listing._id });
+
   }
 });
 

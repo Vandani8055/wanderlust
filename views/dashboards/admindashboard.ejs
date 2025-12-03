@@ -105,9 +105,9 @@
           <div class="actions">
             <a href="/listings/<%= item._id %>" class="view-btn rounded-pill">View</a>
 
-            <form action="/admin/listings/<%= item._id %>/delete" method="POST" style="display:inline;">
-              <button class="delete-btn rounded-pill">Delete</button>
-            </form>
+            <form action="/listings/<%= item._id %>?_method=DELETE" method="POST" style="display:inline;">
+                  <button class="delete-btn rounded-pill">Delete</button>
+              </form> 
           </div>
 
         </div>
@@ -124,9 +124,14 @@
           <span><strong><%= r.listing?.title || "Listing removed" %></strong> ⭐ <%= r.rating %></span>
 
           <div class="actions">
-            <form action="/admin/reviews/<%= r._id %>/delete" method="POST" style="display:inline;">
-              <button class="delete-btn rounded-pill">Delete</button>
-            </form>
+            <% if (r.listing) { %>
+<form action="/listings/<%= r.listing._id %>/reviews/<%= r._id %>?_method=DELETE"
+      method="POST"
+      style="display:inline;">
+  <button class="delete-btn rounded-pill">Delete</button>
+</form>
+<% } %>
+
           </div>
 
         </div>
@@ -158,6 +163,14 @@
   </div>
 
   <script>
+
+    // CONTENT_LOAD:
+    window.addEventListener("load", () => {
+    document.body.classList.add("loaded");
+  });
+
+
+  
     // <!-- ===== SHORT SCRIPT FOR EDIT/DELETE BUTTONS ONLY ===== -->
 
 
@@ -271,535 +284,521 @@
 </body>
 
 <style>
-  /* --- FULL WANDERLUST LIGHT MODE CSS (Final Version) --- */
+ /* --- FULL WANDERLUST VERDANT LIGHT MODE CSS (Fresh & Professional) --- */
 
-  /* Base Variables for Light Theme */
-  :root {
-    --sidebar-width: 240px;
-    --main-bg: #f5f6f8;
-    /* Very subtle off-white background */
-    --card-bg: #ffffff;
-    /* Pure white for cards */
-    --accent-start: #ff385c;
-    /* Pink */
-    --accent-end: #ff7a8a;
-    /* Lighter Pink/Coral */
-    --primary-gradient: linear-gradient(90deg,
-        var(--accent-start),
-        var(--accent-end));
-    --text-dark: #343a40;
-    --text-muted: #6c757d;
-    --border-color: #e9ecef;
-    --shadow-light: 0 6px 15px rgba(0, 0, 0, 0.08);
-  }
+/* Base Variables for Light Theme */
+:root {
+  --sidebar-width: 240px;
+  --main-bg: #f5f6f8; /* Very subtle off-white background */
+  --card-bg: #ffffff; /* Pure white for cards/surfaces */
+  --accent-start: #16a085; /* Deep Teal/Green */
+  --accent-end: #2ecc71; /* Emerald Green */
+  --primary-gradient: linear-gradient(90deg,
+      var(--accent-start),
+      var(--accent-end));
+  --text-dark: #2c3e50; /* Dark navy for main text */
+  --text-muted: #7f8c8d; /* Muted gray for secondary info */
+  --border-color: #ecf0f1; /* Very light gray border */
+  --shadow-light: 0 4px 10px rgba(0, 0, 0, 0.05); /* Very light shadow */
+}
 
-  /* RESET */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
-  }
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
 
+body {
+  display: flex; /* Keep flex for fixed sidebar layout */
+  background: var(--main-bg);
+  color: var(--text-dark);
+  min-height: 100vh;
+}
+
+
+.menu{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-left: -2rem;
+}
+/* --- 1. SIDEBAR (Fixed and Accent Colored) --- */
+.sidebar {
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--primary-gradient); /* Use the new Teal/Green gradient */
+  color: #fff;
+  padding: 25px 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s;
+  /* Use a lighter, cleaner shadow for the fixed element */
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1); 
+  z-index: 200;
+}
+
+.sidebar .logo {
+  font-size: 26px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 50px;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar ul li {
+  margin-bottom: 8px; /* Tighter spacing for professional look */
+}
+
+.sidebar ul li a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.sidebar ul li.active a {
+  /* Use a very subtle white background for active state */
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar ul li a:hover:not(.active) {
+  background: rgba(0, 0, 0, 0.1);
+  color: #fff;
+}
+
+.sidebar-footer {
+  padding-top: 20px;
+  margin-left: 1rem;
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-footer .action-link {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  text-decoration: none;
+  padding: 5px 0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-footer .action-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* --- 2. MAIN LAYOUT (Fixed Sidebar Offset) --- */
+
+.main-container {
+  /* Offset for fixed sidebar */
+  margin-left: var(--sidebar-width);
+  width: calc(100% - var(--sidebar-width));
+  min-height: 100vh;
+}
+
+/* HEADER (Sticky - Light Background) */
+.dashboard-header {
+  position: sticky;
+  top: 0;
+  height: 65px; /* Slightly shorter header */
+  background: var(--card-bg);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 30px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); /* Very subtle shadow */
+  z-index: 100;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* --- User Info & Dropdown --- */
+.user-menu-wrapper {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.user-menu-wrapper.open .user-info,
+.user-info:hover {
+  background: var(--border-color);
+}
+
+.user-info .avatar {
+  border: 2px solid var(--accent-start); /* Use new accent color */
+  width: 35px; /* Slightly smaller avatar */
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-info .username {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-dark);
+}
+
+.user-info .role {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.dropdown-arrow {
+  color: var(--text-muted);
+}
+
+.dropdown-menu {
+  width: 200px;
+  background: var(--card-bg);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
+  color: var(--text-dark);
+  font-size: 13px;
+}
+
+.dropdown-item i {
+  color: var(--text-muted);
+}
+
+.dropdown-item:hover {
+  background: var(--main-bg);
+  color: var(--accent-start);
+}
+
+.dropdown-item:hover i {
+  color: var(--accent-start);
+}
+
+.dropdown-divider {
+  background: var(--border-color);
+}
+
+.logout-btn {
+  color: #e74c3c; /* Use standard red for logout */
+}
+
+.logout-btn:hover {
+  background: rgba(231, 76, 60, 0.1);
+}
+
+/* MAIN CONTENT */
+.main-content {
+  padding: 30px;
+  /* Space for the sticky header (65px header + 30px margin) */
+  padding-top: 95px;
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 20px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+/* --- 3. METRIC CARDS & LISTS --- */
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 35px;
+}
+
+.metric-card {
+  background: var(--card-bg);
+  padding: 20px; /* Slightly less padding */
+  border-radius: 10px;
+  box-shadow: var(--shadow-light);
+  /* Accent Border */
+  border-left: 4px solid var(--accent-end); /* Slightly thinner border */
+  gap: 6px;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px); /* Less aggressive lift on hover */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  border-left-color: var(--accent-start);
+}
+
+/* FIX: Ensures icons are visible and styled correctly */
+.card-icon,
+.metric-card i {
+  font-size: 22px;
+  color: var(--accent-start);
+  background: rgba(22, 160, 133, 0.1); /* Light bubble background */
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.metric-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.metric-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+/* --- CHART CONTAINER STYLE --- */
+.chart-container {
+  height: 400px;
+  padding: 25px;
+  margin-top: 20px;
+  background: var(--card-bg);
+  border-radius: 10px;
+  box-shadow: var(--shadow-light);
+}
+
+.card-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--card-bg);
+  margin-bottom: 10px;
+  padding: 12px 18px;
+  border-radius: 6px;
+  box-shadow: none; /* Removed individual item shadows */
+  border: 1px solid var(--border-color);
+}
+
+.card-list-item:hover {
+  border-color: var(--accent-end);
+  box-shadow: 0 2px 8px rgba(22, 160, 133, 0.1);
+}
+
+.rating-pill {
+  background: #3498db; /* Blue for a fresh rating look */
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+
+/* Action Buttons (More Professional Look) */
+.view-btn {
+text-decoration: none;
+  background: linear-gradient(135deg, #3498db, #2980b9); /* Blue gradient for view */
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  box-shadow: 0 3px 8px rgba(52, 152, 219, 0.2);
+}
+
+.edit-btn {
+  background: var(--card-bg);
+  color: var(--accent-start);
+  padding: 6px 12px;
+  border: 1px solid var(--accent-start);
+  border-radius: 6px;
+  font-size: 13px;
+  box-shadow: none;
+}
+
+.edit-btn:hover {
+  background: rgba(22, 160, 133, 0.1);
+  opacity: 1;
+}
+
+
+.delete-btn {
+  background: #e74c3c;
+  color: #fff;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  box-shadow: 0 3px 8px rgba(231, 76, 60, 0.2);
+}
+
+.empty-msg {
+  background: var(--card-bg);
+  border: 1px dashed var(--border-color);
+  color: var(--text-muted);
+}
+
+/* 🛠️ 4. RESPONSIVE FIXES (Re-using the previous structure but applied to light mode) 🛠️ */
+@media (max-width: 992px) {
+
+  /* 1. Reset body stacking to column flow */
   body {
-    display: flex;
-    background: var(--main-bg);
-    color: var(--text-dark);
-    min-height: 100vh;
-  }
-
-  /* --- 1. SIDEBAR (Fixed for Large Screens) --- */
-  .sidebar {
-    width: var(--sidebar-width);
-    height: 100vh;
-    background: var(--primary-gradient);
-    color: #fff;
-    padding: 25px 20px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: flex;
     flex-direction: column;
-    transition: all 0.3s;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
-    z-index: 200;
   }
 
+  /* 2. Turn fixed sidebar into a regular flow element */
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    box-shadow: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  /* 3. Re-organize sidebar children for horizontal layout */
   .sidebar .logo {
-    font-size: 26px;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 50px;
-    color: #fff;
-    letter-spacing: 1px;
+    margin-bottom: 15px;
+    margin-right: 20px;
+    text-align: left;
+    width: 100%;
   }
 
   .sidebar ul {
-    list-style: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 15px;
+    border-right: none;
+    display: flex;
+    width: 100%;
   }
 
   .sidebar ul li {
-    margin-bottom: 12px;
+    margin-bottom: 0;
   }
 
   .sidebar ul li a {
-    color: rgba(255, 255, 255, 0.75);
-    text-decoration: none;
-    padding: 12px 18px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 500;
-    transition: all 0.3s;
-    position: relative;
-  }
-
-  .sidebar ul li.active a {
-    background: rgba(255, 255, 255, 0.2);
-    color: #fff;
-    font-weight: 600;
-  }
-
-  .sidebar ul li a:hover:not(.active) {
-    background: rgba(0, 0, 0, 0.1);
-    color: #fff;
+    padding: 8px 12px;
   }
 
   .sidebar-footer {
-    padding-top: 20px;
-    margin-top: auto;
+    margin-top: 15px;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    flex-direction: row;
+    gap: 15px;
+    padding-top: 15px;
+    width: 100%;
   }
 
-  .sidebar-footer .action-link {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 14px;
-    text-decoration: none;
-    padding: 8px 0;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .sidebar-footer .action-link:hover {
-    color: #fff;
-    text-decoration: underline;
-  }
-
-  /* --- 2. MAIN LAYOUT (Fixed Sidebar Offset) --- */
-
+  /* 4. Reset main-container positioning and size */
   .main-container {
-    /* Offset for fixed sidebar */
-    margin-left: var(--sidebar-width);
-    width: calc(100% - var(--sidebar-width));
+    margin-left: 0;
+    width: 100%;
   }
 
-  /* HEADER (Sticky) */
+  /* 5. Fix header position and stacking */
   .dashboard-header {
     position: sticky;
     top: 0;
-    height: 70px;
-    background: var(--card-bg);
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 0 30px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    z-index: 100;
-    border-bottom: 1px solid var(--border-color);
+    left: 0;
+    justify-content: flex-end; /* Keep user menu to the right */
+    width: 100%;
   }
 
-  /* --- User Info & Dropdown --- */
-  .user-menu-wrapper {
-    position: relative;
-    cursor: pointer;
-    user-select: none;
+  /* 6. Fix main-content padding - remove excessive top padding */
+  .main-content {
+    padding-top: 30px;
   }
+}
 
-  .user-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 5px;
-    border-radius: 8px;
-    transition: background 0.2s;
-  }
 
-  .user-menu-wrapper.open .user-info,
-  .user-info:hover {
-    background: var(--border-color);
-  }
 
-  .user-info .avatar {
-    border: 2px solid var(--accent-start);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
 
-  .user-info .user-text {
-    line-height: 1.2;
-  }
+/* drop down */
 
-  .user-info .username {
-    font-weight: 600;
-    font-size: 14px;
-  }
-
-  .user-info .role {
-    color: var(--text-muted);
-    font-size: 12px;
-  }
-
-  .dropdown-arrow {
-    color: var(--text-muted);
-    transition: transform 0.2s;
-  }
-
-  .user-menu-wrapper.open .dropdown-arrow {
-    transform: rotate(180deg);
-  }
-
-  .dropdown-menu {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    width: 220px;
-    background: var(--card-bg);
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    overflow: hidden;
-    z-index: 1000;
-
-    display: none;
+/* CSS Snippet from your code */
+.dropdown-menu {
+    /* ... styles ... */
+    display: none; /* Initially hidden */
     opacity: 0;
     transform: translateY(10px);
     transition: opacity 0.2s, transform 0.2s;
-  }
+    width: 5rem;
+}
 
-  .user-menu-wrapper.open .dropdown-menu {
-    display: block;
+.user-menu-wrapper.open .dropdown-menu {
+    display: block; /* Becomes visible */
     opacity: 1;
     transform: translateY(0);
+}
+
+.user-menu-wrapper.open .dropdown-arrow {
+    transform: rotate(180deg); /* Arrow rotation */
+}
+
+
+/* Prevent horizontal scrolling when the dropdown is open */
+.dropdown-open-active {
+    overflow-x: hidden;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 200px;
+    /* ... other styles ... */
+    
+    /* ADD THIS LINE to compensate for potential overflow */
+    margin-right: -1px; 
+}
+
+/* Further refinements for small phones */
+@media (max-width: 576px) {
+  .sidebar .logo {
+    font-size: 22px;
   }
 
-  .dropdown-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 15px;
-    text-decoration: none;
-    color: var(--text-dark);
-    font-size: 14px;
-    transition: background 0.2s, color 0.2s;
+  .sidebar ul {
+    flex-direction: column;
+    width: 100%;
   }
 
-  .dropdown-item i {
-    width: 15px;
-    color: var(--text-muted);
+  .sidebar ul li a {
+    width: 100%;
   }
 
-  .dropdown-item:hover {
-    background: var(--main-bg);
-    color: var(--accent-start);
+  .sidebar-footer {
+    flex-direction: column;
+    gap: 5px;
   }
-
-  .dropdown-item:hover i {
-    color: var(--accent-start);
-  }
-
-  .dropdown-divider {
-    height: 1px;
-    background: var(--border-color);
-    margin: 5px 0;
-  }
-
-  .logout-btn {
-    color: var(--accent-start);
-  }
-
-  .logout-btn:hover {
-    background: rgba(255, 56, 92, 0.1);
-  }
-
-  /* MAIN CONTENT (Large Screen Spacing) */
-  .main-content {
-    padding: 30px;
-    /* Space for the sticky header (70px header + 30px margin) */
-    padding-top: 100px;
-  }
-
-  .section-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--text-dark);
-    margin-bottom: 25px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid var(--border-color);
-  }
-
-  /* --- 3. METRIC CARDS & LISTS --- */
 
   .metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 25px;
-    margin-bottom: 40px;
+    grid-template-columns: 1fr;
   }
-
-  .metric-card {
-    background: var(--card-bg);
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: var(--shadow-light);
-    /* Accent Border */
-    border-left: 5px solid var(--accent-start);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    transition: transform 0.3s, border-left-color 0.3s;
-  }
-
-  .metric-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    border-left-color: var(--accent-end);
-  }
-
-  /* FIX: Ensures icons are visible and styled correctly */
-  .card-icon,
-  .metric-card i {
-    font-size: 24px;
-    color: var(--accent-start);
-    background: rgba(255, 56, 92, 0.1);
-    padding: 10px;
-    border-radius: 8px;
-    display: inline-block;
-  }
-
-  .metric-value {
-    font-size: 30px;
-    font-weight: 700;
-    color: var(--text-dark);
-  }
-
-  .metric-label {
-    font-size: 13px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  /* --- CHART CONTAINER STYLE --- */
-  .chart-container {
-    height: 400px;
-    padding: 30px;
-    margin-top: 20px;
-  }
-
-  .card-list-item {
-    background: var(--card-bg);
-    margin-bottom: 12px;
-    padding: 15px 20px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    border: 1px solid var(--border-color);
-    transition: all 0.3s;
-  }
-
-  .card-list-item:hover {
-    border-color: var(--accent-start);
-    box-shadow: 0 4px 10px rgba(255, 56, 92, 0.1);
-  }
-
-  .card-list-item strong {
-    font-weight: 600;
-    color: var(--text-dark);
-  }
-
-  .rating-pill {
-    background: #2ecc71;
-    color: #fff;
-    font-size: 12px;
-    padding: 3px 8px;
-    border-radius: 4px;
-    margin-left: 10px;
-    font-weight: 600;
-  }
-
-  .view-btn {
-    background: linear-gradient(135deg, #4f7cff, #6ca8ff);
-    color: #fff;
-    padding: 5px 10px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    transition: opacity 0.3s;
-    box-shadow: 0 4px 10px rgba(79, 124, 255, 0.35);
-  }
-
-  .view-btn:hover {
-    opacity: 0.85;
-  }
-
-
-  .edit-btn {
-    background: linear-gradient(135deg, #e5e5e5, #c9c9c9);
-    color: #333;
-    padding: 5px 10px;
-    border: none;
-    text-decoration: none;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 500;
-    transition: opacity 0.3s;
-    box-shadow: 0 4px 10px rgba(150, 150, 150, 0.25);
-  }
-
-  .edit-btn:hover {
-    opacity: 0.85;
-  }
-
-
-  .delete-btn {
-    background: linear-gradient(135deg, #ff385c, #d91b42);
-    color: #fff;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 10px;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    transition: opacity 0.3s;
-    box-shadow: 0 4px 10px rgba(255, 56, 92, 0.35);
-  }
-
-  .delete-btn:hover {
-    opacity: 0.85;
-  }
-
-
-  .empty-msg {
-    padding: 25px;
-    background: var(--card-bg);
-    border-radius: 8px;
-    border: 1px dashed var(--border-color);
-    color: var(--text-muted);
-    text-align: center;
-    font-size: 16px;
-  }
-
-  /* 🛠️ 4. RESPONSIVE FIXES 🛠️ */
-  @media (max-width: 992px) {
-
-    /* 1. Reset body stacking to column flow */
-    body {
-      flex-direction: column;
-    }
-
-    /* 2. Turn fixed sidebar into a regular flow element */
-    .sidebar {
-      width: 100%;
-      height: auto;
-      position: relative;
-      box-shadow: none;
-      flex-direction: row;
-      flex-wrap: wrap;
-      align-items: center;
-      padding-top: 15px;
-      padding-bottom: 15px;
-    }
-
-    /* 3. Re-organize sidebar children for horizontal layout */
-    .sidebar .logo {
-      margin-bottom: 15px;
-      margin-right: 20px;
-      text-align: left;
-      width: 100%;
-    }
-
-    .sidebar ul.menu {
-      flex-direction: row;
-      flex-wrap: wrap;
-      gap: 5px;
-      margin-bottom: 15px;
-      border-right: none;
-      display: flex;
-      width: 100%;
-    }
-
-    .sidebar ul li {
-      margin-bottom: 0;
-    }
-
-    .sidebar ul li a {
-      padding: 8px 12px;
-    }
-
-    .sidebar-footer {
-      margin-top: 15px;
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-      display: flex;
-      flex-direction: row;
-      gap: 15px;
-      padding-top: 15px;
-      width: 100%;
-    }
-
-    /* 4. Reset main-container positioning and size */
-    .main-container {
-      margin-left: 0;
-      width: 100%;
-    }
-
-    /* 5. Fix header position and stacking */
-    .dashboard-header {
-      position: sticky;
-      top: 0;
-      left: 0;
-      justify-content: space-between;
-      width: 100%;
-    }
-
-    /* 6. Fix main-content padding - remove excessive top padding */
-    .main-content {
-      padding-top: 30px;
-    }
-  }
-
-  /* Further refinements for small phones */
-  @media (max-width: 576px) {
-    .sidebar .logo {
-      font-size: 22px;
-    }
-
-    .sidebar ul.menu {
-      flex-direction: column;
-      width: 100%;
-    }
-
-    .sidebar ul li a {
-      width: 100%;
-    }
-
-    .sidebar-footer {
-      flex-direction: column;
-      gap: 5px;
-    }
-
-    .metrics-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>
+}
