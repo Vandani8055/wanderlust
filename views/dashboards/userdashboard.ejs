@@ -1,18 +1,18 @@
-
 <% layout('/layouts/boilerplate') %>
 
 <% 
-  const listings = user.listings || []; 
+ 
   const wishlist = user.wishlist || []; 
   const reviews = user.reviews || []; 
   const bookings = user.bookings || []; 
+  
 %>
 
 <div class="profile-wrapper">
   <div class="profile-card">
     <div class="profile-header">
       <div class="profile-image">
-        <img src="<%= user.profileImage || 'https://via.placeholder.com/90' %>" />
+       <img src="<%= currUser.profileImage ? currUser.profileImage : '/images/default.jpg' %>" class="nav-profile-img" />
       </div>
       <div class="profile-info">
         <h2><%= user.username %></h2>
@@ -25,8 +25,8 @@
 
     <div class="profile-stats">
       <div class="stat-box">
-        <strong><%= listings.length %></strong>
-        <span>Listings</span>
+        <strong><%= wishlist.length %></strong>
+        <span>Wishlist</span>
       </div>
       <div class="stat-box">
         <strong><%= bookings.length %></strong>
@@ -42,86 +42,72 @@
       <a href="/user/edit" class="edit-btn rounded-pill">Edit Profile</a>
     </div>
 
-    <button class="tab-btn active" onclick="showSection('listings', this)">Listings</button>
-    <button class="tab-btn" onclick="showSection('wishlist', this)">Wishlist</button>
+    
+    <button class="tab-btn active" onclick="showSection('wishlist', this)">Wishlist</button>
     <button class="tab-btn" onclick="showSection('reviews', this)">Reviews</button>
     <button class="tab-btn" onclick="showSection('bookings', this)">Bookings</button>
 
     <div class="section-content">
-      <!-- LISTINGS -->
-      <div id="listings">
-        <% if(listings.length === 0){ %>
-          <div class="empty-msg">You haven’t added any listings yet 🌴</div>
-        <% } else { %>
-          <% listings.forEach(item => { %>
-            <div class="card">
-              <span><%= item.title %></span>
-              <a href="/listings/<%= item._id %>" class="view-btn">View</a>
-            </div>
-          <% }) %>
-        <% } %>
-      </div>
-
+      
       <!-- WISHLIST -->
       <div id="wishlist" style="display: none">
         <% if(wishlist.length === 0){ %>
-          <div class="empty-msg">Your wishlist is waiting ❤️</div>
+        <div class="empty-msg">Your wishlist is waiting ❤️</div>
         <% } else { %>
-          <% wishlist.forEach(item => { %>
-            <div class="card">
-              <span><%= item.title %></span>
-              <a href="/listings/<%= item._id %>">View</a>
-            </div>
-          <% }) %>
+        <% wishlist.forEach(item => { %>
+        <div class="card">
+          <span><%= item.title %></span>
+          <a href="/listings/<%= item._id %>">View</a>
+        </div>
+        <% }) %>
         <% } %>
       </div>
 
       <!-- REVIEWS -->
-      <div id="reviews" style="display: none">
-        <% if(reviews.length === 0){ %>
-          <div class="empty-msg">No reviews yet 🌟</div>
-        <% } else { %>
-          <% reviews.forEach(r => { %>
-            <div class="card">
-              <h5><%= r.listing?.title || "Listing removed" %></h5>
-              <p>⭐ <%= r.rating %></p>
-              <p><%= r.comment %></p>
-            </div>
-          <% }) %>
-        <% } %>
+<div id="reviews" style="display: none">
+  <% if(reviews.length === 0){ %>
+    <div class="empty-msg">No reviews yet 🌟</div>
+  <% } else { %>
+    <% reviews.forEach(r => { %>
+      <div class="card review-card">
+        <div class="card-header">
+          <h5 class="listing-title"><%= r.listing?.title || "Listing removed" %></h5>
+          <span class="rating">⭐ <%= r.rating %></span>
+          <% if(r.listing) { %>
+            <a href="/listings/<%= r.listing._id %>" class="view-btn">View</a>
+          <% } %>
+        </div>
+        <p class="comment"><%= r.comment %></p>
       </div>
+    <% }) %>
+  <% } %>
+</div>
 
       <!-- BOOKINGS -->
       <div id="bookings" style="display: none">
         <% if(bookings.length === 0){ %>
-          <div class="empty-msg">No bookings yet ✈️</div>
+        <div class="empty-msg">No bookings yet ✈️</div>
         <% } else { %>
-          <% bookings.forEach(b => { %>
-            <div class="card">
-              <div>
-                <strong><%= b.listing?.title || "Listing removed" %></strong><br />
-                <small>Check-in: <%= new Date(b.checkIn).toLocaleDateString() %></small><br />
-                <small>Status: <strong><%= b.paymentStatus %></strong></small>
-              </div>
+        <% bookings.forEach(b => { %>
+        <div class="card">
+          <div>
+            <strong><%= b.listing?.title || "Listing removed" %></strong><br />
+            <small>Check-in: <%= new Date(b.checkIn).toLocaleDateString() %></small><br />
+            <small>Status: <strong><%= b.paymentStatus %></strong></small>
+          </div>
 
-              <div style="display: flex; gap: 10px; align-items: center">
-                <% if(b.listing){ %>
-                  <a class="view-btn" href="/listings/<%= b.listing._id %>">View</a>
-                <% } %>
-              </div>
-            </div>
-          <% }) %>
+          <div style="display: flex; gap: 10px; align-items: center">
+            <% if(b.listing){ %>
+            <a class="view-btn" href="/listings/<%= b.listing._id %>">View</a>
+            <% } %>
+          </div>
+        </div>
+        <% }) %>
         <% } %>
       </div>
     </div>
   </div>
 </div>
-
-
-
-
-
-
 
 
 
@@ -306,24 +292,52 @@
   }
 
   /* --- Card Styles (Feed Items) --- */
-  .card {
-    background: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 18px;
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-  }
+  .review-card {
+  background: #fff;
+  padding: 15px 20px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
 
-  .card:hover {
-    border-color: #ff7a8a;
-    /* Highlight border with lighter pink on hover */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-  }
+.review-card .card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap; /* responsive */
+}
+
+.review-card .listing-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.review-card .rating {
+  font-size: 14px;
+  color: #f39c12; /* gold star color */
+}
+
+.review-card .view-btn {
+  padding: 5px 12px;
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: #fff;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.review-card .view-btn:hover {
+  opacity: 0.85 !important;
+}
+
+.review-card .comment {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #555;
+}
 
   .empty-msg {
     padding: 40px;
@@ -333,32 +347,7 @@
     font-size: 16px;
   }
 
-  /* --- View Button (Accent Color) --- */
-  .view-btn {
-    /* Using your requested gradient */
-    background: linear-gradient(90deg, #ff385c, #ff7a8a);
-    color: white;
-    margin-top: 0;
-    height: 30px;
-    width: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-    transition: 0.3s ease;
-    flex-shrink: 0;
-  }
-
-  .view-btn:hover {
-    transform: none;
-    /* Stronger shadow using the primary color */
-    box-shadow: 0 3px 10px rgba(255, 56, 92, 0.4);
-    /* Slightly darker/more prominent gradient */
-    background: linear-gradient(90deg, #e03250, #e66f7e);
-  }
+  
 
   /* Responsive adjustments */
   @media (max-width: 600px) {

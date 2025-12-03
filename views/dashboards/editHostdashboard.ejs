@@ -17,7 +17,7 @@
       <div class="form-group photo-upload">
         <label>Profile Photo</label>
         <div class="photo-preview">
-          <img id="photoPreview" src="<%= host.profileImage || '/images/default-user.jpg' %>" alt="Profile Photo">
+          <img src="<%= currUser.profileImage ? currUser.profileImage : '/images/default.jpg' %>" class="nav-profile-img" />
         </div>
         <input type="file" name="profileImage" id="profileImage" accept="image/*">
       </div>

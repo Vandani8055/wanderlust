@@ -3,42 +3,41 @@ const Listing = require("./../models/listingModel");
 const Review = require("./../models/reviewModel");
 const Booking = require("./../models/bookingModel");
 
+
+
 module.exports.hostDashboard = async (req, res) => {
   try {
     const hostId = req.user._id;
 
-    // Host's Listings
-    const listings = await Listing.find({ owner: hostId });
+    // Fetch only listings created by THIS host
+   const listings = await Listing.find({ owner: hostId })
+    .populate({
+      path: "reviews",
+      populate: {
+        path: "author",
+        select: "username profileImage"
+      }
+    });
 
-    // Total Listings
+    // Count listings
     const totalListings = listings.length;
 
-    // Host Bookings
-    const bookings = await Booking.find({ host: hostId });
-
-    // Total Bookings
-    const totalBookings = bookings.length;
-
-    // Monthly Earnings (example – adjust your Booking schema as needed)
-    const monthlyEarnings = bookings.reduce((sum, b) => {
-      return sum + (b.totalAmount || 0);
-    }, 0);
-
-    // Host Reviews
-    const reviews = await Review.find({ host: hostId });
+    // Count bookings of host → based on listings
+    const totalBookings = await Booking.countDocuments({
+      listing: { $in: listings.map(l => l._id) }
+    });
 
     res.render("dashboards/hostDashboard", {
-      host: req.user,  // 👈 add this
+  
+      host: req.user,
       listings,
-      bookings,
-      reviews,
       totalListings,
-      totalBookings,
-      monthlyEarnings,
+      totalBookings
     });
+
   } catch (err) {
     console.log(err);
-    res.send("Error loading host dashboard");
+    res.redirect("/");
   }
 };
 

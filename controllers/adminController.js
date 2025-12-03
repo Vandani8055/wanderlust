@@ -105,19 +105,16 @@ module.exports.deleteUser = async (req, res) => {
 
 
 // ================================
-// ADMIN CRUD — LISTINGS
+// ADMIN CRUD — LISTINGS(use alredy exist rout , controler and isOwner middleware for delete lsiting )
 // ================================
 
 
 
 // ================================
-// ADMIN CRUD — REVIEWS
+// ADMIN CRUD — REVIEWS(use laredy exist route , contriller and isReviewAuthor middleware to perform this action)
 // ================================
 
-// module.exports.deleteReview = async (req, res) => {
-//   await Review.findByIdAndDelete(req.params.id);
-//   res.redirect("/admin/dashboard");
-// };
+
 
 
 
