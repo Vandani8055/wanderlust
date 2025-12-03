@@ -38,23 +38,8 @@
 
   <!-- currUser must have in locals othervise not (if error in midd.then currUser not save that's why) -->
 
- <% if(currUser && listing.owner && (currUser._id.equals(listing.owner._id) || currUser.role === "admin")) { %>
-  <div class="btns">
-    <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark rounded-pill mt-3 mb-3">
-      Edit
-    </a>
-
-    <a href="/bookings/<%= listing._id %>" class="btn btn-primary rounded-pill mt-3 mb-3">
-      Book Now
-    </a>
-
-    <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" style="display:inline;">
-      <button class="btn btn-danger rounded-pill mt-3 mb-3">
-        Delete
-      </button>
-    </form>
-  </div>
-<% } %>
+<!-- BOOK NOW: Visible for ALL roles -->
+    <a href="/bookings/<%= listing._id %>" class="btn btn-primary rounded-pill mt-3 mb-3">Book Now</a>
 
 
 
