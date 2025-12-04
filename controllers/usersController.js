@@ -9,22 +9,30 @@ module.exports.renderSignupForm = (req, res) => {
   res.render("users/signup.ejs");
 };
 
-module.exports.signup = async (req, res) => {
+
+
+module.exports.signup = async (req, res, next) => {
   try {
     const { username, email, password, role } = req.body;
 
     const user = new User({ username, email, role });
     const registeredUser = await User.register(user, password);
 
+    // Send welcome email
+    await sendWelcomeEmail(
+      registeredUser.email,
+      "Welcome to Wanderlust!",
+      `<h2>Hello ${registeredUser.username}!</h2>
+       <p>Your account has been created successfully.</p>`
+    );
+
     req.login(registeredUser, (err) => {
       if (err) return next(err);
 
-      // Redirect based on role
-      if (registeredUser.role === "admin") return res.redirect("/admin/dashboard");
+      if (registeredUser.role === "admin") return res.redirect("/admin/dashboard"); 
       if (registeredUser.role === "host") return res.redirect("/host/dashboard");
 
       return res.redirect("/dashboard");
-
     });
 
   } catch (err) {
@@ -33,9 +41,18 @@ module.exports.signup = async (req, res) => {
   }
 };
 
+
+
+
+
+
 module.exports.renderLoginForm = (req, res) => {
   res.render("users/login.ejs");
 };
+
+
+
+
 
 module.exports.login = (req, res) => {
   req.flash("success", "Welcome back to Wanderlust!");

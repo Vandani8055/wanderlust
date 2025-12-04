@@ -8,8 +8,8 @@
       <div class="host-profile-card">
         <div class="profile-avatar">
           <img src="<%= currUser.profileImage ? currUser.profileImage : '/images/default.jpg' %>" class="nav-profile-img" />
-
         </div>
+
         <div class="profile-info">
           <h2>Hello, <%= host?.username || "Host User" %></h2>
           <a href="/host/edit" class="profile-link rounded-pill"> Edit Profile</a>
@@ -29,24 +29,28 @@
 
     </div>
 
+    <!-- ===== STATS SECTION ===== -->
     <div class="host-stats-v2">
       <div class="stat-box-v2 stat-1">
         <p class="stat-label">Total Listings</p>
         <strong><%= totalListings %></strong>
         <i class="fas fa-city stat-icon"></i>
       </div>
+
       <div class="stat-box-v2 stat-2">
         <p class="stat-label">Total Bookings</p>
         <strong><%= totalBookings %></strong>
         <i class="fas fa-calendar-alt stat-icon"></i>
       </div>
+
       <div class="stat-box-v2 stat-3">
-        <p class="stat-label">Earnings (This Month)</p>
-        <strong>₹12,222</strong>
-        <i class="fas fa-wallet stat-icon"></i>
+        <p class="stat-label">Guest Reviews</p>
+        <strong><%= totalReviews %></strong>
+        <i class="fas fa-star stat-icon"></i>
       </div>
     </div>
 
+    <!-- ===== TABS ===== -->
     <div class="host-tabs-v2">
       <button class="tab-btn-v2 active" data-tab="listings">My Listings</button>
       <button class="tab-btn-v2" data-tab="bookings">Bookings</button>
@@ -54,12 +58,16 @@
     </div>
 
     <div class="host-content-v2">
+
+      <!-- LISTINGS TAB -->
       <div class="tab-section active" id="listings">
         <% if(listings.length === 0) { %>
         <p class="empty-msg-v2">No listings added yet. Let's get started!</p>
         <% } else { %>
+
         <% listings.forEach(listing => { %>
         <div class="dash-card-v2 listing-card">
+
           <div class="card-left">
             <h3><%= listing.title %></h3>
             <p class="location-text"><i class="fas fa-map-marker-alt"></i> <%= listing.location %></p>
@@ -68,93 +76,92 @@
           <div class="btns">
             <a class="view-btn rounded-pill" href="/listings/<%= listing._id %>">View</a>
             <a href="/listings/<%= listing._id %>/edit" class="edit-btn rounded-pill">Edit</a>
+
             <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST" style="display:inline;">
               <button class="delete-btn rounded-pill">Delete</button>
             </form>
           </div>
 
-
-
         </div>
         <% }) %>
+
         <% } %>
       </div>
 
-      <div class="tab-section" id="bookings">
-      </div>
+      <!-- BOOKINGS TAB -->
+<div class="tab-section" id="bookings">
+  <% if (bookings.length > 0) { %>
+  <% bookings.forEach(booking => { %>
+  <div class="booking-card">
+    <p>Booking for: <%= booking.listing ? booking.listing.title : "N/A" %></p>
+    <p>Guest: <%= booking.user?.username || "User" %></p>
 
-      <!-- GUEST REVIEWS -->
-<div class="tab-section" id="reviews">
-
-  <h2 class="section-title">Guest Reviews</h2>
-
-  <% if (reviews.length === 0) { %>
-      <div class="empty-msg-v2">No guest reviews yet 🚫</div>
+    <p>Check-In: <%= booking.checkIn.toDateString() %></p>
+    <p>Check-Out: <%= booking.checkOut.toDateString() %></p>
+  </div>
+  <% }) %>
   <% } else { %>
-
-      <% reviews.forEach(r => { %>
-      <div class="card-list-item">
-        
-        <!-- Listing title + rating -->
-        <span>
-          <strong><%= r.listing?.title || "Listing Removed" %></strong>  
-          ⭐ <%= r.rating %>
-        </span>
-
-        <!-- Review comment -->
-        <p class="review-comment"><%= r.comment %></p>
-
-        <!-- Author details -->
-        <div class="review-user">
-          <img 
-            src="<%= r.author?.profileImage || '/images/default.jpg' %>" 
-            class="review-avatar"
-          />
-          <strong><%= r.author?.username || "Unknown User" %></strong>
-        </div>
-
-        <!-- Date -->
-        <small>
-          <%= r.createdAt ? r.createdAt.toDateString() : "Date not available" %>
-        </small>
-
-        <!-- Action buttons -->
-        <div class="actions">
-          <% if (r.listing) { %>
-            <a class="view-btn rounded-pill" href="/listings/<%= r.listing._id %>">View</a>
-
-            <form 
-              action="/listings/<%= r.listing._id %>/reviews/<%= r._id %>?_method=DELETE" 
-              method="POST" 
-              style="display:inline;"
-            >
-              <button class="delete-btn rounded-pill">Delete</button>
-            </form>
-          <% } %>
-        </div>
-
-      </div>
-      <% }) %>
-
+  <p>No bookings yet.</p>
   <% } %>
-
 </div>
 
+
+      <!-- REVIEWS TAB -->
+      <div class="tab-section" id="reviews">
+        <h2 class="section-title">Guest Reviews</h2>
+
+        <% if (reviews.length === 0) { %>
+        <div class="empty-msg-v2">No guest reviews yet 🚫</div>
+        <% } else { %>
+
+        <div class="review-small-grid">
+          <% reviews.forEach(r => { %>
+
+          <div class="review-small-card">
+
+            <!-- Avatar + Username -->
+            <div class="review-small-header">
+              <img src="<%= r.author?.profileImage || '/images/default.jpg' %>" class="review-small-avatar" />
+              <span class="review-small-username"><%= r.author?.username || "User" %></span>
+            </div>
+
+            <!-- Rating -->
+            <div class="review-small-stars">
+              <% for (let i = 1; i <= 5; i++) { %>
+              <i class="star <%= i <= r.rating ? 'filled' : '' %>">★</i>
+              <% } %>
+            </div>
+
+            <% if (r.listing) { %>
+            <a class="view-btn rounded-pill" href="/listings/<%= r.listing._id %>">View</a>
+            <% } %>
+
+
+          </div>
+
+          <% }) %>
+        </div>
+
+        <% } %>
+      </div>
 
     </div>
   </div>
 </div>
 
-
+<!-- FIXED SCRIPT -->
 <script>
-  const tabs = document.querySelectorAll(".tab-btn");
+  const tabs = document.querySelectorAll(".tab-btn-v2");
   const sections = document.querySelectorAll(".tab-section");
 
   tabs.forEach(btn => {
     btn.addEventListener("click", () => {
+
+      // remove active from all
       tabs.forEach(t => t.classList.remove("active"));
       btn.classList.add("active");
 
+      // show correct section
       sections.forEach(sec => sec.classList.remove("active"));
       document.getElementById(btn.dataset.tab).classList.add("active");
     });
@@ -164,33 +171,241 @@
 
 
 
-
 <style>
-  .review-listing-block {
-    background: #fff;
-    padding: 20px;
-    margin: 20px 0;
-    border-radius: 15px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  /* section hide show when click */
+  .tab-section {
+    display: none;
   }
 
-  .review-card {
-    display: flex;
-    gap: 15px;
+  .tab-section.active {
+    display: block;
+  }
+
+
+  /* ---------- BOOKINGS TAB ---------- */
+/* ---------- BOOKINGS TAB ---------- */
+#bookings {
+  display: none; /* hide by default */
+  padding: 1rem;
+}
+
+.tab-section.active#bookings {
+  display: grid; /* show only when active */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.booking-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.booking-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+}
+
+.booking-card p {
+  font-size: 0.95rem;
+  color: #333;
+  margin: 0;
+}
+
+.booking-card p:nth-child(2) {
+  font-weight: 600; /* guest name */
+  color: #007bff;
+}
+
+.booking-card p:nth-child(1) {
+  font-weight: 500; /* booking title */
+}
+
+.booking-card p:nth-child(3),
+.booking-card p:nth-child(4) {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 600px) {
+  .tab-section.active#bookings {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+  /* ----- REVIEW SECTION STYLING ----- */
+
+  .review-small-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 18px;
+    margin-top: 20px;
+  }
+
+  .review-small-card {
+    background-color: #fff;
+    /* background-color: #10b981; */
     padding: 15px;
-    border-bottom: 1px solid #eee;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    transition: 0.2s ease;
+    min-height: 160px;
+    /* square-ish size */
   }
 
-  .review-avatar {
-    width: 40px;
-    height: 40px;
+  .review-small-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.08);
+  }
+
+  .review-small-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .review-small-avatar {
+    width: 45px;
+    height: 45px;
+    border: 1px solid #d91b42 !important;
     border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #eee;
   }
 
-  .rating {
-    font-weight: bold;
-    color: #ff9800;
+  .review-small-username {
+    margin-top: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #444;
   }
+
+  .review-small-stars {
+    margin: 6px 0;
+  }
+
+  .review-small-stars .star {
+    font-size: 18px;
+    color: #ccc;
+    margin: 0 1px;
+  }
+
+  .review-small-stars .star.filled {
+    color: #ff9800;
+    /* soft green */
+  }
+
+  .review-small-text {
+    font-size: 0.8rem;
+    color: #555;
+    margin-top: 5px;
+    line-height: 1.3;
+  }
+
+  /* Wrapper for each review card */
+  .card-list-item {
+    background: #ffffff;
+    padding: 18px 20px;
+    border-radius: 16px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    border: 1px solid #f1f1f1;
+    transition: 0.25s ease;
+  }
+
+  .card-list-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.09);
+  }
+
+  /* Listing title + rating row */
+  .card-list-item span {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Comment text */
+  .review-comment {
+    margin: 10px 0;
+    font-size: 0.95rem;
+    color: #444;
+    line-height: 1.6;
+  }
+
+  /* User info row */
+  .review-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 8px 0;
+  }
+
+  /* Avatar */
+  .review-avatar {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #ff385c;
+    /* Airbnb-style highlight */
+  }
+
+  /* Date */
+  .card-list-item small {
+    font-size: 0.78rem;
+    color: #888;
+  }
+
+  /* Actions button row */
+  .actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 10px;
+  }
+
+  /* Buttons */
+  .view-btn,
+  .delete-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    border: none;
+    cursor: pointer;
+    transition: 0.25s ease;
+  }
+
+  .view-btn {
+    background: #ff385c;
+    color: #fff;
+  }
+
+  .view-btn:hover {
+    background: #e52e4e;
+  }
+
+  .delete-btn {
+    background: #f5f5f5;
+    color: #444;
+  }
+
+  .delete-btn:hover {
+    background: #e4e4e4;
+  }
+
+
 
   /* --- V6: FIXING LAYOUT CONFLICTS WITH GLOBAL HEADER --- */
 

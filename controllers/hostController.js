@@ -3,51 +3,63 @@ const Listing = require("./../models/listingModel");
 const Review = require("./../models/reviewModel");
 const Booking = require("./../models/bookingModel");
 
-
-
 module.exports.hostDashboard = async (req, res) => {
   try {
     const hostId = req.user._id;
 
-    // Fetch only listings created by THIS host
-   const listings = await Listing.find({ owner: hostId })
-    .populate({
-      path: "reviews",
-      populate: {
-        path: "author",
-        select: "username profileImage"
-      }
-    });
+    // 1. Fetch all listings created by this host
+    const listings = await Listing.find({ owner: hostId });
 
-    // Count listings
+    // 2. Extract listing IDs
+    const listingIds = listings.map((l) => l._id);
+
+    // 3. Count total listings
     const totalListings = listings.length;
 
-    // Count bookings of host → based on listings
-    const totalBookings = await Booking.countDocuments({
-      listing: { $in: listings.map(l => l._id) }
-    });
+    // 4. Fetch all bookings for host’s listings
+    const bookings = await Booking.find({
+      listing: { $in: listingIds }
+    })
+      .populate('user' , "username")       // populate guest/user name
+      .populate('listing', 'title');  // populate listing title
 
+    // 5. Count total bookings
+    const totalBookings = bookings.length;
+
+    // 6. Fetch all reviews for host’s listings
+    const reviews = await Review.find({
+      listing: { $in: listingIds }
+    })
+      .populate("author", "username profileImage")
+      .populate("listing", "title");
+
+    // 7. Count total reviews
+    const totalReviews = reviews.length;
+
+    // 8. Render Dashboard
     res.render("dashboards/hostDashboard", {
-  
       host: req.user,
+      currUser: req.user,
       listings,
       totalListings,
-      totalBookings
+      bookings,        // <--- send bookings array to template
+      totalBookings,
+      reviews,
+      totalReviews
     });
 
   } catch (err) {
-    console.log(err);
+    console.log("Host Dashboard Error:", err);
     res.redirect("/");
   }
 };
+
 
 // / SHOW EDIT FORM
 module.exports.renderEditProfileHost = async (req, res) => {
   const user = await User.findById(req.user._id);
   res.render("dashboards/editHostdashboard", { host: req.user });
 };
-
-
 
 // UPDATE PROFILE
 module.exports.updateProfileHost = async (req, res) => {
@@ -70,8 +82,7 @@ module.exports.updateProfileHost = async (req, res) => {
   }
 };
 
-
-// Render creat listing form for host 
+// Render creat listing form for host
 module.exports.renderNewForm = (req, res) => {
   res.render("listings/createListing.ejs");
 };
