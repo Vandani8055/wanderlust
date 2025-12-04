@@ -6,32 +6,32 @@
     <form action="/signup" method="POST" class="needs-validation" novalidate>
       <div class="mb-3">
         <label for="username" class="form-label">Username:</label>
-        <input name="username" id="username" type="text" class="form-control" required />
+        <input placeholder="Enter username" name="username" id="username" type="text" class="form-control" required />
         <div class="invalid-feedback">Please enter a username.</div>
-        <div class="valid-feedback">Filled</div>
+        <div class="valid-feedback">Grate! Username </div>
       </div>
 
       <div class="mb-3">
         <label for="email" class="form-label">Email:</label>
-        <input name="email" id="email" type="email" class="form-control" required pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?" />
+        <input placeholder="Enter valid email address" name="email" id="email" type="email" class="form-control" required pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?" />
         <div class="invalid-feedback">Please provide a valid email.</div>
-        <div class="valid-feedback">Filled</div>
+        <div class="valid-feedback">Grate! Email is valid</div>
       </div>
 
       <div class="mb-3">
         <label for="password" class="form-label">Password:</label>
         <div class="password-field">
-          <input type="password" id="password" name="password" class="form-control" minlength="8" required />
+          <input placeholder="More than 8 characters" type="password" id="password" name="password" class="form-control" minlength="8" required />
           <span class="fa fa-eye toggle-password"></span>
           <div class="invalid-feedback">Please provide a valid password.</div>
-          <div class="valid-feedback">Filled</div>
+          <div class="valid-feedback">Grate! Password</div>
         </div>
       </div>
 
       <div class="mb-3">
         <label for="confirmPassword" class="form-label">Confirm Password:</label>
         <div class="password-field">
-          <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" minlength="8" required oninput="
+          <input placeholder="More than 8 characters" type="password" id="confirmPassword" name="confirmPassword" class="form-control" minlength="8" required oninput="
                             this.setCustomValidity(
                                 this.value !== document.getElementById('password').value 
                                 ? 'Passwords do not match' 
@@ -40,7 +40,7 @@
                         " />
           <span class="fa fa-eye toggle-password"></span>
           <div class="invalid-feedback">Please confirm your password.</div>
-          <div class="valid-feedback">Filled</div>
+          <div class="valid-feedback">Grate! match with password</div>
         </div>
       </div>
 

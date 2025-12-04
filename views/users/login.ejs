@@ -9,18 +9,18 @@
     <form action="/login" method="POST" class="needs-validation" novalidate>
       <div class="mb-3">
         <label for="email" class="form-lable">Email : </label><br />
-        <input name="email" id="email" type="email" class="form-control" required pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?" />
+        <input placeholder="Enter valid email address" name="email" id="email" type="email" class="form-control" required pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?" />
         <div class="invalid-feedback">Please provide a valid email.</div>
-        <div class="valid-feedback">Filled</div>
+        <div class="valid-feedback">Grate! Email is match</div>
       </div>
       <div class="mb-3">
         <label for="password" class="form-label">Password:</label>
         <div class="password-field">
-          <input type="password" id="password" name="password" class="form-control" minlength="8" required />
+          <input placeholder="More than 8 characters" type="password" id="password" name="password" class="form-control" minlength="8" required />
 
           <span class="fa fa-eye toggle-password"></span>
           <div class="invalid-feedback">Please provide a valid password.</div>
-          <div class="valid-feedback">Filled</div>
+          <div class="valid-feedback">Grate! Password is match</div>
         </div>
       </div>
       <button class="btn btn-success rounded-pill" disabled>
