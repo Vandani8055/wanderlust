@@ -28,7 +28,7 @@ module.exports.adminDashboard = async (req, res) => {
     const totalBookings = bookings.length;
     const monthlyRevenue = 12450;
 
-    res.render("dashboards/adminDashboard", {
+    res.render("dashboards/admindashboard", {
       admin: req.user || null,
       totalUsers,
       totalListings,
