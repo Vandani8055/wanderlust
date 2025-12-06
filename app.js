@@ -8,7 +8,11 @@ if(process.env.NODE_ENV !== 'production'){
 }
 
 // Core Express Modules
+
 const express = require("express");
+
+
+
 const app = express();
 const path = require("path");
 const methodOverride = require("method-override");
@@ -16,6 +20,7 @@ const ejsMate = require("ejs-mate");
 
 // Database & Session Management
 const mongoose = require("mongoose");
+
 const session = require("express-session");
 const MongoStore = require('connect-mongo');
 const flash = require('connect-flash');
@@ -59,10 +64,14 @@ main()
 // APP CONFIGURATION & MIDDLEWARE
 // ============================================================================
 
+
 // EJS & EJS-Mate Configuration
 app.set("view engine", "ejs");
+
 app.set("views", path.join(__dirname, "views"));
 app.engine("ejs", ejsMate);
+
+
 
 // Standard Middleware
 app.use(express.json());
@@ -92,7 +101,8 @@ const sessionOptions = {
     cookie: {
         expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-        httpOnly: true // Prevent client-side JS from reading the cookie
+        httpOnly: true, // Prevent client-side JS from reading the cookie
+       
     },
 };
 
