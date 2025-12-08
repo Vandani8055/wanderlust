@@ -9,7 +9,7 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const { upload } = require("../cloudConfig");
 
 const usersController = require("../controllers/usersController.js");
-const { saveRedirectUrl, isLoggedIn, isAdmin, isHost, isUser } = require("../middleware.js");
+const { saveRedirectUrl, isLoggedIn, isAdmin, isUser } = require("../middleware.js");
 
 /* ===============================
    AUTH ROUTES
@@ -42,9 +42,32 @@ router.get("/logout", usersController.logout);
 ================================ */
 
 // User dashboard
-router.get("/dashboard", isLoggedIn, isUser, usersController.userDashboard);
-router.get("/user/edit", isLoggedIn, usersController.renderEditProfile);
-router.put("/user/edit", isLoggedIn, upload.single("profileImage"), usersController.updateProfile);
+// router.get("/dashboard", isLoggedIn, isUser, usersController.userDashboard);
+// router.get("/user/edit", isLoggedIn, usersController.renderEditProfile);
+// router.put("/user/edit", isLoggedIn, upload.single("profileImage"), usersController.updateProfile);
+
+
+
+
+
+// Host dashboard
+router.get("/dashboard", isLoggedIn, usersController.userDashboard);
+
+router.get("/edit", isLoggedIn, usersController.renderEditProfileUser);
+router.put("/edit", isLoggedIn, upload.single("profileImage"), usersController.updateProfileUser);
+
+
+
+// Add the listing route here
+router.get("/listings/new", isLoggedIn, (req, res) => {
+    res.render("listings/createListing");
+});
+
+
+
+
+
+
 
 /* ===============================
    WISHLIST ROUTES

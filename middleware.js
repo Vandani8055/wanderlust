@@ -7,29 +7,46 @@ const { listingSchema, reviewSchema } = require("./schema");
 
 
 // ROLE BASE SELECTION :
-
 module.exports.isAdmin = (req, res, next) => {
+
+  // Prevent Crafted session attack:
+  if (!req.user || !req.user._id) {  
+    req.logout(() => {});  
+    req.flash("error", "Session expired. Please login again.");  
+    return res.redirect("/login");  
+  }
+
+  // if not logged in 
+  if (!req.isAuthenticated()) {
+    req.flash("error", "Please login first!");
+    return res.redirect("/login");
+  }
+
+  // Admin check
   if (req.user.role !== "admin") {
     req.flash("error", "Not authorized!");
     return res.redirect("/");
   }
+
   next();
 };
 
-module.exports.isHost = (req, res, next) => {
-  if (req.user.role !== "host") {
-    req.flash("error", "Not authorized!");
-    return res.redirect("/");
-  }
-  next();
-};
+
+// module.exports.isHost = (req, res, next) => {
+//   if (!req.user || req.user.role !== "host") {
+//     req.flash("error", "You must be logged in as a host to access this page");
+//     return res.redirect("/login");
+//   }
+//   next();
+// };
+
 
 module.exports.isUser = (req, res, next) => {
-  if (req.user.role !== "user") {
-    req.flash("error", "Not authorized!");
-    return res.redirect("/");
-  }
-  next();
+    if (!req.user || req.user.role !== "user") {
+        req.flash("error", "Please log in as a user");
+        return res.redirect("/login");
+    }
+    next();
 };
 
 

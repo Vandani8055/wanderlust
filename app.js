@@ -29,6 +29,8 @@ const flash = require('connect-flash');
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/userModel.js"); // Assuming User model for Passport
+const createDefaultAdmin = require('./utils/createDefaulyAdmin.js');
+
 const Booking = require("./models/bookingModel.js");
 
 
@@ -40,7 +42,7 @@ const listingRouter = require("./routes/listingRoute.js");
 const reviewRouter = require("./routes/reviewRoute.js");
 const userRouter = require("./routes/userRoute.js");
 const adminRouter = require('./routes/adminRoute.js');
-const hostRouter = require('./routes/hostRoute.js');
+// const hostRouter = require('./routes/hostRoute.js');
 const bookingRoutes = require("./routes/bookingRoute.js");
 const staticRoutes = require("./routes/staticRoute.js");
 
@@ -55,10 +57,14 @@ async function main() {
     await mongoose.connect(mongoURL);
 }
 
-main()
-    .then(() => console.log("✅ Connected to DB successfully!"))
-    .catch((err) => console.log("❌ DB connection error:", err));
 
+
+main()
+  .then(async () => {
+    console.log("✅ Connected to DB successfully!");
+    // await createDefaultAdmin();
+  })
+  .catch((err) => console.log("❌ DB connection error:", err));
 
 // ============================================================================
 // APP CONFIGURATION & MIDDLEWARE
@@ -154,7 +160,7 @@ app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter); // Nested reviews route
 app.use("/", userRouter);
 app.use("/admin", adminRouter);
-app.use("/host", hostRouter);
+// app.use("/host", hostRouter);
 
 app.use("/bookings", bookingRoutes); // User authentication routes
 app.use("/", staticRoutes);

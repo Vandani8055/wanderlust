@@ -1,15 +1,22 @@
+<% layout('layouts/boilerplate') %>
+<%- include("../includes/flash") %>
+
 <h2 class="mb-3">Book Listing: <%= listing.title %></h2>
 <p>Price: ₹<%= listing.price %></p>
 
 <form action="/bookings/<%= listing._id %>" method="POST" class="mt-3">
   <div class="mb-3">
     <label>Check-In:</label>
-    <input type="date" name="checkIn" class="form-control" required>
+    <input class="form-control" type="date" name="checkIn" 
+           min="<%= new Date().toISOString().split('T')[0] %>" 
+           required>
   </div>
 
   <div class="mb-3">
     <label>Check-Out:</label>
-    <input type="date" name="checkOut" class="form-control" required>
+    <input class="form-control" type="date" name="checkOut" 
+           min="<%= new Date().toISOString().split('T')[0] %>" 
+           required>
   </div>
 
   <button type="submit" class="btn btn-success mt-2">
@@ -18,37 +25,36 @@
 </form>
 
 
-
-
 <style>
-/*
+  /*
 |---------------------------------------------------------
 | PROFESSIONAL BOOKING FORM: GREEN ACCENT THEME
 | Accent Theme: linear-gradient(90deg, #198754, #20c997)
 |---------------------------------------------------------
 */
 
-/* Page section spacing & Title */
-h2.mb-3 {
+  /* Page section spacing & Title */
+  h2.mb-3 {
     text-align: center;
     font-weight: 800;
     color: #1a202c;
     margin-top: 40px;
     font-size: 28px;
     font-family: 'Inter', sans-serif;
-}
+  }
 
-/* Price text */
-p {
+  /* Price text */
+  p {
     text-align: center;
     font-size: 1.25rem;
     font-weight: 600;
-    color: #198754; /* Green accent color for the price */
+    color: #198754;
+    /* Green accent color for the price */
     margin-bottom: 30px;
-}
+  }
 
-/* Main booking card */
-form.mt-3 {
+  /* Main booking card */
+  form.mt-3 {
     max-width: 550px;
     margin: 0 auto 60px;
     padding: 40px;
@@ -59,10 +65,10 @@ form.mt-3 {
     border: none;
     position: relative;
     overflow: hidden;
-}
+  }
 
-/* Soft top accent bar */
-form.mt-3::before {
+  /* Soft top accent bar */
+  form.mt-3::before {
     content: "";
     position: absolute;
     top: 0;
@@ -72,19 +78,19 @@ form.mt-3::before {
     /* Use the Green/Success Gradient */
     background: linear-gradient(90deg, #198754, #20c997);
     border-radius: 16px 16px 0 0;
-}
+  }
 
-/* Labels */
-form label {
+  /* Labels */
+  form label {
     font-weight: 600;
     color: #4b5563;
     margin-bottom: 8px;
     font-size: 15px;
     display: block;
-}
+  }
 
-/* Inputs */
-form .form-control {
+  /* Inputs */
+  form .form-control {
     border-radius: 10px;
     padding: 14px 16px;
     border: 1px solid #e2e8f0;
@@ -93,17 +99,18 @@ form .form-control {
     margin-bottom: 20px;
     font-size: 16px;
     color: #333;
-}
+  }
 
-form .form-control:focus {
+  form .form-control:focus {
     background: #fff;
-    border-color: #198754; /* Primary green accent border on focus */
+    border-color: #198754;
+    /* Primary green accent border on focus */
     /* Stronger shadow using primary green accent */
     box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.2);
-}
+  }
 
-/* Button improved look */
-form .btn-success {
+  /* Button improved look */
+  form .btn-success {
     width: 100%;
     height: auto;
     padding: 15px;
@@ -117,44 +124,45 @@ form .btn-success {
     border: none;
     letter-spacing: 0.5px;
     transition: all 0.3s ease;
-}
+  }
 
-/* Button hover */
-form .btn-success:hover {
+  /* Button hover */
+  form .btn-success:hover {
     transform: translateY(-2px);
     /* Stronger hover shadow with primary green color */
     box-shadow: 0 15px 35px rgba(25, 135, 84, 0.45);
-    background: linear-gradient(135deg, #157347, #1aa179); /* Slightly darker gradient on hover */
-}
+    background: linear-gradient(135deg, #157347, #1aa179);
+    /* Slightly darker gradient on hover */
+  }
 
-/* Smooth animation on load */
-form.mt-3 {
+  /* Smooth animation on load */
+  form.mt-3 {
     animation: slideUp 0.6s ease;
-}
+  }
 
-@keyframes slideUp {
+  @keyframes slideUp {
     from {
-        opacity: 0;
-        transform: translateY(30px);
+      opacity: 0;
+      transform: translateY(30px);
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 
-/* Mobile optimization */
-@media (max-width: 576px) {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Mobile optimization */
+  @media (max-width: 576px) {
     form.mt-3 {
-        padding: 30px 20px;
-        margin-bottom: 30px;
-        border-radius: 14px;
+      padding: 30px 20px;
+      margin-bottom: 30px;
+      border-radius: 14px;
     }
 
     h2.mb-3 {
-        font-size: 24px;
-        margin-top: 20px;
+      font-size: 24px;
+      margin-top: 20px;
     }
-}
-
+  }
 </style>

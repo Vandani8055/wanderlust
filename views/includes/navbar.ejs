@@ -27,7 +27,7 @@
     <div class="navbar-nav ms-auto align-items-center">
 
       <!-- ✅ SHOW ONLY WHEN USER IS HOST -->
-      <% if (currUser && currUser.role === "host") { %>
+      <% if (currUser && currUser.role === "user") { %>
       <a class="nav-link" href="/listings/new">Airbnb Your Home</a>
       <% } %>
 
@@ -44,7 +44,7 @@
 
       <a href="<%= 
       currUser?.role === 'admin' ? '/admin/dashboard' : 
-      currUser?.role === 'host' ? '/host/dashboard' : '/dashboard'%>" class="nav-link profile-nav">
+      currUser?.role === 'user' ? '/dashboard' : '/listings'%>" class="nav-link profile-nav">
         <img src="<%= currUser.profileImage ? currUser.profileImage : '/images/default.jpg' %>" class="nav-profile-img" />
 
 

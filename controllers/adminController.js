@@ -11,7 +11,7 @@ const Booking = require('./../models/bookingModel');
 module.exports.adminDashboard = async (req, res) => {
   try {
     const users = await User.find({
-      role: { $in: ["user", "host"] }
+      role: { $in: ["user"] }
     });
 
     const listings = await Listing.find({});
@@ -20,7 +20,9 @@ module.exports.adminDashboard = async (req, res) => {
     const allReviews = await Review.find({}).populate("listing");
     const reviews = allReviews.filter(r => r.listing !== null);
 
-    const bookings = await Booking.find({});
+    // Bookings : not deleted listing booking not show:
+    const allBookings = await Booking.find({}).populate("listing");
+    const bookings = allBookings.filter(b => b.listing !== null);
 
     const totalUsers = users.length;
     const totalListings = listings.length;
