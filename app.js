@@ -8,10 +8,7 @@ if(process.env.NODE_ENV !== 'production'){
 }
 
 // Core Express Modules
-
 const express = require("express");
-
-
 
 const app = express();
 const path = require("path");
@@ -33,7 +30,6 @@ const createDefaultAdmin = require('./utils/createDefaulyAdmin.js');
 
 const Booking = require("./models/bookingModel.js");
 
-
 // Utilities & Error Handling
 const ExpressError = require("./utils/ExpressError.js");
 
@@ -46,18 +42,14 @@ const adminRouter = require('./routes/adminRoute.js');
 const bookingRoutes = require("./routes/bookingRoute.js");
 const staticRoutes = require("./routes/staticRoute.js");
 
-
 // ============================================================================
 // DATABASE CONNECTION
 // ============================================================================
-
 const mongoURL = process.env.ATLAS_DB_URL;
 
 async function main() {
     await mongoose.connect(mongoURL);
 }
-
-
 
 main()
   .then(async () => {
@@ -70,14 +62,10 @@ main()
 // APP CONFIGURATION & MIDDLEWARE
 // ============================================================================
 
-
 // EJS & EJS-Mate Configuration
 app.set("view engine", "ejs");
-
 app.set("views", path.join(__dirname, "views"));
 app.engine("ejs", ejsMate);
-
-
 
 // Standard Middleware
 app.use(express.json());
@@ -108,13 +96,11 @@ const sessionOptions = {
         expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         httpOnly: true, // Prevent client-side JS from reading the cookie
-       
     },
 };
 
 app.use(session(sessionOptions));
 app.use(flash());
-
 
 // --- Passport Authentication Configuration ---
 app.use(passport.initialize());
@@ -145,7 +131,6 @@ app.use((req, res, next) => {
     next();
 });
 
-
 // ============================================================================
 // ROUTES (Route Handlers)
 // ============================================================================
@@ -165,7 +150,6 @@ app.use("/admin", adminRouter);
 app.use("/bookings", bookingRoutes); // User authentication routes
 app.use("/", staticRoutes);
 
-
 // ============================================================================
 // ERROR HANDLING MIDDLEWARE
 // ============================================================================
@@ -180,7 +164,6 @@ app.use((err, req, res, next) => {
     const { statusCode = 500, message = "Something Went Wrong!" } = err;
     res.status(statusCode).render("error.ejs", { message });
 });
-
 
 // ============================================================================
 // SERVER SETUP

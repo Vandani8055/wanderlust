@@ -70,7 +70,7 @@
 
   <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-1 mt-3">
     <% for (let listing of allListings) { %>
-    <div class="col mb-4 listing-card" data-tags='<%= JSON.stringify(listing.tags) %>' >
+    <div class="col mb-4 listing-card" data-tags='<%= JSON.stringify(listing.tags) %>'>
       <a href="/listings/<%= listing._id %>" class="listing-link">
 
         <div class="card attractive-card hover-lift shadow-lg rounded-4 overflow-hidden">
@@ -97,7 +97,7 @@
             <p class="card-text price-text" data-base-price="<%= listing.price %>" data-gst-price="<%= (listing.price * 1.18).toFixed(0) %>">
               <!-- display price i=on cards  -->
               <span class="final-price fw-bold text-dark price-amount">
-                <%= listing.price.toLocaleString("en-IN") %>      
+                <%= listing.price.toLocaleString("en-IN") %>
               </span>
 
               <span class="old-price text-muted ms-2" style="display: none">
@@ -142,7 +142,7 @@
 
 
 <!-- tags  : brand new 7 days  : avtive de active class  -->
- <script>
+<script>
   const normalize = t => (t || "").toLowerCase().replace(/[^a-z]/g, "").replace(/(es|s)$/, "");
 
   document.querySelectorAll(".filter").forEach(f => {
@@ -156,11 +156,11 @@
       const sel = normalize(f.dataset.tag);
       document.querySelectorAll(".listing-card").forEach(card => {
         let tags = [];
-        try { tags = JSON.parse(card.dataset.tags || "[]").map(normalize); } catch(e) {}
+        try {
+          tags = JSON.parse(card.dataset.tags || "[]").map(normalize);
+        } catch (e) {}
         card.style.display = sel === "all" || tags.includes(sel) ? "" : "none";
       });
     };
   });
-</script> 
-
-
+</script>

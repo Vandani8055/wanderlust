@@ -1,82 +1,38 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const multer = require("multer");
-
-const User = require("../models/userModel.js");
-const Listing = require("../models/listingModel.js");
-const wrapAsync = require("../utils/wrapAsync.js");
 const { upload } = require("../cloudConfig");
-
+const wrapAsync = require("../utils/wrapAsync.js");
 const usersController = require("../controllers/usersController.js");
-const { saveRedirectUrl, isLoggedIn, isAdmin, isUser } = require("../middleware.js");
+const { saveRedirectUrl, isLoggedIn } = require("../middleware.js");
 
-/* ===============================
-   AUTH ROUTES
-================================ */
 
-// Signup
-router
-  .route("/signup")
+// AUTH ROUTES
+router.route("/signup")                         // signup
   .get(usersController.renderSignupForm)
   .post(wrapAsync(usersController.signup));
 
-// Login
-router
-  .route("/login")
+router.route("/login")                          // login
   .get(usersController.renderLoginForm)
-  .post(
-    saveRedirectUrl,
-    passport.authenticate("local", {
-      failureRedirect: "/login",
-      failureFlash: true,
-    }),
-    usersController.login
-  );
+  .post(saveRedirectUrl, passport.authenticate("local", {
+    failureRedirect: "/login",
+    failureFlash: true
+  }), usersController.login);
 
-// Logout
-router.get("/logout", usersController.logout);
-
-/* ===============================
-   DASHBOARD ROUTES (ROLE-BASED)
-================================ */
-
-// User dashboard
-// router.get("/dashboard", isLoggedIn, isUser, usersController.userDashboard);
-// router.get("/user/edit", isLoggedIn, usersController.renderEditProfile);
-// router.put("/user/edit", isLoggedIn, upload.single("profileImage"), usersController.updateProfile);
+router.get("/logout", usersController.logout);  // logout
 
 
+// DASHBOARD / PROFILE
+router.get("/dashboard", isLoggedIn, usersController.userDashboard);      // user dashboard
+router.get("/edit", isLoggedIn, usersController.renderEditProfileUser);  // edit profile form
+router.put("/edit", isLoggedIn, upload.single("profileImage"), usersController.updateProfileUser); // update profile
+
+// Add new listing form
+router.get("/listings/new", isLoggedIn, (req, res) => res.render("listings/createListing")); // new listing
 
 
-
-// Host dashboard
-router.get("/dashboard", isLoggedIn, usersController.userDashboard);
-
-router.get("/edit", isLoggedIn, usersController.renderEditProfileUser);
-router.put("/edit", isLoggedIn, upload.single("profileImage"), usersController.updateProfileUser);
-
-
-
-// Add the listing route here
-router.get("/listings/new", isLoggedIn, (req, res) => {
-    res.render("listings/createListing");
-});
-
-
-
-
-
-
-
-/* ===============================
-   WISHLIST ROUTES
-================================ */
-
-// Add or remove from wishlist
-router.post("/wishlist/:listingId", isLoggedIn, usersController.wishlistAddRemove);
-
-// View wishlist
-router.get("/wishlist", isLoggedIn, usersController.showAllWishlist);
+// WISHLIST ROUTES
+router.post("/wishlist/:listingId", isLoggedIn, usersController.wishlistAddRemove); // toggle wishlist
+router.get("/wishlist", isLoggedIn, usersController.showAllWishlist);              // view wishlist
 
 module.exports = router;

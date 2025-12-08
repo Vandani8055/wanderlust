@@ -5,10 +5,12 @@ const Listing = require("../models/listingModel");
 const Booking = require("../models/bookingModel"); // If you have bookings
 const Review = require("../models/reviewModel"); // If you have bookings
 
+
+// --- Auth views ---
+
 module.exports.renderSignupForm = (req, res) => {
   res.render("users/signup.ejs");
 };
-
 
 
 module.exports.signup = async (req, res, next) => {
@@ -18,11 +20,10 @@ module.exports.signup = async (req, res, next) => {
     const allowedRoles = ['user'];
     const safeRole = allowedRoles.includes(role) ? role : 'user';
 
-
-    const user = new User({ username, email, role : safeRole });
+    const user = new User({ username, email, role: safeRole });
     const registeredUser = await User.register(user, password);
 
-     // Send welcome email
+    // Send welcome email
     await sendWelcomeEmail(
       registeredUser.email,
       "Welcome to Wanderlust!",
@@ -33,10 +34,9 @@ module.exports.signup = async (req, res, next) => {
     // ✅ Auto login + correct redirect
     req.login(registeredUser, (err) => {
       if (err) return next(err);
-      if (registeredUser.role === "admin") return res.redirect("/admin/dashboard"); 
+      if (registeredUser.role === "admin") return res.redirect("/admin/dashboard");
       return res.redirect("/dashboard");
     });
-
 
   } catch (err) {
     req.flash("error", err.message);
@@ -45,16 +45,9 @@ module.exports.signup = async (req, res, next) => {
 };
 
 
-
-
-
-
 module.exports.renderLoginForm = (req, res) => {
   res.render("users/login.ejs");
 };
-
-
-
 
 
 module.exports.login = (req, res) => {
@@ -68,135 +61,7 @@ module.exports.login = (req, res) => {
 };
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// module.exports.userDashboard = async (req, res) => {
-//   const user = await User.findById(req.user._id)
-//     .populate("listings")
-//     .populate("wishlist")
-//     .populate({
-//       path: "reviews",
-//       populate: { path: "listing" },
-//     })
-//     .populate({
-//       path: "bookings",
-//       populate: { path: "listing" },
-//     });
-
-//   // Ensure arrays always exist
-//   user.listings = user.listings || [];
-//   user.wishlist = user.wishlist || [];
-//   user.bookings = user.bookings || [];
-//   user.reviews = user.reviews || [];
-
-//   res.render("dashboards/userdashboard.ejs", { user });
-// };
-
-
-
-
-
-
-// // / SHOW EDIT FORM
-// module.exports.renderEditProfile = async (req, res) => {
-//   const user = await User.findById(req.user._id);
-//   res.render("dashboards/editUserdashboard", { user });
-
-// };
-
-
-
-
-
-
-// // UPDATE PROFILE
-// module.exports.updateProfile = async (req, res) => {
-//   try {
-//     const { username, bio } = req.body;
-//     const updateData = { username, bio };
-
-//     // If user uploaded a new image, save its Cloudinary URL
-//     if (req.file) {
-//       updateData.profileImage = req.file.path; // multer-storage-cloudinary automatically gives URL in path
-//     }
-
-//     await User.findByIdAndUpdate(req.user._id, updateData);
-
-//     req.flash("success", "Profile updated successfully!");
-//     res.redirect("/dashboard");
-//   } catch (e) {
-//     req.flash("error", e.message);
-//     res.redirect("/user/edit");
-//   }
-// };
-
-
-
-
-
-
-
-
-
-
-
-
-
+// --- User dashboard (active) ---
 
 module.exports.userDashboard = async (req, res) => {
   try {
@@ -215,8 +80,8 @@ module.exports.userDashboard = async (req, res) => {
     const bookings = await Booking.find({
       listing: { $in: listingIds }
     })
-      .populate('user' , "username")       // populate guest/user name
-      .populate('listing', 'title');  // populate listing title
+      .populate('user', "username")       // populate guest/user name
+      .populate('listing', 'title');      // populate listing title
 
     // 5. Count total bookings
     const totalBookings = bookings.length;
@@ -256,6 +121,7 @@ module.exports.renderEditProfileUser = async (req, res) => {
   res.render("dashboards/editUserdashboard", { user: req.user });
 };
 
+
 // UPDATE PROFILE
 module.exports.updateProfileUser = async (req, res) => {
   try {
@@ -271,11 +137,13 @@ module.exports.updateProfileUser = async (req, res) => {
 
     req.flash("success", "Profile updated successfully!");
     res.redirect("/dashboard");
+
   } catch (e) {
     req.flash("error", e.message);
     res.redirect("/edit");
   }
 };
+
 
 // Render creat listing form for user
 module.exports.renderNewForm = (req, res) => {
@@ -284,71 +152,21 @@ module.exports.renderNewForm = (req, res) => {
 
 
 
-
-
-
-// Render creat listing form for user 
-// router.get("/listings/new", isLoggedIn, listingController.renderNewForm);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// --- Logout ---
 
 module.exports.logout = (req, res, next) => {
   req.logout((err) => {
     if (err) {
       return next(err);
     }
+
     req.flash("success", "You are Logged Out !");
     res.redirect("/listings");
   });
 };
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// --- Wishlist ---
 
 module.exports.showAllWishlist = async (req, res) => {
   const user = await User.findById(req.user._id).populate("wishlist");
@@ -358,6 +176,7 @@ module.exports.showAllWishlist = async (req, res) => {
     currUser: req.user,
   });
 };
+
 
 module.exports.wishlistAddRemove = async (req, res) => {
   if (!req.user) return res.status(401).json({ error: "Login required" });

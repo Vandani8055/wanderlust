@@ -4,9 +4,7 @@ const Review = require('./../models/reviewModel');
 const Booking = require('./../models/bookingModel');
 
 
-// ================================
-// ADMIN DASHBOARD
-// ================================
+// --- Admin dashboard ---
 
 module.exports.adminDashboard = async (req, res) => {
   try {
@@ -50,12 +48,7 @@ module.exports.adminDashboard = async (req, res) => {
 };
 
 
-
-
-
-// ================================
-// EDIT ADMIN PROFILE
-// ================================
+// --- Edit admin profile ---
 
 module.exports.renderEditProfileAdmin = (req, res) => {
   const admin = req.user;   
@@ -84,17 +77,12 @@ module.exports.updateProfileAdmin = async (req, res) => {
 };
 
 
-
-
-
-// ================================
-// ADMIN CRUD — USERS (usercontroller not have permittion it itself delete just logout )
-// ================================
-
+// --- Admin users delete (usercontroller not have permittion it itself delete just logout ) ---
 
 module.exports.deleteUser = async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);
+
     req.flash("success", "User deleted successfully!");
     res.redirect("/admin/dashboard");
   } catch (err) {
@@ -104,25 +92,8 @@ module.exports.deleteUser = async (req, res) => {
 };
 
 
+// --- Admin bookings delete ---
 
-
-// ================================
-// ADMIN CRUD — LISTINGS(use alredy exist rout , controler and isOwner middleware for delete lsiting )
-// ================================
-
-
-
-// ================================
-// ADMIN CRUD — REVIEWS(use laredy exist route , contriller and isReviewAuthor middleware to perform this action)
-// ================================
-
-
-
-
-
-// ================================
-// ADMIN CRUD — BOOKINGS
-// ================================
 module.exports.deleteBooking = async (req, res) => {
   await Booking.findByIdAndDelete(req.params.id);
   res.redirect("/admin/dashboard");

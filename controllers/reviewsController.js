@@ -2,11 +2,14 @@ const Listing = require("../models/listingModel.js");
 const Review = require("../models/reviewModel.js");
 const User = require('./../models/userModel.js');
 
+
+// --- Create review ---
+
 module.exports.createReview = async (req, res) => {
 
   const listing = await Listing.findById(req.params.id);
 
-  /* ================= 🎯 CRITICAL CHANGE START ================= */
+  /* ▶ CRITICAL CHANGE START */
 
   const newReview = new Review({
     rating: req.body.review.rating,
@@ -15,7 +18,7 @@ module.exports.createReview = async (req, res) => {
     listing: listing._id     // ✅✅ THIS IS THE MOST IMPORTANT LINE
   });
 
-  /* ================= 🎯 CRITICAL CHANGE END =================== */
+  /* ▶ CRITICAL CHANGE END */
 
   // ✅ store review id inside listing
   listing.reviews.push(newReview._id);
@@ -34,14 +37,14 @@ module.exports.createReview = async (req, res) => {
 };
 
 
-
-
+// --- Delete review ---
 
 module.exports.deleteReview = async (req, res) => {
   let { id, reviewId } = req.params;
 
   await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
   await Review.findByIdAndDelete(reviewId);
+
   req.flash("success", " Review Deleted!🎉");
   res.redirect(`/listings/${id}`);
 };

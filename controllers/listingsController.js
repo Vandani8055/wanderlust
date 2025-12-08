@@ -7,6 +7,7 @@ const pluralize = require("pluralize"); // ⬅️ add this      / / for tags sea
 
 
 
+// --- Render all listings ---
 
 // render All listings:
 // for icons : change will be needed...
@@ -21,11 +22,14 @@ module.exports.index = async (req, res) => {
 
   const allListings = await Listing.find(filter);
 
-  res.render("listings/mainOverview.ejs", { allListings, tags: tags || "all" });
+  res.render("listings/mainOverview.ejs", { 
+    allListings, 
+    tags: tags || "all" 
+  });
 };
 
 
-
+// --- New listing form ---
 
 // New route :
 module.exports.renderNewForm = (req, res) => {
@@ -34,7 +38,7 @@ module.exports.renderNewForm = (req, res) => {
 };
 
 
-
+// --- Show single listing ---
 
 // Show Listhing : (one)
 module.exports.showListing = async (req, res) => {
@@ -42,20 +46,24 @@ module.exports.showListing = async (req, res) => {
   const listing = await Listing.findById(id)
     .populate({ path: "reviews", populate: { path: "author" } })
     .populate("owner" , "username email"); // Pass data to EJS for specific listing
+
   if (!listing) {
     req.flash("error", "Listing you requested. Does not exist😬💥!");
     return res.redirect("/listings");
   }
+
   // console.log(listing);
-//   res.render("listings/listingPage.ejs", { listing });
-// };
-res.render("listings/listingPage", {
+  // res.render("listings/listingPage.ejs", { listing });
+  // };
+
+  res.render("listings/listingPage", {
     listing,
-    user: req.user  || null  // ✅ THIS IS THE FIX
+    user: req.user || null  // ✅ THIS IS THE FIX
   });
 };
 
 
+// --- Create listing ---
 
 module.exports.createListing = async (req, res) => {
   try {
@@ -101,14 +109,12 @@ module.exports.createListing = async (req, res) => {
 
     await newListing.save();
 
-
-     /* ======================= 🔥 CRITICAL ADDITION 🔥 ======================= */
+    /* ======================= 🔥 CRITICAL ADDITION 🔥 ======================= */
     await User.findByIdAndUpdate(req.user._id, {
       $push: { listings: newListing._id }     // ✅ THIS LINK MAKES PROFILE UPDATE
     });
     /* ======================================================================= */
 
-    
     req.flash("success", "Successfully created a new listing!");
     res.redirect(`/listings/${newListing._id}`);
   } catch (err) {
@@ -119,26 +125,29 @@ module.exports.createListing = async (req, res) => {
 };
 
 
-
-
+// --- Render edit form ---
 
 // render edit form :
 module.exports.renderEditForm = async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findById(id);
+
   if (!listing) {
     req.flash("error", "Listing you requested. Does not exist😬💥!");
     return res.redirect("/listings");
   }
+
   let originalImageUrl = listing.image.url;
   originalImageUrl = originalImageUrl.replace("/upload", "/upload/w_250");
-  res.render("listings/editListing.ejs", { listing, originalImageUrl });
+
+  res.render("listings/editListing.ejs", { 
+    listing, 
+    originalImageUrl 
+  });
 };
 
 
-
-
-
+// --- Update listing ---
 
 // update Listing :
 module.exports.updateListing = async (req, res) => {
@@ -150,37 +159,32 @@ module.exports.updateListing = async (req, res) => {
     let url = req.file.path;
     let filename = req.file.filename;
     listing.image = { url, filename };
+
     if (req.body.tags) {
       req.body.tags = req.body.tags.map((t) => t.trim().toLowerCase());
     }
 
     await listing.save();
   }
+
   req.flash("success", "Listing Updated! 🎉");
   res.redirect(`/listings/${id}`);
 };
 
 
-
-
-
+// --- Delete listing ---
 
 // Delete listing :
 module.exports.deleteListing = async (req, res) => {
   const { id } = req.params;
   await Listing.findByIdAndDelete(id, { ...req.body.listing });
+
   req.flash("success", "Listing Deleted!🎉");
   res.redirect("/listings");
 };
 
 
-
-
-
-
-
-
-
+// --- Search listings ---
 
 module.exports.searchListing = async (req, res) => {
   try {

@@ -1,6 +1,4 @@
-// -----------------------------------------------------------------------------
-// IMPORTS & DEPENDENCIES
-// -----------------------------------------------------------------------------
+// --- IMPORTS & DEPENDENCIES ---
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
@@ -9,9 +7,8 @@ const Listing = require('../models/listing.js');
 const User = require('../models/user.js');
 const initData = require('./data.js');
 
-// -----------------------------------------------------------------------------
-// DATABASE CONNECTION SETUP
-// -----------------------------------------------------------------------------
+
+// --- DATABASE CONNECTION SETUP ---
 const mongoURL = process.env.ATLAS_DB_URL;
 if (!mongoURL) throw new Error('ATLAS_DB_URL is not defined in .env!');
 
@@ -19,9 +16,8 @@ mongoose.connect(mongoURL)
   .then(() => console.log('✅ Connected to DB successfully!'))
   .catch(err => console.error('❌ Database connection error:', err));
 
-// -----------------------------------------------------------------------------
-// INITIALIZE DATABASE WITH SAMPLE DATA
-// -----------------------------------------------------------------------------
+
+// --- INITIALIZE DATABASE WITH SAMPLE DATA ---
 const initDB = async () => {
   try {
     await Listing.deleteMany({}); // clear listings
@@ -42,4 +38,3 @@ const initDB = async () => {
 
 // Call the initialization function
 // initDB();
-// 

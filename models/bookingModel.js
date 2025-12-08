@@ -15,18 +15,17 @@ const bookingSchema = new Schema({
   },
 
   checkIn: {
-  type: Date,
-  required: true,
-  validate: {
-    validator: function (value) {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0); // remove time
-      return value >= today;
-    },
-    message: "Check-in date cannot be in the past"
-  }
-},
-
+    type: Date,
+    required: true,
+    validate: {
+      validator: function (value) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // remove time
+        return value >= today;
+      },
+      message: "Check-in date cannot be in the past"
+    }
+  },
 
   checkOut: {
     type: Date,

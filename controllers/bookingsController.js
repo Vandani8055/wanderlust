@@ -4,7 +4,9 @@ const User = require("../models/userModel");
 const Stripe = require("stripe");
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
-// SHOW BOOKING FORM
+
+// --- Show booking form ---
+
 module.exports.showBookingForm = async (req, res) => {
   try {
     const listing = await Listing.findById(req.params.listingId);
@@ -17,7 +19,9 @@ module.exports.showBookingForm = async (req, res) => {
   }
 };
 
+
 // ✅ CREATE STRIPE SESSION (UPDATED WITH OVERLAP CHECK)
+
 module.exports.createStripeSession = async (req, res) => {
   try {
     const { listingId } = req.params;
@@ -101,7 +105,9 @@ module.exports.createStripeSession = async (req, res) => {
   }
 };
 
+
 // ✅ PAYMENT SUCCESS HANDLER (UPDATED WITH SECOND SAFETY CHECK)
+
 module.exports.bookingSuccess = async (req, res) => {
   try {
     if (!req.query.session_id) {

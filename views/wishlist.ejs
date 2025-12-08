@@ -4,25 +4,20 @@
   <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-1 mt-3">
     <% if (wishlist.length === 0) { %>
     <div class="text-center mt-5">
-     
-    
+
+
       <h4>No Wishlist Yet 😢</h4>
       <p>Add some properties by clicking the <span class="heart-icon">❤️</span> button</p>
     </div>
     <% } %>
-    
+
     <% wishlist.forEach(listing => { %>
     <div class="col mb-4">
       <a href="/listings/<%= listing._id %>" class="listing-link">
-        <div
-          class="card attractive-card hover-lift shadow-lg rounded-4 overflow-hidden"
-        >
+        <div class="card attractive-card hover-lift shadow-lg rounded-4 overflow-hidden">
           <div class="position-relative">
             <!-- IMAGE -->
-            <img
-              src="<%= listing.image.url %>"
-              class="card-img-top listing-img"
-            />
+            <img src="<%= listing.image.url %>" class="card-img-top listing-img" />
 
             <!-- REMOVE FROM WISHLIST HEART -->
             <button class="wishlist-btn border-0" data-id="<%= listing._id %>">
@@ -30,17 +25,13 @@
             </button>
 
             <!-- PRICE BADGE -->
-            <span
-              class="position-absolute px-3 py-2 badge text-white fw-bold shadow-sm price-tag"
-            >
+            <span class="position-absolute px-3 py-2 badge text-white fw-bold shadow-sm price-tag">
               ₹<%= listing.price.toLocaleString("en-IN") %> / night
             </span>
 
             <!-- NEW BADGE -->
             <% if (listing.isNew) { %>
-            <span
-              class="position-absolute new-badge badge bg-success text-white fw-bold shadow-sm"
-            >
+            <span class="position-absolute new-badge badge bg-success text-white fw-bold shadow-sm">
               New
             </span>
             <% } %>
@@ -62,77 +53,61 @@
 
 
 <style>
- 
-/*
-|---------------------------------------------------------
-| ALTERNATIVE EMPTY WISHLIST MESSAGE STYLING (Defined Box)
-| Focus: Clear visual boundary and friendly color scheme.
-|---------------------------------------------------------
-*/
-
-/*
-|---------------------------------------------------------
-| MINIMALIST EMPTY WISHLIST MESSAGE STYLING (High-End & Clean)
-| Focus: Minimalism, generous whitespace, and clean lines.
-|---------------------------------------------------------
-*/
-
-/*
-|---------------------------------------------------------
-| FINAL PROFESSIONAL EMPTY WISHLIST MESSAGE STYLING
-| Focus: Minimalism, High Contrast, and Clean Lines.
-|---------------------------------------------------------
-*/
-
-.text-center.mt-5 {
+  .text-center.mt-5 {
     /* Large vertical padding for clean whitespace */
-    padding: 100px 0; 
+    padding: 100px 0;
     margin-top: 60px !important;
     margin-bottom: 60px;
     width: 100%;
-    
+
     /* Ensure a pure white background and remove all decorative borders/shadows */
-    background-color: transparent; 
+    background-color: transparent;
     border: none;
     box-shadow: none;
-}
+  }
 
-/* Optional: Add a subtle visual divider before the message content */
-.text-center.mt-5::before {
+  /* Optional: Add a subtle visual divider before the message content */
+  .text-center.mt-5::before {
     content: '';
     display: block;
     width: 80px;
     height: 4px;
-    background-color: #e0e0e0; /* Very subtle light gray line */
+    background-color: #e0e0e0;
+    /* Very subtle light gray line */
     margin: 0 auto 30px auto;
     border-radius: 2px;
-}
+  }
 
-.text-center.mt-5 h4 {
+  .text-center.mt-5 h4 {
     /* Main Heading: Strong, serious, and highly readable */
-    font-size: 36px; 
-    font-weight: 800; /* Extra bold */
-    color: #1e293b; /* Deep, professional dark text */
+    font-size: 36px;
+    font-weight: 800;
+    /* Extra bold */
+    color: #1e293b;
+    /* Deep, professional dark text */
     margin-bottom: 10px;
-}
+  }
 
-.text-center.mt-5 p {
+  .text-center.mt-5 p {
     /* Secondary Text: Clear instruction, slightly lighter color */
-    font-size: 18px; 
-    font-weight: 400; /* Regular weight */
-    color: #475569; /* Muted slate gray */
+    font-size: 18px;
+    font-weight: 400;
+    /* Regular weight */
+    color: #475569;
+    /* Muted slate gray */
     margin-top: 10px;
     line-height: 1.6;
-    max-width: 60%; /* Ensure text doesn't stretch too wide */
+    max-width: 60%;
+    /* Ensure text doesn't stretch too wide */
     margin-left: auto;
     margin-right: auto;
-}
+  }
 
-/* Heart Icon Styling (uses your red accent for the call-to-action) */
-.heart-icon {
-    color: #fe424d; 
+  /* Heart Icon Styling (uses your red accent for the call-to-action) */
+  .heart-icon {
+    color: #fe424d;
     font-size: 24px;
     vertical-align: middle;
     font-weight: 700;
-}
+  }
 </style>
