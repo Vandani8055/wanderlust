@@ -1,113 +1,171 @@
 <% layout('/layouts/boilerplate') %>
 
-<div class="container mt-4">
-  <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-1 mt-3">
-    <% if (wishlist.length === 0) { %>
-    <div class="text-center mt-5">
-
-
-      <h4>No Wishlist Yet 😢</h4>
-      <p>Add some properties by clicking the <span class="heart-icon">❤️</span> button</p>
-    </div>
-    <% } %>
-
-    <% wishlist.forEach(listing => { %>
-    <div class="col mb-4">
-      <a href="/listings/<%= listing._id %>" class="listing-link">
-        <div class="card attractive-card hover-lift shadow-lg rounded-4 overflow-hidden">
-          <div class="position-relative">
-            <!-- IMAGE -->
-            <img src="<%= listing.image.url %>" class="card-img-top listing-img" />
-
-            <!-- REMOVE FROM WISHLIST HEART -->
-            <button class="wishlist-btn border-0" data-id="<%= listing._id %>">
-              <i class="fa-solid fa-heart text-danger"></i>
-            </button>
-
-            <!-- PRICE BADGE -->
-            <span class="position-absolute px-3 py-2 badge text-white fw-bold shadow-sm price-tag">
-              ₹<%= listing.price.toLocaleString("en-IN") %> / night
-            </span>
-
-            <!-- NEW BADGE -->
-            <% if (listing.isNew) { %>
-            <span class="position-absolute new-badge badge bg-success text-white fw-bold shadow-sm">
-              New
-            </span>
-            <% } %>
-          </div>
-
-          <!-- BODY -->
-          <div class="card-body card-body-main">
-            <h5 class="card-title-main"><%= listing.title %></h5>
-            <p class="card-text text-muted"><%= listing.location %></p>
-          </div>
-        </div>
-      </a>
-    </div>
-    <% }) %>
-  </div>
-</div>
-
-
 
 
 <style>
-  .text-center.mt-5 {
-    /* Large vertical padding for clean whitespace */
-    padding: 100px 0;
-    margin-top: 60px !important;
-    margin-bottom: 60px;
-    width: 100%;
-
-    /* Ensure a pure white background and remove all decorative borders/shadows */
-    background-color: transparent;
-    border: none;
-    box-shadow: none;
-  }
-
-  /* Optional: Add a subtle visual divider before the message content */
-  .text-center.mt-5::before {
-    content: '';
-    display: block;
-    width: 80px;
-    height: 4px;
-    background-color: #e0e0e0;
-    /* Very subtle light gray line */
-    margin: 0 auto 30px auto;
-    border-radius: 2px;
-  }
-
-  .text-center.mt-5 h4 {
-    /* Main Heading: Strong, serious, and highly readable */
-    font-size: 36px;
-    font-weight: 800;
-    /* Extra bold */
-    color: #1e293b;
-    /* Deep, professional dark text */
-    margin-bottom: 10px;
-  }
-
-  .text-center.mt-5 p {
-    /* Secondary Text: Clear instruction, slightly lighter color */
-    font-size: 18px;
-    font-weight: 400;
-    /* Regular weight */
-    color: #475569;
-    /* Muted slate gray */
-    margin-top: 10px;
-    line-height: 1.6;
-    max-width: 60%;
-    /* Ensure text doesn't stretch too wide */
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  /* Heart Icon Styling (uses your red accent for the call-to-action) */
-  .heart-icon {
-    color: #fe424d;
-    font-size: 24px;
-    vertical-align: middle;
-    font-weight: 700;
-  }
+    .glass-price {
+        background: rgba(0, 123, 255, 0.15);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .whisper-shadow {
+        box-shadow: 0 10px 40px -15px rgba(0, 0, 0, 0.05);
+    }
+    .card-hover:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 50px -20px rgba(106, 0, 255, 0.12);
+    }
+    body { font-family: 'Manrope', sans-serif; }
 </style>
+
+<div class="bg-background-light dark:bg-background-dark min-h-screen text-[#130c1d] dark:text-gray-100">
+    <main class="max-w-7xl mx-auto px-4 md:px-6 py-12">
+        
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div>
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">Saved Stays</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-extrabold tracking-tighter mb-2">Your Wishlist</h2>
+                <div class="flex items-center gap-2">
+                    <span class="text-primary font-bold"><%= wishlist.length %></span>
+                    <span class="text-gray-500 font-medium italic">Properties saved for your next escape</span>
+                </div>
+            </div>
+            
+            <% if (wishlist.length > 0) { %>
+            <div class="flex items-center gap-4">
+                <button onclick="location.reload()" class="flex items-center gap-2 px-6 py-3 rounded-xl bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 font-bold text-sm shadow-sm hover:bg-gray-50 transition-all">
+                    <span class="material-symbols-outlined text-[18px]">refresh</span>
+                    Refresh
+                </button>
+            </div>
+            <% } %>
+        </div>
+
+        <% if (wishlist.length === 0) { %>
+            <div class="mt-12 bg-gradient-to-br from-white to-gray-50 dark:from-zinc-900 dark:to-zinc-800 rounded-3xl p-12 text-center whisper-shadow border border-white dark:border-zinc-800">
+                <div class="max-w-xl mx-auto">
+                    <div class="mb-6 flex justify-center">
+                        <div class="relative">
+                            <div class="absolute inset-0 bg-primary/20 blur-2xl rounded-full"></div>
+                            <div class="relative w-20 h-20 rounded-2xl bg-white dark:bg-zinc-800 flex items-center justify-center shadow-xl">
+                                <span class="material-symbols-outlined text-4xl text-primary opacity-40">heart_broken</span>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="text-3xl font-black mb-4 tracking-tight text-slate-900 dark:text-white">No Wishlist Yet 😢</h3>
+                    <p class="text-gray-500 dark:text-gray-400 mb-8 font-medium">Add some properties by clicking the ❤️ button while exploring our handpicked collection.</p>
+                    <a href="/listings" class="inline-block bg-gradient-to-r from-electric-blue to-primary text-white font-bold px-10 py-4 rounded-xl shadow-xl shadow-primary/25 hover:scale-105 transition-transform">
+                        Start Exploring Destinations
+                    </a>
+                </div>
+            </div>
+        <% } else { %>
+            <div class="flex items-center gap-6 border-b border-gray-200 dark:border-zinc-800 mb-10 overflow-x-auto whitespace-nowrap scrollbar-hide">
+                <a class="border-b-2 border-primary text-primary px-2 pb-4 font-bold text-sm flex items-center gap-2" href="#">
+                    All Items <span class="bg-primary/10 px-2 py-0.5 rounded-md text-[10px]"><%= wishlist.length %></span>
+                </a>
+                <span class="text-gray-400 px-2 pb-4 font-bold text-sm opacity-50">Villas</span>
+                <span class="text-gray-400 px-2 pb-4 font-bold text-sm opacity-50">Penthouses</span>
+                <span class="text-gray-400 px-2 pb-4 font-bold text-sm opacity-50">Private Islands</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <% wishlist.forEach(listing => { %>
+                    <div class="group card-container card-hover transition-all duration-300">
+                        <div class="relative aspect-[4/5] rounded-xl overflow-hidden mb-4 whisper-shadow">
+                            <a href="/listings/<%= listing._id %>">
+                                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                                     src="<%= listing.image.url %>" 
+                                     alt="<%= listing.title %>"/>
+                            </a>
+
+                            <div class="absolute top-4 left-4 flex flex-col gap-2">
+                                <% if (listing.isNew) { %>
+                                    <span class="bg-emerald text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-widest shadow-lg shadow-emerald/20">New</span>
+                                <% } %>
+                            </div>
+
+                            <button class="wishlist-btn absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg group/heart transition-all hover:bg-white" 
+                                    data-id="<%= listing._id %>">
+                                <span class="material-symbols-outlined text-red-500 fill-red-500 transition-all duration-300 group-hover/heart:scale-125">favorite</span>
+                            </button>
+
+                            <div class="absolute bottom-4 left-4 glass-price px-4 py-2 rounded-lg border border-white/20">
+                                <p class="text-white text-[10px] font-bold uppercase tracking-wider opacity-80 mb-0.5">Price</p>
+                                <p class="text-white font-black text-lg leading-none">
+                                    ₹<%= listing.price.toLocaleString("en-IN") %>
+                                    <span class="text-xs font-normal opacity-80">/night</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="px-1">
+                            <div class="flex justify-between items-start mb-1">
+                                <a href="/listings/<%= listing._id %>">
+                                    <h3 class="font-bold text-lg tracking-tight group-hover:text-primary transition-colors line-clamp-1"><%= listing.title %></h3>
+                                </a>
+                                <div class="flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-[16px] text-amber-400 fill-amber-400">star</span>
+                                    <span class="text-xs font-bold">4.9</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm font-medium flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[16px]">location_on</span>
+                                <%= listing.location %>
+                            </p>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } %>
+    </main>
+</div>
+
+<script>
+    // Premium Wishlist functionality for removing items
+    document.querySelectorAll('.wishlist-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const listingId = btn.dataset.id;
+            if (!listingId) return;
+            
+            // Add a temporary "loading" effect to the heart
+            const heartIcon = btn.querySelector('.material-symbols-outlined');
+            heartIcon.style.opacity = '0.5';
+            
+            try {
+                const response = await fetch(`/wishlist/${listingId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (response.ok) {
+                    // Remove the card from the page with high-end animation
+                    const card = btn.closest('.card-container');
+                    card.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                    card.style.opacity = '0';
+                    card.style.transform = 'scale(0.9) translateY(20px)';
+                    card.style.filter = 'blur(10px)';
+                    
+                    setTimeout(() => {
+                        card.remove();
+                        
+                        // Check if wishlist is now empty to show empty state
+                        const remainingCards = document.querySelectorAll('.card-container');
+                        if (remainingCards.length === 0) {
+                            location.reload(); 
+                        }
+                    }, 500);
+                }
+            } catch (error) {
+                console.error('Error removing from wishlist:', error);
+                heartIcon.style.opacity = '1';
+            }
+        });
+    });
+</script>

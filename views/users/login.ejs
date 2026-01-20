@@ -1,31 +1,116 @@
 <% layout('/layouts/boilerplate') %>
 
+<div class="fixed inset-0 z-[1000] bg-white flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden">
+  
+  <div class="relative hidden lg:block lg:w-1/2 xl:w-[58%] h-full">
+    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 hover:scale-105" 
+         style="background-image: url('https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&q=80&w=2000');">
+    </div>
+    
+    <div class="absolute top-10 left-10 flex items-center gap-2 text-white drop-shadow-md">
+       <span class="material-symbols-outlined text-xl font-bold">explore</span>
+       <span class="text-lg font-black tracking-tighter">Wanderlust</span>
+    </div>
 
-
-
-<div class="row mt-3">
-  <h1 class="col-6 offset-3">Login on Wanderlust</h1>
-  <div class="col-6 offset-3">
-    <form action="/login" method="POST" class="needs-validation" novalidate>
-      <div class="mb-3">
-        <label for="email" class="form-lable">Email : </label><br />
-        <input placeholder="Enter valid email address" name="email" id="email" type="email" class="form-control" required pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?" />
-        <div class="invalid-feedback">Please provide a valid email.</div>
-        <div class="valid-feedback">Grate! Email is match</div>
+    <div class="absolute bottom-12 left-10 right-10">
+      <div class="bg-black/20 backdrop-blur-xl p-8 rounded-3xl border border-white/20 inline-block max-w-lg">
+        <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-white/80 mb-2">Collection 2026</p>
+        <h3 class="text-xl font-black leading-tight text-white">Elevated escapes for the modern soul.</h3>
       </div>
-      <div class="mb-3">
-        <label for="password" class="form-label">Password:</label>
-        <div class="password-field">
-          <input placeholder="More than 8 characters" type="password" id="password" name="password" class="form-control" minlength="8" required />
+    </div>
+  </div>
 
-          <span class="fa fa-eye toggle-password"></span>
-          <div class="invalid-feedback">Please provide a valid password.</div>
-          <div class="valid-feedback">Grate! Password is match</div>
+  <div class="flex-1 flex flex-col justify-center items-center px-6 py-12 lg:px-20 bg-white">
+    
+    <div class="lg:hidden flex items-center gap-2 mb-10">
+      <span class="material-symbols-outlined text-electric-blue text-2xl font-bold">explore</span>
+      <span class="text-lg font-black text-deep-charcoal tracking-tighter">Wanderlust</span>
+    </div>
+
+    <div class="w-full max-w-[380px] py-8">
+      <div class="mb-8">
+        <h1 class="text-deep-charcoal text-xl font-black tracking-tight mb-2">Welcome Back</h1>
+        <p class="text-slate-500 text-sm leading-relaxed">Enter your details to access your curated escapes.</p>
+      </div>
+
+      <form action="/login" method="POST" class="space-y-6 needs-validation" novalidate>
+        <div class="flex flex-col gap-1">
+          <label for="email" class="text-slate-700 text-[10px] font-bold uppercase tracking-[0.15em]">Email Address</label>
+          <input 
+            type="email" 
+            name="email" 
+            id="email" 
+            placeholder="alex@wanderlust.com" 
+            class="w-full rounded-xl border-slate-200 bg-slate-50 text-deep-charcoal focus:ring-2 focus:ring-electric-blue focus:border-electric-blue h-12 px-4 text-sm transition-all" 
+            required 
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <div class="flex justify-between items-center">
+            <label for="password" class="text-slate-700 text-[10px] font-bold uppercase tracking-[0.15em]">Password</label>
+            <a class="text-royal-purple text-[10px] font-bold hover:underline" href="#">Forgot?</a>
+          </div>
+          <div class="relative flex items-center">
+            <input 
+              type="password" 
+              name="password" 
+              id="password" 
+              placeholder="••••••••" 
+              class="w-full rounded-xl border-slate-200 bg-slate-50 text-deep-charcoal focus:ring-2 focus:ring-electric-blue focus:border-electric-blue h-12 px-4 pr-12 text-sm transition-all" 
+              minlength="8" 
+              required 
+            />
+            <button class="absolute right-3 text-slate-400 hover:text-electric-blue transition-colors" type="button" onclick="togglePass()">
+              <span class="material-symbols-outlined text-sm" id="pass-icon">visibility</span>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-gradient w-full h-12 rounded-xl text-white font-bold text-sm tracking-wide shadow-lg shadow-electric-blue/20 hover:shadow-xl hover:brightness-110 transition-all flex items-center justify-center gap-2">
+          <span>Login to Wanderlust</span>
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
+      </form>
+
+      <div class="relative my-10">
+        <div class="absolute inset-0 flex items-center">
+          <div class="w-full border-t border-slate-100"></div>
+        </div>
+        <div class="relative flex justify-center text-[10px] font-black uppercase tracking-widest">
+          <span class="px-4 bg-white text-slate-400">Or continue with</span>
         </div>
       </div>
-      <button class="btn btn-success rounded-pill" disabled>
-        Login
-      </button>
-    </form>
+
+      <div class="grid grid-cols-2 gap-3">
+        <button class="flex items-center justify-center gap-2 h-12 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-all font-semibold text-xs text-slate-700">
+          <img alt="Google" class="size-4" src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png"/>
+          Google
+        </button>
+        <button class="flex items-center justify-center gap-2 h-12 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-all font-semibold text-xs text-slate-700">
+          <i class="fa-brands fa-apple text-sm text-black"></i>
+          Apple
+        </button>
+      </div>
+
+      <p class="mt-10 text-center text-slate-500 text-xs">
+        Don't have an account? 
+        <a class="text-electric-blue font-bold hover:underline" href="/signup">Join Wanderlust</a>
+      </p>
+    </div>
   </div>
 </div>
+
+<script>
+  function togglePass() {
+    const passInput = document.getElementById('password');
+    const icon = document.getElementById('pass-icon');
+    if (passInput.type === 'password') {
+      passInput.type = 'text';
+      icon.innerText = 'visibility_off';
+    } else {
+      passInput.type = 'password';
+      icon.innerText = 'visibility';
+    }
+  }
+</script>

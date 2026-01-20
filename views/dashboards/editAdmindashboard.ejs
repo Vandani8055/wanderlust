@@ -1,247 +1,139 @@
 <% layout('/layouts/boilerplate') %>
 
-<div class="profile-wrapper">
-  <div class="profile-card edit-profile-card">
 
-    <!-- Accent top bar -->
-    <div class="edit-top-bar"></div>
+<style type="text/tailwindcss">
+    @layer utilities {
+        .premium-shadow { box-shadow: 0 20px 50px -12px rgba(51, 119, 255, 0.1); }
+        .gradient-btn { background: linear-gradient(135deg, #3377ff 0%, #8B5CF6 100%); }
+    }
+</style>
 
-    <!-- Header -->
-    <div class="edit-header">
-      <h1>Admin Profile</h1>
-      <span>Update admin account information</span>
-    </div>
+<div class="bg-slate-50 min-h-screen font-display pb-20">
+    <div class="h-10"></div>
 
-    <!-- EDIT FORM -->
-    <form action="/admin/edit?_method=PUT" method="POST" enctype="multipart/form-data" class="edit-form">
-
-      <!-- Photo Upload -->
-      <div class="form-group photo-upload">
-        <label>Profile Photo</label>
-
-        <div class="photo-preview">
-          <img src="<%= currUser.profileImage ? currUser.profileImage : '/images/default.jpg' %>" class="nav-profile-img" />
+    <main class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="mb-10 text-center md:text-left">
+            <h2 class="text-3xl md:text-4xl font-black text-royal-purple tracking-tight mb-2">Admin Settings</h2>
+            <p class="text-slate-500 text-base md:text-lg">Update admin account information</p>
         </div>
 
-        <input type="file" name="profileImage" id="profileImage" accept="image/*">
-      </div>
+        <div class="bg-white rounded-2xl premium-shadow border border-slate-200/60 overflow-hidden">
+            
+            <form action="/admin/edit?_method=PUT" method="POST" enctype="multipart/form-data">
+                
+                <div class="p-8 border-b border-slate-100 flex flex-col items-center bg-slate-50/30">
+                    <div class="relative group">
+                        <div class="w-28 h-28 md:w-32 md:h-32 rounded-full border-4 border-white shadow-xl overflow-hidden bg-slate-100">
+                            <img id="preview" src="<%= currUser.profileImage ? currUser.profileImage : '/images/default.jpg' %>" 
+                                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                        </div>
+                        <label for="profileImage" class="absolute bottom-0 right-0 size-10 bg-primary text-white rounded-full flex items-center justify-center shadow-lg hover:bg-primary/90 transition-all cursor-pointer">
+                            <span class="material-symbols-outlined text-xl">photo_camera</span>
+                        </label>
+                        <input type="file" name="profileImage" id="profileImage" accept="image/*" class="hidden" onchange="previewImage(event)">
+                    </div>
+                    
+                    <div class="mt-6 text-center">
+                        <h3 class="text-xl font-bold text-royal-purple"><%= admin.username %></h3>
+                        <div class="flex items-center gap-1.5 justify-center mt-1 text-accent-purple font-bold text-[10px] uppercase tracking-widest">
+                            <span class="material-symbols-outlined text-sm">verified_user</span>
+                            System Administrator
+                        </div>
+                    </div>
 
-      <!-- Username -->
-      <div class="form-group">
-        <label>Admin Name</label>
-        <input
-          type="text"
-          name="username"
-          value="<%= admin.username %>"
-          required
-        />
-      </div>
+                    <div class="mt-6 flex gap-3">
+                        <label for="profileImage" class="px-5 py-2.5 bg-primary/10 text-primary font-bold text-xs rounded-xl hover:bg-primary/20 transition-all cursor-pointer">
+                            Change Photo
+                        </label>
+                    </div>
+                </div>
 
-      <!-- Email (readonly) -->
-      <div class="form-group">
-        <label>Email</label>
-        <input
-          type="email"
-          value="<%= admin.email %>"
-          readonly
-        />
-      </div>
+                <div class="p-6 md:p-12 space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+                        
+                        <div class="space-y-2">
+                            <label class="block text-sm font-bold text-royal-purple ml-1">Admin Name</label>
+                            <div class="relative group">
+                                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">person</span>
+                                <input class="w-full h-14 pl-12 pr-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-slate-900 font-semibold" 
+                                       type="text" name="username" value="<%= admin.username %>" required />
+                            </div>
+                        </div>
 
-      <!-- Admin Role (readonly) -->
-      <div class="form-group">
-        <label>Role</label>
-        <input
-          type="text"
-          value="Administrator"
-          readonly
-        />
-      </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-bold text-royal-purple ml-1">Email Address</label>
+                            <div class="relative group">
+                                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">mail</span>
+                                <input class="w-full h-14 pl-12 pr-12 bg-slate-100 border-slate-200 rounded-xl cursor-not-allowed text-slate-500 font-medium" 
+                                       readonly type="email" value="<%= admin.email %>" />
+                                <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 text-lg">lock</span>
+                            </div>
+                        </div>
+                    </div>
 
-      <!-- Bio -->
-      <div class="form-group">
-        <label>Bio</label>
-        <textarea name="bio" rows="4"><%= admin.bio || "" %></textarea>
-      </div>
+                    <div class="space-y-2">
+                        <label class="block text-sm font-bold text-royal-purple ml-1">Account Role</label>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">shield_person</span>
+                            <input class="w-full h-14 pl-12 pr-12 bg-slate-100 border-slate-200 rounded-xl cursor-not-allowed text-slate-500 font-medium" 
+                                   readonly type="text" value="Administrator" />
+                            <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 text-lg">lock</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 ml-1 font-medium">Administrative roles are locked to the system core.</p>
+                    </div>
 
-      <!-- Save -->
-      <div class="form-actions">
-        <button type="submit" class="btn-save rounded-pill">Save Changes</button>
-      </div>
+                    <div class="space-y-2">
+                        <label class="block text-sm font-bold text-royal-purple ml-1">Admin Bio</label>
+                        <textarea name="bio" rows="4" 
+                                  class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-slate-900 font-medium resize-none" 
+                                  placeholder="Describe your role or add a bio..."><%= admin.bio || "" %></textarea>
+                    </div>
 
-    </form>
-  </div>
+                    <div class="pt-4 space-y-4">
+                        <h4 class="text-xs font-black text-royal-purple uppercase tracking-widest border-b border-slate-100 pb-2">Security & Identity</h4>
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-emerald-50/50 border border-emerald-100 rounded-2xl gap-4">
+                            <div class="flex items-center gap-3">
+                                <div class="size-10 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600">
+                                    <span class="material-symbols-outlined">verified</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-900">Verified Administrator</p>
+                                    <p class="text-xs text-slate-500">Your account is fully audited and secure.</p>
+                                </div>
+                            </div>
+                            <span class="px-3 py-1 bg-emerald-500 text-white text-[10px] font-black rounded-full uppercase">Active</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 md:p-8 bg-slate-50 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <p class="text-xs text-slate-400 text-center md:text-left font-medium">Last session update: <%= new Date().toLocaleDateString() %></p>
+                    <div class="flex gap-3 w-full md:w-auto">
+                        <a href="/admin" class="flex-1 md:flex-none text-center px-8 py-3 bg-white border border-slate-200 text-slate-600 font-bold rounded-xl hover:bg-slate-100 transition-all text-sm">
+                            Cancel
+                        </a>
+                        <button type="submit" class="flex-1 md:flex-none px-10 py-3 gradient-btn text-white font-bold rounded-xl hover:shadow-lg hover:shadow-primary/30 transition-all text-sm">
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="mt-8 text-center text-slate-400 text-xs font-medium">
+            © 2026 Wanderlust Travel Inc. • Secure Admin Console
+        </div>
+    </main>
 </div>
 
-
-<!-- =========================================================
-     ADMIN EDIT PROFILE CSS — EXACT MATCH WITH USER PAGE
-========================================================= -->
-<style>
-
-/* GENERAL */
-body {
-    margin: 0;
-    background: #fcfcfc;
-    font-family: "Inter", sans-serif;
-    color: #1e293b;
-}
-
-.profile-wrapper {
-    max-width: 800px;
-    margin: 60px auto;
-    padding: 0 20px;
-}
-
-.profile-card {
-    background: #fff;
-    border-radius: 10px;
-    padding: 0;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-}
-
-/* TOP ACCENT BAR */
-.edit-top-bar {
-    height: 10px;
-    background: linear-gradient(90deg, #ff385c, #ff7a8a);
-    border-radius: 10px 10px 0 0;
-}
-
-/* HEADER */
-.edit-header {
-    padding: 30px 40px 20px;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.edit-header h1 {
-    margin: 0;
-    font-size: 26px;
-    font-weight: 700;
-}
-
-.edit-header span {
-    font-size: 15px;
-    color: #64748b;
-}
-
-/* FORM */
-.edit-form {
-    display: flex;
-    flex-direction: column;
-    padding: 30px 40px;
-}
-
-/* FORM GROUPS */
-.form-group {
-    display: flex;
-    flex-direction: column;
-    padding: 15px 0;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.edit-form > .form-group:last-of-type {
-    border-bottom: none;
-}
-
-.form-group label {
-    font-size: 13px;
-    font-weight: 600;
-    color: #64748b;
-    text-transform: uppercase;
-    letter-spacing: .5px;
-    margin-bottom: 5px;
-}
-
-.form-group input,
-.form-group textarea {
-    padding: 10px 0;
-    font-size: 16px;
-    border: none;
-    border-bottom: 2px solid #e2e2e2;
-    background: none;
-    outline: none;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-    border-color: #ff385c;
-}
-
-/* READONLY */
-.form-group input[readonly] {
-    color: #94a3b8;
-}
-
-/* PHOTO UPLOAD */
-.photo-upload {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 20px;
-}
-
-.photo-preview {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 3px solid #ff385c;
-    box-shadow: 0 0 0 5px rgba(255,56,92,0.1);
-}
-
-.photo-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-#profileImage {
-    margin-top: 10px;
-}
-
-/* BUTTON */
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    padding-top: 20px;
-    border-top: 1px solid #f0f0f0;
-}
-
-.btn-save {
-    background: linear-gradient(135deg, #ff385c, #ff6b81);
-    padding: 14px 40px;
-    border-radius: 6px;
-    border: none;
-    color: #fff;
-    font-weight: 700;
-    cursor: pointer;
-    transition: .3s;
-}
-
-.btn-save:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 20px rgba(255,56,92,0.4);
-}
-
-/* RESPONSIVE */
-@media (max-width: 600px) {
-
-    .edit-header, 
-    .edit-form {
-        padding: 20px;
+<script>
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const output = document.getElementById('preview');
+            output.src = reader.result;
+        }
+        reader.readAsDataURL(event.target.files[0]);
     }
-
-    .photo-upload {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .photo-preview {
-        width: 75px;
-        height: 75px;
-    }
-
-    .form-actions {
-        justify-content: center;
-    }
-}
-</style>
+</script>

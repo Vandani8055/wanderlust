@@ -151,26 +151,33 @@ module.exports.renderEditForm = async (req, res) => {
 
 // update Listing :
 module.exports.updateListing = async (req, res) => {
-  const { id } = req.params;
-  let listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+    const { id } = req.params;
 
-  //edit and not file then give err:
-  if (typeof req.file !== "undefined") {
-    let url = req.file.path;
-    let filename = req.file.filename;
-    listing.image = { url, filename };
-
-    if (req.body.tags) {
-      req.body.tags = req.body.tags.map((t) => t.trim().toLowerCase());
+    // 1. Handle the Tags normalization first
+    // If no checkboxes are ticked, req.body.listing.tags will be undefined. 
+    // We set it to an empty array to avoid "required" errors if your schema allows it,
+    // or to ensure the old tags are cleared.
+    if (!req.body.listing.tags) {
+        req.body.listing.tags = []; 
+    } else {
+        // Normalize tags to lowercase to match your index/filter logic
+        req.body.listing.tags = req.body.listing.tags.map((t) => t.trim().toLowerCase());
     }
 
-    await listing.save();
-  }
+    // 2. Update the listing data (Title, Price, etc. + the new normalized Tags)
+    let listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
 
-  req.flash("success", "Listing Updated! 🎉");
-  res.redirect(`/listings/${id}`);
+    // 3. Handle File Upload (Image) separately
+    if (typeof req.file !== "undefined") {
+        let url = req.file.path;
+        let filename = req.file.filename;
+        listing.image = { url, filename };
+        await listing.save();
+    }
+
+    req.flash("success", "Listing Updated! 🎉");
+    res.redirect(`/listings/${id}`);
 };
-
 
 // --- Delete listing ---
 

@@ -1,91 +1,122 @@
 <% layout('/layouts/boilerplate') %>
 
-<div class="container mt-5">
-  <h2 class="mb-5 text-center fw-bold">
-    Search results for
-    <span class="text-primary">"<%= query %>"</span>
-  </h2>
 
-  <div class="d-flex justify-content-end align-items-center mb-4">
-    <div class="form-check form-switch">
-      <input class="form-check-input" type="checkbox" id="toggle-switch" />
-      <label class="form-check-label" for="toggle-switch">
-        Display total after taxes
-      </label>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .glass-rating {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  .gradient-cta {
+    background: linear-gradient(135deg, #2677DA 0%, #661fad 100%);
+  }
+  body { font-family: 'Manrope', sans-serif; background-color: #f9f9fa; }
+</style>
+
+<div class="min-h-screen pb-20">
+  <main class="mx-auto w-full max-w-[1200px] px-6 md:px-20 py-12">
+    
+    <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
+      <div class="flex flex-col gap-2">
+        <h1 class="text-4xl md:text-5xl font-black tracking-tight text-primary">
+          <%= query %>
+        </h1>
+        <p class="text-lg text-[#735393] font-medium">
+          <%= allListings.length %> exceptional properties found
+        </p>
+      </div>
+
+      <div class="flex items-center gap-4 bg-white p-3 px-5 rounded-2xl shadow-sm border border-[#ede8f2]">
+        <span class="text-sm font-bold text-[#735393]">Display total with GST</span>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" id="toggle-switch" class="sr-only peer">
+          <div class="w-12 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-sage-green"></div>
+        </label>
+      </div>
     </div>
-  </div>
 
-  <% if (allListings.length === 0) { %>
-  <div class="text-center my-5">
-    <p class="text-muted fs-4">No listings found for "<%= query %>" 😞</p>
-    <a href="/listings" class="btn btn-outline-primary rounded-pill mt-3">
-      🔍 Browse All Listings
-    </a>
-  </div>
+    <% if (allListings.length === 0) { %>
+      <div class="text-center py-20 bg-white rounded-3xl border border-dashed border-slate-300">
+        <span class="material-symbols-outlined text-6xl text-slate-300 mb-4">search_off</span>
+        <p class="text-[#735393] text-xl font-semibold">No listings found for "<%= query %>" 😞</p>
+        <a href="/listings" class="mt-6 inline-block gradient-cta text-white px-8 py-3 rounded-full font-bold uppercase tracking-widest text-xs hover:scale-105 transition-transform">
+          Browse All Listings
+        </a>
+      </div>
+    <% } else { %>
 
-  <% } else { %>
-
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-    <% allListings.forEach(listing => { %>
-    <div class="col">
-      <a href="/listings/<%= listing._id %>" class="listing-link">
-        <div class="card attractive-card hover-lift shadow-lg rounded-4 overflow-hidden">
-          <div class="position-relative">
-            <img src="<%= listing.image?.url || '/images/default.jpg' %>" alt="<%= listing.title %>" class="card-img-top listing-img" />
-
-            <span class="badge bg-success text-white fw-bold rating-tag shadow-sm">
-              <% if (listing.rating) { %>
-              <i class="fas fa-star me-1"></i> <%= listing.rating.toFixed(1) %>
-              <% } else { %> New <% } %>
-            </span>
-          </div>
-
-          <div class="card-body card-body-main">
-            <h5 class="card-title-main"><%= listing.title %></h5>
-            <p class="card-text text-muted"><%= listing.location %></p>
-
-            <p class="card-text price-text" data-base-price="<%= listing.price %>" data-gst-price="<%= (listing.price * 1.18).toFixed(0) %>">
-              <span class="final-price fw-bold text-dark price-amount">
-                ₹<%= listing.price.toLocaleString("en-IN") %>
-              </span>
-
-              <span class="old-price text-muted ms-2" style="display: none">
-                ₹<%= listing.price.toLocaleString("en-IN") %>
-              </span>
-
-              <span class="gst-badge badge bg-success ms-2" style="display: none">
-                +18% GST
-              </span>
-            </p>
-            <p class="card-text text-secondary mb-3 flex-grow-1" style="font-size: 0.95rem">
-              <%= listing.description.length > 100 ?
-              listing.description.substring(0, 100) + '...' :
-              listing.description %>
-            </p>
-
-            <div class="mt-auto text-center">
-              <a href="/listings/<%= listing._id %>" class="btn btn-view btn-sm rounded-pill">
-                View Listing
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <% allListings.forEach(listing => { %>
+          <div class="group flex flex-col bg-white rounded-xl overflow-hidden shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_50px_-15px_rgba(102,31,173,0.15)] transition-all duration-500 border border-[#ede8f2]">
+            
+            <div class="relative aspect-[4/3] overflow-hidden">
+              <a href="/listings/<%= listing._id %>">
+                <img src="<%= listing.image?.url || '/images/default.jpg' %>" 
+                     alt="<%= listing.title %>" 
+                     class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
               </a>
+              <div class="absolute top-4 right-4 glass-rating rounded-full px-3 py-1.5 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-emerald-green text-lg">star</span>
+                <span class="text-xs font-bold text-[#140f1a]">
+                  <%= listing.rating ? listing.rating.toFixed(1) : 'New' %>
+                </span>
+              </div>
+            </div>
+
+            <div class="p-6 flex flex-col flex-1">
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="text-xl font-bold tracking-tight truncate pr-2"><%= listing.title %></h3>
+                <span class="bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded flex-shrink-0">
+                  Premium
+                </span>
+              </div>
+              
+              <p class="text-[#735393] text-sm mb-4 flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">location_on</span> <%= listing.location %>
+              </p>
+
+              <p class="text-[#140f1a] text-sm leading-relaxed mb-6 line-clamp-2 opacity-80">
+                <%= listing.description %>
+              </p>
+
+              <div class="mt-auto pt-4 border-t border-[#ede8f2] flex items-center justify-between">
+                <div class="flex flex-col price-text" 
+                     data-base-price="<%= listing.price %>" 
+                     data-gst-price="<%= (listing.price * 1.18).toFixed(0) %>">
+                  
+                  <div class="flex items-baseline gap-1">
+                    <span class="text-2xl font-extrabold text-[#140f1a] price-amount">
+                      ₹<%= listing.price.toLocaleString("en-IN") %>
+                    </span>
+                    <span class="text-xs font-bold text-[#735393]">/night</span>
+                  </div>
+                  
+                  <span class="gst-badge text-[10px] font-bold text-emerald-green uppercase tracking-tighter" style="display: none">
+                    Incl. 18% GST
+                  </span>
+                </div>
+
+                <a href="/listings/<%= listing._id %>" 
+                   class="gradient-cta text-white px-5 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest hover:brightness-110 transition-all shadow-lg shadow-primary/20">
+                  View Listing
+                </a>
+              </div>
             </div>
           </div>
-        </div>
-      </a>
-    </div>
-    <% }) %>
-  </div>
+        <% }) %>
+      </div>
+    <% } %>
 
-  <% } %>
+    <div class="fixed bottom-10 left-1/2 -translate-x-1/2 z-50">
+      <button class="bg-[#140f1a] text-white flex items-center gap-3 px-8 py-4 rounded-full shadow-2xl hover:scale-105 transition-transform active:scale-95">
+        <span class="text-sm font-black uppercase tracking-widest">Show Map</span>
+        <span class="material-symbols-outlined">map</span>
+      </button>
+    </div>
+
+  </main>
 </div>
 
 <script src="/js/price-toggle.js"></script>
-
-
-
-
-<style>
-  .btn-view {
-    background-color: #1e90ff;
-    color: #fff;
-  }
-</style>

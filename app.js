@@ -74,8 +74,9 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "/public"))); // Serve static files
 
 // --- Session Store Configuration (MongoDB) ---
-const store = MongoStore.create({
+const store = new MongoStore({
     mongoUrl: mongoURL,
+    collectionName: 'sessions',
     crypto: { 
         secret: process.env.SECRET,
     },
@@ -125,6 +126,7 @@ passport.deserializeUser(User.deserializeUser());
 // --- Response Locals Middleware ---
 // Makes flash messages and current user available to all templates
 app.use((req, res, next) => {
+    res.locals.pagePath = req.path; // Important for hiding Nav/Footer
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     res.locals.currUser = req.user; // User object provided by Passport

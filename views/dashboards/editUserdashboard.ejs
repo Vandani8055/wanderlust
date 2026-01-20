@@ -1,193 +1,140 @@
 <% layout('/layouts/boilerplate') %>
 
-<div class="profile-wrapper">
-  <div class="profile-card edit-profile-card">
 
-    <div class="edit-top-bar"></div>
-
-    <div class="edit-header">
-      <h1>Edit Host Profile</h1>
-      <span>Manage your hosting information</span>
-    </div>
-
-    <!-- HOST EDIT FORM -->
-    <form action="/host/edit?_method=PUT" method="POST" enctype="multipart/form-data" class="edit-form">
-
-      <!-- Profile Photo -->
-      <div class="form-group photo-upload">
-        <label>Profile Photo</label>
-        <div class="photo-preview">
-          <img src="<%= currUser.profileImage ? currUser.profileImage : '/images/default.jpg' %>" class="nav-profile-img" />
-        </div>
-        <input type="file" name="profileImage" id="profileImage" accept="image/*">
-      </div>
-
-      <!-- Username -->
-      <div class="form-group">
-        <label>Username</label>
-        <input 
-          type="text" 
-          name="username"
-          value="<%= host.username %>"
-        />
-      </div>
-
-      <!-- Email (readonly) -->
-      <div class="form-group">
-        <label>Email</label>
-        <input 
-          type="email" 
-          value="<%= host.email %>"
-          readonly
-        />
-      </div>
-
-     
-
-      <!-- Save -->
-      <div class="form-actions">
-        <button type="submit" class="btn-save rounded-pill">Save Changes</button>
-      </div>
-
-    </form>
-  </div>
-</div>
 
 <style>
-    /* Your Entire CSS — Not Touched At All */
-    /* GENERAL BODY */
-bod/*
-|---------------------------------------------------------
-| VERSION 2: BOLD, HIGH-CONTRAST EDIT FORM
-|---------------------------------------------------------
-*/
-
-/* GENERAL BODY */
-body {
-    margin: 0;
-    background: #fcfcfc;
-    font-family: "Inter", "Helvetica Neue", sans-serif;
-    color: #1e293b;
-}
-
-.profile-wrapper {
-    max-width: 800px;
-    margin: 60px auto;
-    padding: 0 20px;
-}
-
-.profile-card {
-    background: #ffffff;
-    border-radius: 10px;
-    padding: 0;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-}
-
-.edit-top-bar {
-    height: 10px;
-    background: linear-gradient(90deg, #ff385c, #ff7a8a);
-    border-radius: 10px 10px 0 0;
-}
-
-.edit-header {
-    padding: 30px 40px 20px;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.edit-header h1 {
-    font-size: 26px;
-    font-weight: 700;
-}
-
-.edit-header span {
-    font-size: 15px;
-    color: #64748b;
-}
-
-.edit-form {
-    display: flex;
-    flex-direction: column;
-    padding: 30px 40px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    padding: 15px 0;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.form-group label {
-    font-size: 13px;
-    font-weight: 600;
-    color: #64748b;
-    margin-bottom: 5px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.form-group input,
-.form-group textarea {
-    padding: 10px 0;
-    font-size: 16px;
-    border: none;
-    border-bottom: 2px solid #e2e2e2;
-    background: none;
-    outline: none;
-}
-
-.form-group textarea {
-    resize: vertical;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-    border-color: #ff385c;
-}
-
-.form-group input[readonly] {
-    color: #94a3b8;
-}
-
-.photo-upload {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 30px;
-    padding: 20px 0;
-}
-
-.photo-preview {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 3px solid #ff385c;
-    box-shadow: 0 0 0 5px rgba(255, 56, 92, 0.1);
-}
-
-.photo-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid #f0f0f0;
-}
-
-.btn-save {
-    background: linear-gradient(135deg, #ff385c, #ff6b81);
-    color: white;
-    padding: 14px 40px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    font-weight: 700;
-}
-
+    body { font-family: 'Manrope', sans-serif; }
+    .premium-shadow { box-shadow: 0 20px 50px -12px rgba(51, 119, 255, 0.08); }
+    .gradient-btn { background: linear-gradient(135deg, #3377ff 0%, #8B5CF6 100%); }
+    /* Hide default file input but keep it functional */
+    #profileImageInput { display: none; }
 </style>
+
+<div class="bg-background-light dark:bg-background-dark min-h-screen text-slate-900 dark:text-slate-100 font-display pb-20">
+    <main class="py-12 px-4 md:px-6 lg:px-40">
+        <div class="max-w-[960px] mx-auto">
+            
+            <div class="mb-10 text-center md:text-left">
+                <h2 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-2">Profile Settings</h2>
+                <p class="text-slate-500 dark:text-slate-400 text-lg">Customize your premium presence in the community.</p>
+            </div>
+
+            <div class="bg-white dark:bg-slate-900/50 rounded-xl premium-shadow border border-slate-200/50 dark:border-slate-800/50 overflow-hidden">
+                
+                <form action="/host/edit?_method=PUT" method="POST" enctype="multipart/form-data">
+                    
+                    <div class="p-8 border-b border-slate-100 dark:border-slate-800 flex flex-col items-center">
+                        <div class="relative group">
+                            <div class="w-32 h-32 rounded-full border-4 border-white dark:border-slate-900 shadow-xl overflow-hidden bg-slate-100 dark:bg-slate-800">
+                                <img id="imagePreview" 
+                                     src="<%= currUser.profileImage ? currUser.profileImage : '/images/default.jpg' %>" 
+                                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                                     alt="Profile Preview" />
+                            </div>
+                            <label for="profileImageInput" class="absolute bottom-0 right-0 size-10 bg-primary text-white rounded-full flex items-center justify-center shadow-lg hover:bg-primary/90 transition-all cursor-pointer">
+                                <span class="material-symbols-outlined text-xl">photo_camera</span>
+                            </label>
+                            <input type="file" name="profileImage" id="profileImageInput" accept="image/*" onchange="previewImage(event)">
+                        </div>
+
+                        <div class="mt-6 text-center">
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white"><%= currUser.username %></h3>
+                            <div class="flex items-center gap-1.5 justify-center mt-1 text-accent-purple font-semibold text-sm uppercase tracking-wider">
+                                <span class="material-symbols-outlined text-sm">verified</span>
+                                Verified Host
+                            </div>
+                        </div>
+
+                        <div class="mt-6 flex gap-3">
+                            <label for="profileImageInput" class="px-6 py-2.5 bg-primary/10 text-primary font-bold text-sm rounded-xl hover:bg-primary/20 transition-all cursor-pointer">
+                                Update Photo
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="p-8 md:p-12 space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            
+                            <div class="space-y-2">
+                                <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">
+                                    Username
+                                </label>
+                                <div class="relative group">
+                                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-accent-purple transition-colors">alternate_email</span>
+                                    <input 
+                                        class="w-full h-14 pl-12 pr-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-accent-purple/10 focus:border-accent-purple outline-none transition-all text-slate-900 dark:text-white font-medium" 
+                                        type="text" 
+                                        name="username" 
+                                        value="<%= currUser.username %>"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">
+                                    Email Address
+                                </label>
+                                <div class="relative group opacity-70">
+                                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">mail</span>
+                                    <input 
+                                        class="w-full h-14 pl-12 pr-4 bg-slate-100 dark:bg-slate-800 border-none rounded-xl cursor-not-allowed text-slate-500 font-medium" 
+                                        readonly 
+                                        type="email" 
+                                        value="<%= currUser.email %>"
+                                    />
+                                    <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 text-sm">lock</span>
+                                </div>
+                                <p class="text-[11px] text-slate-400 dark:text-slate-500 ml-1">Verified email cannot be changed manually.</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">
+                                Personal Bio
+                            </label>
+                            <textarea 
+                                name="bio"
+                                class="w-full p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-4 focus:ring-accent-purple/10 focus:border-accent-purple outline-none transition-all text-slate-900 dark:text-white font-medium resize-none" 
+                                placeholder="Tell guests about yourself..." 
+                                rows="3"
+                            ><%= currUser.bio || '' %></textarea>
+                        </div>
+                    </div>
+
+                    <div class="p-8 bg-slate-50/50 dark:bg-slate-800/30 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <p class="text-xs text-slate-400 text-center md:text-left">Ensure your details are up to date.</p>
+                        <div class="flex gap-3 w-full md:w-auto">
+                            <a href="/dashboard" class="flex-1 md:flex-none px-8 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-bold rounded-xl hover:bg-slate-100 transition-all text-center">
+                                Cancel
+                            </a>
+                            <button type="submit" class="flex-1 md:flex-none px-10 py-3 gradient-btn text-white font-bold rounded-xl hover:shadow-lg hover:shadow-primary/20 transition-all">
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="mt-12 p-6 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl flex items-center justify-between">
+                <div>
+                    <h5 class="text-sm font-bold text-slate-900 dark:text-white">Deactivate Account</h5>
+                    <p class="text-xs text-slate-500 mt-1">Permanently remove your host profile and listings.</p>
+                </div>
+                <button class="text-sm font-bold text-red-400 hover:text-red-500 transition-colors">Delete Account</button>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    // Live preview for image selection
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function(){
+            const output = document.getElementById('imagePreview');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>

@@ -1,100 +1,175 @@
 <% layout('/layouts/boilerplate') %>
 
-<div class="row mt-3">
-  <div class="col-8 offset-2">
-    <h3>Edit Your Listing</h3>
 
-    <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation" enctype="multipart/form-data">
-      <div class="mb-3">
-        <label for="title" class="form-lable">Title:</label><br>
-        <input name="listing[title]" value="<%= listing.title %>" type="text" class="form-control" required />
-        <div class="valid-feedback">Title looks good!</div>
+
+<style type="text/tailwindcss">
+  @layer base {
+    body { @apply font-sans bg-background-light text-[#2A2D35]; }
+    input, textarea { @apply font-display; }
+  }
+  .gradient-border-box {
+    position: relative;
+    background: #fff;
+    background-clip: padding-box;
+    border: 2px dashed transparent;
+  }
+  .gradient-border-box::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    z-index: -1;
+    margin: -2px;
+    border-radius: inherit;
+    background: linear-gradient(to right, #2b7cee, #9966CC);
+  }
+</style>
+
+<div class="min-h-screen pb-20">
+  <main class="max-w-4xl mx-auto px-6 py-12">
+    <nav class="flex items-center gap-2 mb-6 text-sm font-medium">
+      <a class="text-slate-400 hover:text-primary transition-colors" href="/listings">Listings</a>
+      <span class="material-symbols-outlined text-xs text-slate-300">chevron_right</span>
+      <span class="text-primary">Edit Listing</span>
+    </nav>
+
+    <div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div>
+        <h1 class="text-4xl font-extrabold tracking-tight mb-2 bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600 font-display">
+          Edit Listing
+        </h1>
+        <p class="text-slate-500 text-lg">Updating: <span class="text-slate-900 font-semibold"><%= listing.title %></span></p>
       </div>
-
-      <div class="mb-3">
-        <label for="description" class="form-lable">Description:</label><br>
-        <textarea name="listing[description]" class="form-control" required><%= listing.description %></textarea>
-        <div class="invalid-feedback">Please enter a short description!</div>
+      <div class="flex items-center gap-3">
+        <span class="px-3 py-1 rounded-full bg-accent-green/10 text-accent-green text-xs font-bold uppercase tracking-wider border border-accent-green/20">Live on Market</span>
       </div>
+    </div>
 
-      <div class="mb-3">
-        <h6>Original Listing image:</h6>
-        <img src="<%=originalImageUrl %>" alt="">
-      </div>
-
-      <div class="mb-3">
-        <label for="image" class="form-lable">Upload new Image:</label><br>
-        <input type="file" name="listing[image]" class="form-control" />
-      </div>
-
-      <div class="row">
-        <div class="mb-3 col-md-4">
-          <label for="price" class="form-lable">Price:</label><br>
-          <input name="listing[price]" value="<%= listing.price %>" type="number" class="form-control" required />
-          <div class="invalid-feedback">Price should be valid!</div>
+    <div class="bg-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-8 md:p-10">
+      <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation space-y-10" enctype="multipart/form-data">
+        
+        <div class="space-y-6">
+          <div class="flex items-center gap-2 border-b border-slate-100 pb-4">
+            <span class="material-symbols-outlined text-primary">image</span>
+            <h2 class="text-lg font-bold">Current Listing Media</h2>
+          </div>
+          <div class="flex items-start gap-6 p-4 bg-slate-50 rounded-xl border border-slate-100">
+            <div class="relative group size-32 flex-shrink-0">
+              <img src="<%= originalImageUrl %>" alt="Current listing photo" class="w-full h-full object-cover rounded-lg shadow-md" />
+              <div class="absolute inset-0 bg-black/40 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <span class="text-white material-symbols-outlined">visibility</span>
+              </div>
+            </div>
+            <div class="flex-1 space-y-2">
+              <p class="text-sm font-bold text-slate-700">Original Listing Image</p>
+              <p class="text-xs text-slate-500">Currently displayed image on the platform.</p>
+              
+              <div class="mt-4">
+                <label class="text-xs font-bold text-primary cursor-pointer hover:underline flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm">cloud_upload</span>
+                  Upload New Image
+                  <input type="file" name="listing[image]" class="hidden" />
+                </label>
+              </div>
+            </div>
+          </div>
         </div>
 
-
-        <div class="mb-3 col-md-8">
-          <label for="country" class="form-lable">Country:</label>
-          <input name="listing[country]" value="<%= listing.country %>" type="text" class="form-control" required />
-          <div class="invalid-feedback">Country name should be valid!</div>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <label for="location" class="form-lable">Location:</label><br>
-        <input name="listing[location]" value="<%= listing.location %>" type="text" class="form-control" required />
-        <div class="invalid-feedback">Location should valid!</div>
-      </div>
-
-
-
-      <!-- Tags as Checkboxes -->
-      <div class="mb-3">
-        <label class="form-label">Tags</label>
-        <div class="d-flex flex-wrap gap-2">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="listing[tags][]" value="brand-new" id="tag-brand-new">
-            <label class="form-check-label" for="tag-brand-new">Brand New</label>
+        <div class="space-y-6">
+          <div class="flex items-center gap-2 border-b border-slate-100 pb-4">
+            <span class="material-symbols-outlined text-primary">edit_note</span>
+            <h2 class="text-lg font-bold">General Details</h2>
           </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="listing[tags][]" value="trending" id="tag-trending">
-            <label class="form-check-label" for="tag-trending">Trending</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="listing[tags][]" value="beach" id="tag-beach">
-            <label class="form-check-label" for="tag-beach">Beach</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="listing[tags][]" value="arctic" id="tag-arctic">
-            <label class="form-check-label" for="tag-arctic">Arctic</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="listing[tags][]" value="mountain" id="tag-mountain">
-            <label class="form-check-label" for="tag-mountain">Mountains</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="listing[tags][]" value="pools" id="tag-pools">
-            <label class="form-check-label" for="tag-pools">Amazing Pools</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="listing[tags][]" value="camping" id="tag-camping">
-            <label class="form-check-label" for="tag-camping">Camping</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="listing[tags][]" value="tiny-houses" id="tag-tiny-houses">
-            <label class="form-check-label" for="tag-tiny-houses">Tiny Houses</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="listing[tags][]" value="luxury-hotels" id="tag-luxury-hotels">
-            <label class="form-check-label" for="tag-luxury-hotels">Luxury Hotels</label>
+          <div class="grid grid-cols-1 gap-6">
+            <label class="block">
+              <span class="text-sm font-bold text-slate-700 mb-2 block">Listing Title</span>
+              <input name="listing[title]" value="<%= listing.title %>" type="text" class="w-full rounded-lg border-slate-200 bg-slate-50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all py-3.5 px-4" required />
+              <div class="valid-feedback text-green-500 text-xs mt-1">Title looks good!</div>
+            </label>
+            <label class="block">
+              <span class="text-sm font-bold text-slate-700 mb-2 block">Description</span>
+              <textarea name="listing[description]" rows="5" class="w-full rounded-lg border-slate-200 bg-slate-50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all py-3.5 px-4 resize-none" required><%= listing.description %></textarea>
+              <div class="invalid-feedback text-red-500 text-xs mt-1">Please enter a short description!</div>
+            </label>
           </div>
         </div>
+
+        <div class="space-y-6">
+          <div class="flex items-center gap-2 border-b border-slate-100 pb-4">
+            <span class="material-symbols-outlined text-primary">payments</span>
+            <h2 class="text-lg font-bold">Pricing & Location</h2>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <label class="block">
+              <span class="text-sm font-bold text-slate-700 mb-2 block">Price per Night</span>
+              <div class="relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">₹</span>
+                <input name="listing[price]" value="<%= listing.price %>" type="number" class="w-full rounded-lg border-slate-200 bg-slate-50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all py-3.5 pl-8 pr-4" required />
+              </div>
+            </label>
+            <label class="block">
+              <span class="text-sm font-bold text-slate-700 mb-2 block">Country</span>
+              <input name="listing[country]" value="<%= listing.country %>" type="text" class="w-full rounded-lg border-slate-200 bg-slate-50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all py-3.5 px-4" required />
+            </label>
+            <label class="block">
+              <span class="text-sm font-bold text-slate-700 mb-2 block">City / Area</span>
+              <input name="listing[location]" value="<%= listing.location %>" type="text" class="w-full rounded-lg border-slate-200 bg-slate-50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all py-3.5 px-4" required />
+            </label>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <div class="flex items-center gap-2 border-b border-slate-100 pb-4">
+            <span class="material-symbols-outlined text-primary">label</span>
+            <h2 class="text-lg font-bold">Amenities & Tags</h2>
+          </div>
+          <div class="flex flex-wrap gap-3">
+            <% 
+              const tags = [
+                { id: 'Beach', label: 'Beach', icon: 'beach_access' },
+                { id: 'Mountain', label: 'Mountain', icon: 'terrain' },
+                { id: 'City', label: 'City', icon: 'location_city' },
+                { id: 'Countryside', label: 'Countryside', icon: 'cottage' },
+                { id: 'Luxury', label: 'Luxury', icon: 'diamond' },
+                { id: 'Budget', label: 'Budget', icon: 'savings' },
+                { id: 'Romantic', label: 'Romantic', icon: 'favorite' },
+                { id: 'Family', label: 'Family', icon: 'family_restroom' }
+              ];
+            %>
+            <% for(let tag of tags) { %>
+              <label class="cursor-pointer group">
+                <input class="hidden peer" type="checkbox" name="listing[tags][]" value="<%= tag.id %>" id="tag-<%= tag.id %>" <%= listing.tags && listing.tags.includes(tag.id) ? 'checked' : '' %>>
+                <div class="px-5 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary transition-all flex items-center gap-2 group-hover:border-primary/50">
+                  <span class="material-symbols-outlined text-lg"><%= tag.icon %></span> <%= tag.label %>
+                </div>
+              </label>
+            <% } %>
+          </div>
+        </div>
+
+        <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-6 border-t border-slate-100">
+          <a href="/listings/<%= listing._id %>" class="text-slate-500 font-bold hover:text-red-500 transition-colors flex items-center gap-2 group">
+            <span class="material-symbols-outlined">close</span>
+            Cancel Editing
+          </a>
+          <div class="flex w-full sm:w-auto gap-4">
+            <button type="submit" class="w-full sm:w-auto px-10 py-4 rounded-xl bg-gradient-to-r from-primary to-accent-purple text-white font-extrabold text-lg shadow-[0_10px_30px_rgba(43,124,238,0.3)] hover:shadow-[0_15px_35px_rgba(43,124,238,0.4)] active:scale-[0.98] transition-all flex items-center justify-center gap-3">
+              Save Changes
+              <span class="material-symbols-outlined">check_circle</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="mt-12 flex items-center justify-center gap-8 text-slate-400">
+      <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest">
+        <span class="material-symbols-outlined text-sm">history</span>
+        Last Edited: <%= listing.updatedAt ? listing.updatedAt.toDateString() : 'Just now' %>
       </div>
-
-
-      <button class="btn btn-dark edit-btn mb-3">Edit</button>
-    </form>
-  </div>
+      <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest">
+        <span class="material-symbols-outlined text-sm">verified_user</span>
+        Secure Update
+      </div>
+    </div>
+  </main>
 </div>

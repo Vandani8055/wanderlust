@@ -1,137 +1,97 @@
 <% layout('layouts/boilerplate') %>
 
-<div class="payment-success-wrapper">
-  <div class="success-card">
-    <div class="success-icon">✔</div>
-
-    <h2>Payment Successful</h2>
-    <p class="sub-text">Your booking has been confirmed 🎉</p>
-
-    <div class="booking-details">
-      <div class="detail-row">
-        <span>🏡 Listing</span>
-        <strong><%= listing.title %></strong>
-      </div>
-
-      <div class="detail-row">
-        <span>📅 Check In</span>
-        <strong><%= checkIn %></strong>
-      </div>
-
-      <div class="detail-row">
-        <span>📅 Check Out</span>
-        <strong><%= checkOut %></strong>
-      </div>
-    </div>
-
-    <a href="/listings/<%= listing._id %>" class="back-btn">
-      ← Back to Listing
-    </a>
-  </div>
-</div>
 
 
 <style>
-  /* PAYMENT SUCCESS PAGE */
-  .payment-success-wrapper {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #e8f5e9, #ffffff);
-    padding: 20px;
+  .glass-card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
   }
 
-  .success-card {
-    background: #ffffff;
-    padding: 30px 35px;
-    border-radius: 18px;
-    width: 100%;
-    max-width: 480px;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    animation: popIn 0.5s ease;
+  .confetti-svg {
+    position: absolute;
+    z-index: 0;
+    opacity: 0.3;
+    pointer-events: none;
   }
 
-  @keyframes popIn {
-    from {
-      transform: scale(0.9);
-      opacity: 0;
-    }
-
-    to {
-      transform: scale(1);
-      opacity: 1;
-    }
+  .pulsing-glow {
+    box-shadow: 0 0 0 0 rgba(41, 201, 120, 0.4);
+    animation: pulse-green 2s infinite;
   }
 
-  .success-icon {
-    width: 70px;
-    height: 70px;
-    background: #2ecc71;
-    color: #fff;
-    font-size: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 15px;
+  @keyframes pulse-green {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(41, 201, 120, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(41, 201, 120, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(41, 201, 120, 0); }
   }
 
-  .success-card h2 {
-    color: #2ecc71;
-    font-weight: 700;
-    margin-bottom: 5px;
-  }
-
-  .sub-text {
-    color: #666;
-    font-size: 15px;
-    margin-bottom: 25px;
-  }
-
-  .booking-details {
-    background: #f8f9fa;
-    border-radius: 12px;
-    padding: 15px 20px;
-    text-align: left;
-    margin-bottom: 25px;
-  }
-
-  .detail-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid #e6e6e6;
-    font-size: 14px;
-  }
-
-  .detail-row:last-child {
-    border-bottom: none;
-  }
-
-  .detail-row span {
-    color: #555;
-    font-weight: 500;
-  }
-
-  .detail-row strong {
-    color: #111;
-  }
-
-  .back-btn {
-    display: inline-block;
-    background: linear-gradient(135deg, #28a745, #20c997);
-    color: #fff;
-    padding: 12px 20px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: 0.3s ease;
-  }
-
-  .back-btn:hover {
-    background: linear-gradient(135deg, #218838, #1aa179);
-    transform: translateY(-2px);
+  .success-page-body {
+    background: radial-gradient(circle at top right, #f3e8ff, #ffffff);
   }
 </style>
+
+<div class="success-page-body font-display min-h-screen relative overflow-x-hidden flex flex-col">
+  
+  <div class="absolute top-10 left-5 text-emerald-success confetti-svg"><span class="material-symbols-outlined text-3xl">celebration</span></div>
+  <div class="absolute top-32 right-10 text-electric-blue confetti-svg"><span class="material-symbols-outlined text-2xl">star</span></div>
+  <div class="absolute bottom-10 left-10 text-primary/20 confetti-svg"><span class="material-symbols-outlined text-5xl">circle</span></div>
+
+  <main class="flex-1 flex items-center justify-center p-4 md:p-6 z-10">
+    <div class="max-w-[550px] w-full glass-card rounded-3xl p-6 md:p-10 shadow-2xl relative">
+      
+      <div class="flex flex-col items-center text-center mb-8">
+        <div class="size-16 md:size-20 bg-emerald-success/10 rounded-full flex items-center justify-center mb-4 pulsing-glow">
+          <span class="material-symbols-outlined text-emerald-success text-4xl md:text-5xl font-bold">check_circle</span>
+        </div>
+        <h1 class="text-primary text-2xl md:text-3xl font-extrabold tracking-tight mb-2">Payment Successful</h1>
+        <p class="text-slate-600 text-base">Your booking has been confirmed 🎉</p>
+      </div>
+
+      <div class="bg-white/50 border border-slate-100 rounded-2xl overflow-hidden mb-8 shadow-sm">
+        <div class="flex flex-col sm:flex-row items-center p-4 gap-4 border-b border-slate-100">
+          <% if (listing.image && listing.image.url) { %>
+            <div class="w-full sm:w-20 h-24 sm:h-20 rounded-xl bg-cover bg-center" style="background-image: url('<%= listing.image.url %>');"></div>
+          <% } %>
+          <div class="text-center sm:text-left">
+            <h3 class="text-slate-900 text-lg font-bold leading-tight"><%= listing.title %></h3>
+            <p class="text-primary text-sm font-medium"><%= listing.location %>, <%= listing.country %></p>
+          </div>
+        </div>
+
+        <div class="p-5 space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="text-slate-500 text-xs font-bold uppercase tracking-widest">Check-In</span>
+            <span class="text-slate-900 font-semibold"><%= checkIn %></span>
+          </div>
+          <div class="flex justify-between items-center border-t border-slate-50 pt-3">
+            <span class="text-slate-500 text-xs font-bold uppercase tracking-widest">Check-Out</span>
+            <span class="text-slate-900 font-semibold"><%= checkOut %></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-3">
+        <a href="/listings/<%= listing._id %>" 
+           class="w-full h-14 rounded-2xl bg-gradient-to-r from-electric-blue to-primary text-white font-bold text-lg shadow-lg hover:shadow-primary/30 hover:scale-[1.01] transition-all flex items-center justify-center gap-2 group">
+          Back to Listing
+          <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+        </a>
+        
+        <button onclick="window.print()" class="w-full py-3 text-slate-500 font-semibold text-sm hover:text-primary transition-colors flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined text-lg">print</span>
+          Print Receipt
+        </button>
+      </div>
+
+      <div class="mt-8 text-center border-t border-slate-100 pt-6">
+        <p class="text-slate-400 text-xs tracking-wide">
+          A confirmation email has been sent to your registered address.
+          <br>
+          © 2026 Wanderlust Global Inc.
+        </p>
+      </div>
+    </div>
+  </main>
+</div>

@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const passportLocalMongoose = require("passport-local-mongoose");
-
+const passportLocalMongoose = require('passport-local-mongoose');
 // username, password: automatically handled by passport-local-mongoose
 const userSchema = new Schema({
   username: String,
@@ -32,14 +31,15 @@ const userSchema = new Schema({
   role: {
     type: String,
     enum: ["user", "admin"],
-    default: "user",
+    default: "user", 
   }
 });
 
 // Tell passport-local-mongoose to use "email" as username field
 userSchema.plugin(passportLocalMongoose, {
-  usernameField: "email",
-  usernameUnique: false,
+  usernameField: 'email',
+  usernameUnique: false
 });
+
 
 module.exports = mongoose.model("User", userSchema);
