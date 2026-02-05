@@ -22,7 +22,6 @@
   <script src="/js/tailwind-config.js"></script>
   
   <style>
-    /* Prevent horizontal overflow on the whole site */
     body {
       overflow-x: hidden;
       min-height: 100vh;
@@ -30,8 +29,13 @@
       flex-direction: column;
     }
     
-    /* Ensure the body expands to fit content */
     main {
+      flex: 1;
+    }
+
+    .admin-layout-wrapper {
+      display: flex;
+      flex-direction: column;
       flex: 1;
     }
   </style>
@@ -39,19 +43,18 @@
 
 <body>
   <% 
-    // Logic to detect page types
-    const isAdminPage = (typeof admin !== 'undefined' || (typeof body !== 'undefined' && body.toString().includes('dashboard')));
-    // Check if we are on main overview/listings page to remove margins
+    const isAdminPage = (typeof admin !== 'undefined' || (typeof body !== 'undefined' && body.toString().includes('dashboard') && !body.toString().includes('editAdminDashboard')));
     const isHomePage = (typeof allListings !== 'undefined');
   %>
 
   <% if (isAdminPage) { %>
-    <div class="admin-layout-wrapper w-full h-full">
+    <div class="admin-layout-wrapper w-full">
       <%- include("../includes/flash.ejs") %>
-      <%- include("../includes/navbar.ejs") %>
-      <%- body %>
-      <%- include("../includes/footer.ejs") %>
-    </div>
+      
+      <main class="w-full">
+        <%- body %>
+      </main>
+      </div>
 
   <% } else { %>
     <%- include("../includes/navbar.ejs") %>

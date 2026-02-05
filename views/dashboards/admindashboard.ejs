@@ -1,167 +1,184 @@
 <% layout('/layouts/boilerplate') %>
 
 <style>
-    .section { display: none; }
-    .section.active-section { display: block; }
-    .sidebar-item.active { background-color: #f3e8ff; color: #6b28d7; border-right: 4px solid #6b28d7; }
-    
-    /* Custom Scrollbar for the Sidebar and Tables */
-    .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+  .font-manrope { font-family: 'Manrope', sans-serif; }
+  
+  /* Your Brand Gradient */
+  .brand-gradient { 
+    background: linear-gradient(135deg, #00B0FF 0%, #673ab6 100%) !important; 
+  }
 
-    @media (max-width: 1024px) {
-        .sidebar-closed { transform: translateX(-100%); }
-        .sidebar-open { transform: translateX(0); }
-    }
+  /* Material Symbols Config */
+  .material-symbols-outlined { 
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; 
+  }
+
+  /* Section Visibility Logic */
+  .section { display: none; }
+  .section.active-section { display: block; }
+  
+  /* Updated Sidebar Active State with Brand Gradient */
+  .sidebar-item.active { 
+    background: #f8fafc; 
+    color: #673ab6; 
+    position: relative;
+  }
+
+  /* The Gradient Vertical Bar on the right of the active item */
+  .sidebar-item.active::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(to bottom, #00B0FF 0%, #673ab6 100%);
+    border-radius: 4px 0 0 4px;
+  }
+
+  /* Gradient applied to the Icon when active */
+  .sidebar-item.active span.material-symbols-outlined {
+    font-variation-settings: 'FILL' 1, 'wght' 700;
+    background: linear-gradient(135deg, #00B0FF 0%, #673ab6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Mobile Sidebar Transitions */
+  @media (max-width: 1024px) {
+    .sidebar-closed { transform: translateX(-100%); }
+    .sidebar-open { transform: translateX(0); }
+  }
+
+  .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
 </style>
 
-<div class="flex min-h-screen bg-[#F8FAFC] relative">
-    
-    <div id="sidebarOverlay" class="fixed inset-0 bg-slate-900/50 z-40 hidden backdrop-blur-sm lg:hidden" onclick="toggleSidebar()"></div>
+<div class="flex min-h-screen bg-white font-manrope text-slate-900 relative">
+    <div id="sidebarOverlay" class="fixed inset-0 bg-slate-900/40 z-40 hidden backdrop-blur-sm lg:hidden" onclick="toggleSidebar()"></div>
 
-    <aside id="sidebar" class="fixed inset-y-0 left-0 w-72 bg-white flex flex-col h-screen z-50 border-r border-slate-200 transition-transform duration-300 sidebar-closed lg:translate-x-0 lg:w-64">
+    <aside id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-white flex flex-col h-screen z-50 border-r border-slate-100 transition-transform duration-300 sidebar-closed lg:translate-x-0">
         <div class="p-8 flex items-center justify-between shrink-0">
-            <div class="flex items-center gap-3">
-                <div class="w-9 h-9 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/30 text-white">
-                    <span class="material-symbols-outlined">rocket_launch</span>
-                </div>
-                <h1 class="text-slate-900 font-extrabold text-xl tracking-tight">Wanderlust</h1>
+            <div class="flex items-center gap-2">
+                <img src="/images/logo.png" alt="Wanderlust" class="h-12 w-auto" />
+                <h1 class="text-slate-900 text-lg font-black tracking-tight">Wanderlust</h1>
             </div>
-            <button onclick="toggleSidebar()" class="lg:hidden p-2 text-slate-400">
+            <button onclick="toggleSidebar()" class="lg:hidden text-slate-400">
                 <span class="material-symbols-outlined">close</span>
             </button>
         </div>
 
         <nav class="flex-1 px-4 space-y-1 overflow-y-auto custom-scrollbar">
-            <div class="text-slate-400 text-[10px] font-bold uppercase tracking-widest px-4 mb-4 mt-6">Overview</div>
-            <a href="#" onclick="handleNavClick(this, 'dashboard')" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-all">
-                <span class="material-symbols-outlined">dashboard</span>
-                <span class="text-sm font-semibold">Dashboard</span>
-            </a>
-            <a href="#" onclick="handleNavClick(this, 'users')" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-all">
-                <span class="material-symbols-outlined">group</span>
-                <span class="text-sm font-semibold">Users</span>
-            </a>
-            <a href="#" onclick="handleNavClick(this, 'listings')" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-all">
-                <span class="material-symbols-outlined">travel_explore</span>
-                <span class="text-sm font-semibold">Listings</span>
-            </a>
-            <a href="#" onclick="handleNavClick(this, 'reviews')" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-all">
-                <span class="material-symbols-outlined">reviews</span>
-                <span class="text-sm font-semibold">Reviews</span>
-            </a>
-            <a href="#" onclick="handleNavClick(this, 'bookings')" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-all">
-                <span class="material-symbols-outlined">calendar_month</span>
-                <span class="text-sm font-semibold">Bookings</span>
-            </a>
+            <div class="text-[10px] font-black uppercase tracking-widest text-slate-400 px-4 mb-4 mt-6">Control Center</div>
+            
+            <% const navItems = [
+                { id: 'dashboard', icon: 'grid_view', label: 'Overview' },
+                { id: 'users', icon: 'group', label: 'Users' },
+                { id: 'listings', icon: 'map', label: 'Listings' },
+                { id: 'reviews', icon: 'chat_bubble', label: 'Reviews' },
+                { id: 'bookings', icon: 'calendar_today', label: 'Bookings' }
+            ] %>
+
+            <% navItems.forEach(item => { %>
+                <a href="#" onclick="handleNavClick(this, '<%= item.id %>')" 
+                   class="sidebar-item <%= item.id === 'dashboard' ? 'active' : '' %> flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:text-slate-900 transition-all">
+                    <span class="material-symbols-outlined !text-xl"><%= item.icon %></span>
+                    <span class="text-[11px] font-bold uppercase tracking-wider"><%= item.label %></span>
+                </a>
+            <% }) %>
         </nav>
 
-        <div class="p-4 border-t border-slate-100 shrink-0">
-            <a href="/admin/edit" class="flex items-center gap-3 px-4 py-2 text-slate-500 text-xs font-medium hover:text-primary transition-all">
-                <span class="material-symbols-outlined !text-lg">person_edit</span> Profile Settings
-            </a>
-            <a href="/logout" class="flex items-center gap-3 px-4 py-2 text-red-500 text-xs font-bold hover:bg-red-50 rounded-lg transition-all">
+        <div class="p-6 border-t border-slate-50">
+            <a href="/logout" class="flex items-center gap-3 px-4 py-2 text-red-400 text-[10px] font-black uppercase tracking-widest hover:bg-red-50 rounded-lg transition-all">
                 <span class="material-symbols-outlined !text-lg">logout</span> Logout
             </a>
         </div>
     </aside>
 
-    <div class="flex-1 flex flex-col min-w-0 lg:ml-64 h-screen">
-        
-        <header class="h-20 flex items-center justify-between px-6 lg:px-10 bg-white/80 backdrop-blur-md sticky top-0 z-30 border-b border-slate-200 shrink-0">
+    <div class="flex-1 flex flex-col min-w-0 lg:ml-64">
+        <header class="h-20 flex items-center justify-between px-6 lg:px-10 bg-white/80 backdrop-blur-md sticky top-0 z-30 border-b border-slate-100">
             <div class="flex items-center gap-4">
-                <button onclick="toggleSidebar()" class="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg">
+                <button onclick="toggleSidebar()" class="lg:hidden p-2 text-slate-600 bg-slate-50 rounded-lg">
                     <span class="material-symbols-outlined">menu</span>
                 </button>
-                <h2 class="text-lg lg:text-xl font-bold text-slate-800">Hello, <%= admin?.username || "Admin" %></h2>
+                <h2 class="text-sm font-bold">Admin: <%= admin?.username || "Admin" %></h2>
             </div>
             <div class="flex items-center gap-3">
-                <span class="text-xs font-bold text-slate-400 uppercase hidden sm:inline">Admin Panel</span>
-                <img src="<%= currUser.profileImage || '/images/default.jpg' %>" class="h-10 w-10 rounded-full border-2 border-primary/10 object-cover" />
+                <span class="hidden sm:block text-[9px] font-black text-indigo-500 uppercase tracking-widest bg-indigo-50 px-3 py-1.5 rounded-full hover:border hover:border-[#00B0FF] hover:ring-2 hover:ring-[#00B0FF]/30 transition-all">System Active</span>
+                <a href="/admin/edit" class="size-9 rounded-xl overflow-hidden border-2 border-indigo-100 hover:border-indigo-500 transition-all shadow-sm">
+                    <img src="<%= currUser.profileImage || '/images/default.jpg' %>" class="w-full h-full object-cover" />
+                </a>
             </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto p-4 lg:p-10 custom-scrollbar">
-            <div class="max-w-[1400px] mx-auto w-full">
-                
-                <section class="section active-section space-y-6 lg:space-y-8" id="dashboard">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6">
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                            <div class="p-2 w-fit bg-indigo-50 text-indigo-600 rounded-lg mb-3"><span class="material-symbols-outlined">people</span></div>
-                            <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Total Users</p>
-                            <p class="text-3xl font-black text-slate-800"><%= totalUsers %></p>
-                        </div>
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                            <div class="p-2 w-fit bg-blue-50 text-blue-600 rounded-lg mb-3"><span class="material-symbols-outlined">apartment</span></div>
-                            <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Listings</p>
-                            <p class="text-3xl font-black text-slate-800"><%= totalListings %></p>
-                        </div>
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                            <div class="p-2 w-fit bg-emerald-50 text-emerald-600 rounded-lg mb-3"><span class="material-symbols-outlined">verified</span></div>
-                            <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Total Reviews</p>
-                            <p class="text-3xl font-black text-slate-800"><%= totalReviews %></p>
-                        </div>
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                            <div class="p-2 w-fit bg-amber-50 text-amber-600 rounded-lg mb-3"><span class="material-symbols-outlined">monetization_on</span></div>
-                            <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Revenue</p>
-                            <p class="text-3xl font-black text-slate-800">$<%= monthlyRevenue %></p>
-                        </div>
+        <main class="flex-1 p-4 lg:p-10">
+            <div class="max-w-6xl mx-auto">
+                <section class="section active-section space-y-6" id="dashboard">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <% const stats = [
+                            { label: 'Total Users', val: totalUsers, icon: 'group', color: 'text-blue-500', bg: 'bg-blue-50' },
+                            { label: 'Properties', val: totalListings, icon: 'home_work', color: 'text-indigo-500', bg: 'bg-indigo-50' },
+                            { label: 'Reviews', val: totalReviews, icon: 'reviews', color: 'text-emerald-500', bg: 'bg-emerald-50' },
+                            { label: 'Monthly Rev', val: '$' + monthlyRevenue, icon: 'payments', color: 'text-amber-500', bg: 'bg-amber-50' }
+                        ] %>
+                        <% stats.forEach(s => { %>
+                            <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 lg:block">
+                                <div class="size-10 <%= s.bg %> <%= s.color %> rounded-xl flex items-center justify-center lg:mb-4">
+                                    <span class="material-symbols-outlined"><%= s.icon %></span>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1"><%= s.label %></p>
+                                    <p class="text-xl font-black text-slate-900"><%= s.val %></p>
+                                </div>
+                            </div>
+                        <% }) %>
                     </div>
 
-                    <div class="bg-white p-6 lg:p-8 rounded-2xl shadow-sm border border-slate-200">
-                        <h3 class="text-lg font-bold text-slate-800 mb-6">Revenue Performance</h3>
-                        <div style="position: relative; height: 400px; width: 100%;">
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                        <h3 class="text-[11px] font-black text-slate-900 uppercase tracking-widest mb-6">Revenue Performance</h3>
+                        <div class="h-[300px] w-full">
                             <canvas id="revenueChart"></canvas>
                         </div>
                     </div>
                 </section>
 
-                <% const sections = [
-                    { id: 'users', title: 'User Management', data: users },
-                    { id: 'listings', title: 'Property Listings', data: listings },
-                    { id: 'reviews', title: 'Recent Reviews', data: reviews },
-                    { id: 'bookings', title: 'Recent Bookings', data: bookings }
+                <% const dataSections = [
+                    { id: 'users', title: 'User Directory', data: users },
+                    { id: 'listings', title: 'Inventory', data: listings },
+                    { id: 'reviews', title: 'Feedback', data: reviews },
+                    { id: 'bookings', title: 'Reservations', data: bookings }
                 ] %>
 
-                <% sections.forEach(sec => { %>
+                <% dataSections.forEach(sec => { %>
                 <section class="section space-y-4" id="<%= sec.id %>">
-                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                        <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center">
-                            <h3 class="font-bold text-slate-800 text-lg"><%= sec.title %></h3>
-                            <span class="text-[10px] font-bold px-3 py-1 bg-slate-100 text-slate-500 rounded-full">Total: <%= sec.data.length %></span>
+                    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                        <div class="px-6 py-4 bg-slate-50/50 flex justify-between items-center">
+                            <h3 class="text-[10px] font-black uppercase text-slate-900"><%= sec.title %></h3>
+                            <span class="text-[8px] font-black px-2 py-1 brand-gradient text-white rounded-md"><%= sec.data?.length || 0 %></span>
                         </div>
-                        <div class="overflow-x-auto custom-scrollbar">
-                            <table class="w-full text-left min-w-[800px]">
-                                <thead class="bg-slate-50 text-[11px] font-bold text-slate-400 uppercase tracking-widest">
-                                    <tr>
-                                        <th class="px-6 py-4">Main Details</th>
-                                        <th class="px-6 py-4">Secondary Info</th>
-                                        <th class="px-6 py-4 text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-slate-100">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <tbody class="divide-y divide-slate-50">
                                     <% if(sec.data && sec.data.length > 0) { %>
                                         <% sec.data.forEach(item => { %>
-                                            <tr class="hover:bg-slate-50/50 transition-colors">
-                                                <td class="px-6 py-4 font-bold text-slate-700">
-                                                    <%= item.name || item.title || (item.listing ? item.listing.title : "ID: " + item._id) %>
-                                                </td>
-                                                <td class="px-6 py-4 text-slate-500 text-sm">
-                                                    <%= item.email || item.location || "Reference Data" %>
+                                            <tr class="hover:bg-slate-50/50">
+                                                <td class="px-6 py-4">
+                                                    <p class="text-[11px] font-black text-slate-900 truncate max-w-[150px]">
+                                                        <%= item.username || item.title || (item.listing ? item.listing.title : "ID: " + item._id) %>
+                                                    </p>
                                                 </td>
                                                 <td class="px-6 py-4 text-right">
                                                     <div class="flex justify-end gap-3">
-                                                        <a href="/admin/<%= sec.id %>/<%= item._id %>" class="text-slate-400 hover:text-primary"><span class="material-symbols-outlined">visibility</span></a>
-                                                        <form action="/admin/<%= sec.id %>/<%= item._id %>/delete" method="POST">
-                                                            <button class="text-slate-400 hover:text-red-500"><span class="material-symbols-outlined">delete</span></button>
+                                                        <a href="/admin/<%= sec.id %>/<%= item._id %>" class="text-slate-400 hover:text-indigo-600"><span class="material-symbols-outlined !text-lg">visibility</span></a>
+                                                        <form action="/admin/<%= sec.id %>/<%= item._id %>/delete" method="POST" onsubmit="return confirm('Confirm Deletion?')" class="m-0">
+                                                            <button class="text-slate-400 hover:text-red-500 bg-transparent border-none p-0 cursor-pointer"><span class="material-symbols-outlined !text-lg">delete</span></button>
                                                         </form>
                                                     </div>
                                                 </td>
                                             </tr>
                                         <% }) %>
                                     <% } else { %>
-                                        <tr><td colspan="3" class="p-10 text-center text-slate-400 italic">No data found in this category</td></tr>
+                                        <tr><td class="p-10 text-center text-[10px] font-black text-slate-300 uppercase">No Data Records found</td></tr>
                                     <% } %>
                                 </tbody>
                             </table>
@@ -174,8 +191,9 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // SIDEBAR NAVIGATION
+    // Sidebar Toggle
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('sidebarOverlay');
@@ -184,53 +202,42 @@
         overlay.classList.toggle('hidden');
     }
 
+    // Navigation Switcher
     function handleNavClick(element, sectionId) {
         if (window.innerWidth < 1024) toggleSidebar();
+        
+        // Remove active class from all nav items
         document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+        // Add active class to clicked item
         element.classList.add('active');
+        
+        // Hide all sections and show selected
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
         document.getElementById(sectionId).classList.add('active-section');
     }
 
-    // CHART INITIALIZATION
-    document.addEventListener("DOMContentLoaded", function() {
-        const ctx = document.getElementById("revenueChart");
-        if (ctx) {
-            new Chart(ctx, {
-                type: "line",
-                data: {
-                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-                    datasets: [{
-                        label: "Revenue ($)",
-                        data: [5000, 7500, 6000, 9500, 10500, 12450, 11000],
-                        borderColor: "#5c0eaa",
-                        backgroundColor: "rgba(92, 14, 170, 0.05)",
-                        borderWidth: 4,
-                        tension: 0.4,
-                        fill: true,
-                        pointBackgroundColor: "#fff",
-                        pointBorderColor: "#5c0eaa",
-                        pointBorderWidth: 2,
-                        pointRadius: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: { 
-                            beginAtZero: true,
-                            grid: { borderDash: [5, 5], color: "#e2e8f0" },
-                            ticks: { color: "#94a3b8", font: { size: 12 } }
-                        },
-                        x: { 
-                            grid: { display: false },
-                            ticks: { color: "#94a3b8", font: { size: 12 } }
-                        }
-                    }
-                }
-            });
-        }
-    });
+    // Initialize Revenue Chart (Using your chart logic)
+    const ctx = document.getElementById('revenueChart');
+    if(ctx) {
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Revenue',
+                    data: [12000, 15000, 11000, 19000, 22000, 24000],
+                    borderColor: '#673ab6',
+                    backgroundColor: 'rgba(103, 58, 182, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { display: false }, x: { grid: { display: false } } }
+            }
+        });
+    }
 </script>
