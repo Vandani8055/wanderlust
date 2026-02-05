@@ -1,174 +1,144 @@
 <% layout('/layouts/boilerplate') %>
 
+<style>
+  .font-manrope { font-family: 'Manrope', sans-serif; }
+  
+  .material-symbols-outlined { 
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; 
+  }
 
+  /* Synchronized Brand Gradient */
+  .brand-gradient { 
+    background: linear-gradient(135deg, #00B0FF 0%, #673ab6 100%) !important; 
+  }
 
-<style type="text/tailwindcss">
-  @layer base {
-    body { @apply font-sans bg-background-light text-[#2A2D35]; }
-    input, textarea { @apply font-display; }
-  }
-  .gradient-border-box {
-    position: relative;
-    background: #fff;
-    background-clip: padding-box;
-    border: 2px dashed transparent;
-  }
-  .gradient-border-box::before {
-    content: '';
-    position: absolute;
-    top: 0; right: 0; bottom: 0; left: 0;
-    z-index: -1;
-    margin: -2px;
-    border-radius: inherit;
-    background: linear-gradient(to right, #2b7cee, #9966CC);
-  }
+  /* Consistent Font Sizing from Create Page */
+  h1 { font-size: 1.25rem !important; }
+  h2 { font-size: 0.9rem !important; }
+  .text-label { font-size: 0.7rem; font-weight: 700; color: #1e293b; text-transform: uppercase; letter-spacing: 0.025em; }
 </style>
 
-<div class="min-h-screen pb-20">
-  <main class="max-w-4xl mx-auto px-6 py-12">
-    <nav class="flex items-center gap-2 mb-6 text-sm font-medium">
-      <a class="text-slate-400 hover:text-primary transition-colors" href="/listings">Listings</a>
-      <span class="material-symbols-outlined text-xs text-slate-300">chevron_right</span>
-      <span class="text-primary">Edit Listing</span>
+<div class="bg-white font-manrope text-slate-900 antialiased min-h-screen pb-24">
+  <main class="max-w-4xl mx-auto px-4 md:px-12 py-6">
+    
+    <nav class="flex items-center gap-1 mb-6 text-[9px] font-bold uppercase tracking-widest text-gray-400">
+      <a class="hover:text-indigo-600" href="/listings">Listings</a>
+      <span class="material-symbols-outlined text-[10px]">chevron_right</span>
+      <span class="text-slate-900">Edit Listing</span>
     </nav>
 
-    <div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
-      <div>
-        <h1 class="text-4xl font-extrabold tracking-tight mb-2 bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600 font-display">
-          Edit Listing
-        </h1>
-        <p class="text-slate-500 text-lg">Updating: <span class="text-slate-900 font-semibold"><%= listing.title %></span></p>
-      </div>
-      <div class="flex items-center gap-3">
-        <span class="px-3 py-1 rounded-full bg-accent-green/10 text-accent-green text-xs font-bold uppercase tracking-wider border border-accent-green/20">Live on Market</span>
-      </div>
+    <div class="mb-8">
+      <h1 class="font-black tracking-tight text-slate-900 mb-1">Edit Listing</h1>
+      <p class="text-slate-400 text-[10px] font-bold uppercase tracking-tighter">Updating: <%= listing.title %></p>
     </div>
 
-    <div class="bg-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-8 md:p-10">
-      <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation space-y-10" enctype="multipart/form-data">
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 md:p-8">
+      <form action="/listings/<%= listing._id %>?_method=PUT" method="POST" enctype="multipart/form-data" novalidate class="needs-validation space-y-8">
         
-        <div class="space-y-6">
-          <div class="flex items-center gap-2 border-b border-slate-100 pb-4">
-            <span class="material-symbols-outlined text-primary">image</span>
-            <h2 class="text-lg font-bold">Current Listing Media</h2>
+        <div class="space-y-4">
+          <div class="flex items-center gap-2 border-b border-slate-50 pb-2">
+            <span class="material-symbols-outlined text-indigo-600 text-sm">image</span>
+            <h2 class="font-bold text-slate-800">Property Media</h2>
           </div>
-          <div class="flex items-start gap-6 p-4 bg-slate-50 rounded-xl border border-slate-100">
-            <div class="relative group size-32 flex-shrink-0">
-              <img src="<%= originalImageUrl %>" alt="Current listing photo" class="w-full h-full object-cover rounded-lg shadow-md" />
-              <div class="absolute inset-0 bg-black/40 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <span class="text-white material-symbols-outlined">visibility</span>
-              </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="relative group h-40 overflow-hidden rounded-xl border border-slate-100 shadow-sm">
+              <img src="<%= originalImageUrl %>" alt="Current image" class="w-full h-full object-cover" />
+              <div class="absolute top-2 left-2 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-[8px] font-bold uppercase tracking-widest text-indigo-600">Current Image</div>
             </div>
-            <div class="flex-1 space-y-2">
-              <p class="text-sm font-bold text-slate-700">Original Listing Image</p>
-              <p class="text-xs text-slate-500">Currently displayed image on the platform.</p>
-              
-              <div class="mt-4">
-                <label class="text-xs font-bold text-primary cursor-pointer hover:underline flex items-center gap-1">
-                  <span class="material-symbols-outlined text-sm">cloud_upload</span>
-                  Upload New Image
-                  <input type="file" name="listing[image]" class="hidden" />
-                </label>
-              </div>
+            
+            <div class="p-4 border-2 border-dashed border-slate-100 rounded-2xl bg-slate-50 flex flex-col items-center justify-center text-center group hover:border-indigo-200 transition-colors">
+               <span class="material-symbols-outlined text-xl text-slate-300 mb-1">cloud_upload</span>
+               <p class="text-[9px] font-bold text-slate-500 uppercase mb-3">Upload replacement</p>
+               <input name="listing[image]" type="file" class="text-[9px] text-slate-400 file:mr-3 file:py-1.5 file:px-4 file:rounded-full file:border-0 file:text-[9px] file:font-bold file:brand-gradient file:text-white file:cursor-pointer" />
             </div>
           </div>
         </div>
 
-        <div class="space-y-6">
-          <div class="flex items-center gap-2 border-b border-slate-100 pb-4">
-            <span class="material-symbols-outlined text-primary">edit_note</span>
-            <h2 class="text-lg font-bold">General Details</h2>
+        <div class="space-y-4">
+          <div class="flex items-center gap-2 border-b border-slate-50 pb-2">
+            <span class="material-symbols-outlined text-indigo-600 text-sm">edit_note</span>
+            <h2 class="font-bold text-slate-800">General Details</h2>
           </div>
-          <div class="grid grid-cols-1 gap-6">
+          <div class="grid grid-cols-1 gap-4">
             <label class="block">
-              <span class="text-sm font-bold text-slate-700 mb-2 block">Listing Title</span>
-              <input name="listing[title]" value="<%= listing.title %>" type="text" class="w-full rounded-lg border-slate-200 bg-slate-50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all py-3.5 px-4" required />
-              <div class="valid-feedback text-green-500 text-xs mt-1">Title looks good!</div>
+              <span class="text-label mb-1.5 block">Listing Title</span>
+              <input name="listing[title]" value="<%= listing.title %>" type="text" class="w-full rounded-xl border-slate-200 bg-slate-50 text-xs py-3 px-4 focus:ring-1 focus:ring-indigo-500 outline-none transition-all" required />
             </label>
             <label class="block">
-              <span class="text-sm font-bold text-slate-700 mb-2 block">Description</span>
-              <textarea name="listing[description]" rows="5" class="w-full rounded-lg border-slate-200 bg-slate-50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all py-3.5 px-4 resize-none" required><%= listing.description %></textarea>
-              <div class="invalid-feedback text-red-500 text-xs mt-1">Please enter a short description!</div>
+              <span class="text-label mb-1.5 block">Description</span>
+              <textarea name="listing[description]" rows="4" class="w-full rounded-xl border-slate-200 bg-slate-50 text-xs py-3 px-4 resize-none focus:ring-1 focus:ring-indigo-500 outline-none transition-all" required><%= listing.description %></textarea>
             </label>
           </div>
         </div>
 
-        <div class="space-y-6">
-          <div class="flex items-center gap-2 border-b border-slate-100 pb-4">
-            <span class="material-symbols-outlined text-primary">payments</span>
-            <h2 class="text-lg font-bold">Pricing & Location</h2>
+        <div class="space-y-4">
+          <div class="flex items-center gap-2 border-b border-slate-50 pb-2">
+            <span class="material-symbols-outlined text-indigo-600 text-sm">payments</span>
+            <h2 class="font-bold text-slate-800">Pricing & Location</h2>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <label class="block">
-              <span class="text-sm font-bold text-slate-700 mb-2 block">Price per Night</span>
+              <span class="text-label mb-1.5 block">Price / Night</span>
               <div class="relative">
-                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">₹</span>
-                <input name="listing[price]" value="<%= listing.price %>" type="number" class="w-full rounded-lg border-slate-200 bg-slate-50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all py-3.5 pl-8 pr-4" required />
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-xs">₹</span>
+                <input name="listing[price]" value="<%= listing.price %>" type="number" class="w-full rounded-xl border-slate-200 bg-slate-50 py-3 pl-7 pr-4 text-xs focus:ring-1 focus:ring-indigo-500 outline-none" required />
               </div>
             </label>
             <label class="block">
-              <span class="text-sm font-bold text-slate-700 mb-2 block">Country</span>
-              <input name="listing[country]" value="<%= listing.country %>" type="text" class="w-full rounded-lg border-slate-200 bg-slate-50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all py-3.5 px-4" required />
+              <span class="text-label mb-1.5 block">Country</span>
+              <input name="listing[country]" value="<%= listing.country %>" type="text" class="w-full rounded-xl border-slate-200 bg-slate-50 py-3 px-4 text-xs focus:ring-1 focus:ring-indigo-500 outline-none" required />
             </label>
             <label class="block">
-              <span class="text-sm font-bold text-slate-700 mb-2 block">City / Area</span>
-              <input name="listing[location]" value="<%= listing.location %>" type="text" class="w-full rounded-lg border-slate-200 bg-slate-50 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all py-3.5 px-4" required />
+              <span class="text-label mb-1.5 block">Location</span>
+              <input name="listing[location]" value="<%= listing.location %>" type="text" class="w-full rounded-xl border-slate-200 bg-slate-50 py-3 px-4 text-xs focus:ring-1 focus:ring-indigo-500 outline-none" required />
             </label>
           </div>
         </div>
 
-        <div class="space-y-6">
-          <div class="flex items-center gap-2 border-b border-slate-100 pb-4">
-            <span class="material-symbols-outlined text-primary">label</span>
-            <h2 class="text-lg font-bold">Amenities & Tags</h2>
+        <div class="space-y-4">
+          <div class="flex items-center gap-2 border-b border-slate-50 pb-2">
+            <span class="material-symbols-outlined text-indigo-600 text-sm">sell</span>
+            <h2 class="font-bold text-slate-800">Categories</h2>
           </div>
-          <div class="flex flex-wrap gap-3">
+          <div class="flex flex-wrap gap-2">
             <% 
               const tags = [
                 { id: 'Beach', label: 'Beach', icon: 'beach_access' },
-                { id: 'Mountain', label: 'Mountain', icon: 'terrain' },
+                { id: 'Mountain', label: 'Mountains', icon: 'terrain' },
                 { id: 'City', label: 'City', icon: 'location_city' },
-                { id: 'Countryside', label: 'Countryside', icon: 'cottage' },
                 { id: 'Luxury', label: 'Luxury', icon: 'diamond' },
-                { id: 'Budget', label: 'Budget', icon: 'savings' },
-                { id: 'Romantic', label: 'Romantic', icon: 'favorite' },
-                { id: 'Family', label: 'Family', icon: 'family_restroom' }
+                { id: 'Trending', label: 'Trending', icon: 'trending_up' }
               ];
             %>
             <% for(let tag of tags) { %>
               <label class="cursor-pointer group">
-                <input class="hidden peer" type="checkbox" name="listing[tags][]" value="<%= tag.id %>" id="tag-<%= tag.id %>" <%= listing.tags && listing.tags.includes(tag.id) ? 'checked' : '' %>>
-                <div class="px-5 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary transition-all flex items-center gap-2 group-hover:border-primary/50">
-                  <span class="material-symbols-outlined text-lg"><%= tag.icon %></span> <%= tag.label %>
+                <input class="hidden peer" type="checkbox" name="listing[tags][]" value="<%= tag.id %>" <%= listing.tags && listing.tags.includes(tag.id) ? 'checked' : '' %>>
+                <div class="px-4 py-2 rounded-xl border border-slate-100 bg-white text-[10px] font-bold text-slate-600 peer-checked:brand-gradient peer-checked:text-white peer-checked:border-transparent transition-all flex items-center gap-1.5 shadow-sm">
+                  <span class="material-symbols-outlined text-sm"><%= tag.icon %></span> <%= tag.label %>
                 </div>
               </label>
             <% } %>
           </div>
         </div>
 
-        <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-6 border-t border-slate-100">
-          <a href="/listings/<%= listing._id %>" class="text-slate-500 font-bold hover:text-red-500 transition-colors flex items-center gap-2 group">
-            <span class="material-symbols-outlined">close</span>
-            Cancel Editing
+        <div class="pt-6 border-t border-slate-50 flex items-center justify-between gap-4">
+          <a href="/listings/<%= listing._id %>" class="text-slate-400 font-bold text-[10px] uppercase tracking-widest hover:text-red-500 flex items-center gap-1 transition-colors">
+            <span class="material-symbols-outlined text-xs">close</span> Cancel
           </a>
-          <div class="flex w-full sm:w-auto gap-4">
-            <button type="submit" class="w-full sm:w-auto px-10 py-4 rounded-xl bg-gradient-to-r from-primary to-accent-purple text-white font-extrabold text-lg shadow-[0_10px_30px_rgba(43,124,238,0.3)] hover:shadow-[0_15px_35px_rgba(43,124,238,0.4)] active:scale-[0.98] transition-all flex items-center justify-center gap-3">
-              Save Changes
-              <span class="material-symbols-outlined">check_circle</span>
-            </button>
-          </div>
+          <button type="submit" class="brand-gradient text-white px-4 py-1 sm:px-10 sm:py-3.5 rounded-xl text-[11px] sm:text-sm font-bold shadow-md hover:opacity-90 active:scale-95 transition-all flex items-center gap-2">
+            Save  <span class="material-symbols-outlined text-xs sm:text-base">check_circle</span>
+          </button>
         </div>
       </form>
     </div>
 
-    <div class="mt-12 flex items-center justify-center gap-8 text-slate-400">
-      <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest">
-        <span class="material-symbols-outlined text-sm">history</span>
-        Last Edited: <%= listing.updatedAt ? listing.updatedAt.toDateString() : 'Just now' %>
+    <div class="mt-8 flex justify-center gap-8">
+      <div class="flex items-center gap-1.5 text-slate-300">
+        <span class="material-symbols-outlined text-xs">verified_user</span>
+        <span class="text-[8px] font-black uppercase tracking-widest">Secure Update</span>
       </div>
-      <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest">
-        <span class="material-symbols-outlined text-sm">verified_user</span>
-        Secure Update
+      <div class="flex items-center gap-1.5 text-slate-300 text-xs font-bold uppercase tracking-widest">
+        <span class="text-[8px]">Last edited: <%= listing.updatedAt ? listing.updatedAt.toDateString() : 'Today' %></span>
       </div>
     </div>
   </main>

@@ -10,177 +10,176 @@
     background: linear-gradient(135deg, #00B0FF 0%, #673ab6 100%);
     transition: all 0.3s ease;
   }
-  #map { width: 100%; height: 400px; border-radius: 1.5rem; z-index: 10; }
+  #map { width: 100%; height: 300px; border-radius: 1rem; z-index: 10; } /* Reduced height */
   .starability-slot label { margin-bottom: 0 !important; }
+  
+  /* Apply consistent font sizing from Auth Pages */
+  .text-display { font-family: system-ui, -apple-system, sans-serif; }
+  
+  /* Synchronized heading sizes */
+  h2 { font-size: 1.25rem; } /* Reduced from 2xl/3xl */
+  h3 { font-size: 1rem; }    /* Reduced from 1.125rem */
+  h4 { font-size: 0.875rem; }
+  
+  /* Synchronized text sizes */
+  .text-base { font-size: 0.75rem; }
+  .text-sm { font-size: 0.7rem; }
+  .text-xs { font-size: 0.65rem; }
+  
+  /* Consistent colors */
+  .text-slate-900 { color: #0f172a; }
+  .text-slate-500 { color: #64748b; }
 </style>
 
 <div class="bg-white font-display text-slate-900 antialiased">
-  <main class="max-w-7xl mx-auto px-4 md:px-12 py-8">
-    
-    <nav class="flex items-center gap-2 mb-6 text-sm font-medium text-gray-500">
-      <a class="hover:text-primary" href="/listings">Listings</a>
-      <span class="material-symbols-outlined text-xs">chevron_right</span>
-      <span class="text-primary font-bold"><%= listing.title %></span>
+  <main class="max-w-6xl mx-auto px-4 md:px-12 py-6"> <nav class="flex items-center gap-1 mb-4 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+      <a class="hover:text-indigo-600" href="/listings">Listings</a>
+      <span class="material-symbols-outlined text-[10px]">chevron_right</span>
+      <span class="text-slate-900"><%= listing.title %></span>
     </nav>
 
-    <section class="w-full h-[300px] md:h-[500px] rounded-2xl overflow-hidden mb-10 shadow-lg relative group">
+    <section class="w-full h-[250px] md:h-[400px] rounded-2xl overflow-hidden mb-6 shadow-md relative group">
       <img src="<%= listing.image.url %>" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-      <div class="absolute bottom-6 left-6">
-        <span class="bg-white/90 px-4 py-2 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm">Verified Property</span>
+      <div class="absolute bottom-4 left-4">
+        <span class="bg-white/90 px-3 py-1 rounded-full text-[9px] font-black tracking-widest uppercase shadow-sm">Verified Property</span>
       </div>
     </section>
 
-    <div class="flex flex-col lg:flex-row gap-12">
-      <div class="flex-1">
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
-          <div>
-            <h2 class="text-3xl md:text-5xl font-extrabold leading-tight mb-4"><%= listing.title %></h2>
-            <div class="flex items-center gap-2 text-gray-500">
-              <span class="material-symbols-outlined text-lg">location_on</span>
-              <span class="font-medium"><%= listing.location %>, <%= listing.country %></span>
-            </div>
+    <div class="flex flex-col lg:flex-row gap-8"> <div class="flex-1">
+        <div class="mb-6">
+          <h2 class="font-black tracking-tight text-slate-900 mb-2"><%= listing.title %></h2>
+          <div class="flex items-center gap-1 text-slate-500 text-xs">
+            <span class="material-symbols-outlined text-sm">location_on</span>
+            <span class="font-medium"><%= listing.location %>, <%= listing.country %></span>
           </div>
         </div>
 
-        <div class="flex items-center gap-4 py-6 border-y border-gray-100 mb-8">
-          <div class="size-12 rounded-full bg-primary flex items-center justify-center text-white font-bold uppercase text-xl">
+        <div class="flex items-center gap-3 py-4 border-y border-slate-100 mb-6">
+          <div class="size-9 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold uppercase text-sm">
              <%= listing.owner?.username?.charAt(0) || 'U' %>
           </div>
           <div>
-            <p class="text-lg font-bold text-slate-800">Hosted by <%= listing.owner?.username || 'Unknown' %></p>
-            <p class="text-sm text-emerald font-semibold flex items-center gap-1">
-              <span class="material-symbols-outlined text-base">verified</span> Property Owner
+            <p class="text-xs font-bold text-slate-800">Hosted by <%= listing.owner?.username || 'Unknown' %></p>
+            <p class="text-[10px] text-emerald-600 font-bold flex items-center gap-1">
+              <span class="material-symbols-outlined text-xs">verified</span> Property Owner
             </p>
           </div>
         </div>
 
-        <div class="flex flex-wrap gap-2 mb-10">
+        <div class="flex flex-wrap gap-2 mb-8">
           <% if (listing.tags && listing.tags.length > 0) { %>
             <% listing.tags.forEach(t => { %>
-              <span class="px-4 py-2 bg-primary/10 text-primary text-xs font-bold rounded-lg flex items-center gap-2">
-                <span class="material-symbols-outlined text-base">sell</span> <%= t %>
+              <span class="px-3 py-1 bg-slate-50 text-slate-600 text-[10px] font-bold rounded-md border border-slate-100 flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">sell</span> <%= t %>
               </span>
             <% }) %>
           <% } %>
         </div>
 
-        <div class="prose prose-slate max-w-none mb-12">
-          <h3 class="text-xl font-bold text-slate-900">About this place</h3>
-          <p class="text-gray-600 leading-relaxed text-lg"><%= listing.description %></p>
+        <div class="mb-8">
+          <h3 class="font-bold text-slate-900 mb-2">About this place</h3>
+          <p class="text-slate-500 leading-relaxed text-xs"><%= listing.description %></p>
         </div>
 
-        <div class="mb-12">
-          <h3 class="text-xl font-bold mb-6">Where you'll be</h3>
-          <div id="map" class="shadow-inner border border-gray-100"></div>
+        <div class="mb-8">
+          <h3 class="font-bold text-slate-900 mb-4">Where you'll be</h3>
+          <div id="map" class="shadow-sm border border-slate-100"></div>
         </div>
 
-        <section class="border-t border-gray-100 pt-12">
-          <div class="flex items-center justify-between mb-8">
-            <h3 class="text-2xl font-bold flex items-center gap-2">
-              <span class="material-symbols-outlined text-yellow-500">star</span>
-              Reviews (<%= listing.reviews.length %>)
-            </h3>
-          </div>
+        <section class="border-t border-slate-100 pt-8">
+          <h3 class="font-bold flex items-center gap-2 mb-6">
+            <span class="material-symbols-outlined text-yellow-500 text-base">star</span>
+            Reviews (<%= listing.reviews.length %>)
+          </h3>
 
           <% if(currUser) { %>
-          <div class="bg-surface-light p-6 rounded-2xl mb-10 border border-slate-100">
-            <h4 class="font-bold text-lg mb-4">Leave a Review</h4>
+          <div class="bg-slate-50 p-5 rounded-xl mb-8 border border-slate-100">
+            <h4 class="font-bold text-xs mb-3">Leave a Review</h4>
             <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
-              <div class="mb-4">
-                <fieldset class="starability-slot">
+              <div class="mb-3">
+                <fieldset class="starability-slot scale-75 origin-left">
                   <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
                   <input type="radio" id="first-rate1" name="review[rating]" value="1" />
-                  <label for="first-rate1" title="Terrible">1 star</label>
+                  <label for="first-rate1">1 star</label>
                   <input type="radio" id="first-rate2" name="review[rating]" value="2" />
-                  <label for="first-rate2" title="Not good">2 stars</label>
+                  <label for="first-rate2">2 stars</label>
                   <input type="radio" id="first-rate3" name="review[rating]" value="3" />
-                  <label for="first-rate3" title="Average">3 stars</label>
+                  <label for="first-rate3">3 stars</label>
                   <input type="radio" id="first-rate4" name="review[rating]" value="4" />
-                  <label for="first-rate4" title="Very good">4 stars</label>
+                  <label for="first-rate4">4 stars</label>
                   <input type="radio" id="first-rate5" name="review[rating]" value="5" />
-                  <label for="first-rate5" title="Amazing">5 stars</label>
+                  <label for="first-rate5">5 stars</label>
                 </fieldset>
               </div>
-              <div class="mb-4">
-                <textarea name="review[comment]" class="w-full rounded-xl border-gray-200 p-4 text-sm focus:ring-primary focus:border-primary" rows="3" placeholder="Share your experience..." required></textarea>
+              <div class="mb-3">
+                <textarea name="review[comment]" class="w-full rounded-lg border-slate-200 p-3 text-xs focus:ring-1 focus:ring-indigo-600" rows="2" placeholder="Share your experience..." required></textarea>
               </div>
-              <button class="bg-slate-900 text-white px-6 py-2.5 rounded-lg text-sm font-bold hover:bg-black transition-all">Submit Review</button>
+              <button class="bg-slate-900 text-white px-5 py-2 rounded-lg text-[10px] font-bold hover:bg-black transition-all">Submit Review</button>
             </form>
           </div>
           <% } %>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <% for(review of listing.reviews){ %>
-            <div class="p-6 rounded-2xl border border-gray-100 bg-white shadow-sm">
-              <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center gap-3">
-                  <div class="size-10 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-500 uppercase">
+            <div class="p-4 rounded-xl border border-slate-100 bg-white shadow-sm">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                  <div class="size-8 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-400 uppercase text-[10px]">
                     <%= review.author?.username?.charAt(0) || 'R' %>
                   </div>
                   <div>
-                    <p class="font-bold text-sm"><%= review.author?.username || 'Reviewer' %></p>
-                    <p class="starability-result scale-50 -ml-10" data-rating="<%= review.rating %>"></p>
+                    <p class="font-bold text-[10px]"><%= review.author?.username || 'Reviewer' %></p>
+                    <p class="starability-result scale-[0.4] origin-left -mt-1" data-rating="<%= review.rating %>"></p>
                   </div>
                 </div>
                 <% if(currUser && currUser._id.equals(review.author._id)) { %>
                 <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
-                  <button class="text-red-400 hover:text-red-600 transition-colors">
-                    <span class="material-symbols-outlined text-lg">delete</span>
+                  <button class="text-slate-300 hover:text-red-500 transition-colors">
+                    <span class="material-symbols-outlined text-base">delete</span>
                   </button>
                 </form>
                 <% } %>
               </div>
-              <p class="text-gray-600 text-sm italic leading-relaxed">"<%= review.comment %>"</p>
+              <p class="text-slate-500 text-[10px] italic leading-relaxed">"<%= review.comment %>"</p>
             </div>
             <% } %>
           </div>
         </section>
       </div>
 
-      <aside class="w-full lg:w-[400px]">
-        <div class="sticky top-28 glass-card p-8 rounded-[2rem] shadow-2xl shadow-primary/5">
-          <div class="flex items-baseline justify-between mb-8">
+      <aside class="w-full lg:w-[320px]"> <div class="sticky top-24 glass-card p-6 rounded-2xl shadow-xl">
+          <div class="flex items-baseline justify-between mb-6">
             <div>
-              <span class="text-3xl font-black text-slate-900">₹<%= listing.price.toLocaleString("en-IN") %></span>
-              <span class="text-gray-500 font-medium">/ night</span>
+              <span class="text-xl font-black text-slate-900">₹<%= listing.price.toLocaleString("en-IN") %></span>
+              <span class="text-slate-400 font-bold text-[10px]">/ night</span>
             </div>
           </div>
           
-          <div class="space-y-4 mb-8">
-            <a href="/bookings/<%= listing._id %>" class="block w-full text-center py-4 rounded-xl text-white font-extrabold text-lg btn-gradient shadow-lg">
+          <div class="space-y-3 mb-6">
+            <a href="/bookings/<%= listing._id %>" class="block w-full text-center py-2.5 rounded-lg text-white font-bold text-xs btn-gradient shadow-md">
               Book Now
             </a>
-            <p class="text-center text-xs text-gray-400">Secure checkout powered by Wanderlust</p>
+            <p class="text-center text-[9px] font-bold text-slate-400 uppercase tracking-tighter">Secure checkout by Wanderlust</p>
           </div>
 
-          <div class="space-y-4 pt-6 border-t border-gray-100">
-             <div class="flex items-center gap-3 text-slate-600">
-                <span class="material-symbols-outlined text-primary">verified_user</span>
-                <span class="text-xs font-semibold">Verified Owner & Property</span>
+          <div class="space-y-3 pt-4 border-t border-slate-100">
+             <div class="flex items-center gap-2 text-slate-500">
+                <span class="material-symbols-outlined text-indigo-600 text-sm">verified_user</span>
+                <span class="text-[10px] font-bold">Verified Property</span>
              </div>
-             <div class="flex items-center gap-3 text-slate-600">
-                <span class="material-symbols-outlined text-primary">support_agent</span>
-                <span class="text-xs font-semibold">24/7 Concierge Support</span>
+             <div class="flex items-center gap-2 text-slate-500">
+                <span class="material-symbols-outlined text-indigo-600 text-sm">support_agent</span>
+                <span class="text-[10px] font-bold">24/7 Support</span>
              </div>
           </div>
         </div>
       </aside>
     </div>
   </main>
-
-  <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 p-4 px-6 z-[100] flex items-center justify-between">
-    <div>
-      <p class="text-lg font-bold text-slate-900">₹<%= listing.price.toLocaleString("en-IN") %> <span class="text-xs font-normal text-gray-500">/ night</span></p>
-      <p class="text-[10px] font-bold text-primary uppercase"><%= listing.location %></p>
-    </div>
-    <a href="/bookings/<%= listing._id %>" class="px-8 py-3 rounded-xl text-white font-bold btn-gradient text-sm">
-      Book Now
-    </a>
-  </div>
 </div>
 
 <script>
-  // Map Logic
+  // Consistent Map Marker Logic
   const lat = <%= listing.geometry.coordinates[1] %>;
   const lng = <%= listing.geometry.coordinates[0] %>;
   const map = L.map('map', { scrollWheelZoom: false }).setView([lat, lng], 12);
@@ -191,12 +190,10 @@
 
   const customIcon = L.divIcon({
     className: 'custom-div-icon',
-    html: "<div style='background-color:#673ab6; width:20px; height:20px; border-radius:50%; border:3px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.3);'></div>",
-    iconSize: [20, 20],
-    iconAnchor: [10, 10]
+    html: "<div style='background-color:#6366f1; width:16px; height:16px; border-radius:50%; border:2px solid white; box-shadow: 0 0 8px rgba(0,0,0,0.2);'></div>",
+    iconSize: [16, 16],
+    iconAnchor: [8, 8]
   });
 
-  L.marker([lat, lng], {icon: customIcon}).addTo(map)
-    .bindPopup("<b class='font-display'><%= listing.title %></b>")
-    .openPopup();
+  L.marker([lat, lng], {icon: customIcon}).addTo(map);
 </script>

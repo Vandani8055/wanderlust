@@ -1,95 +1,109 @@
 <% layout('layouts/boilerplate') %>
 
-
-
 <style>
-  .glass-card {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+  /* UNIFORM SYSTEM SYNC */
+  .font-manrope { font-family: 'Manrope', sans-serif; }
+  
+  /* Standardizing Header Sizes to match your new UI */
+  h1 { font-size: 1.25rem !important; font-weight: 900; letter-spacing: -0.025em; color: #0f172a; }
+  h3 { font-size: 0.9rem !important; font-weight: 800; color: #0f172a; }
+  
+  .text-label { font-size: 0.65rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em; }
+  .text-value { font-size: 0.85rem; font-weight: 700; color: #0f172a; }
+
+  /* UPDATED BRAND GRADIENT */
+  .brand-gradient { 
+    background: linear-gradient(135deg, #00B0FF 0%, #673ab6 100%) !important; 
   }
 
+  .glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+  }
+
+  /* KEEPING YOUR ORIGINAL ANIMATIONS EXACTLY AS THEY WERE */
   .confetti-svg {
     position: absolute;
     z-index: 0;
-    opacity: 0.3;
+    opacity: 0.25; /* Softened slightly for cleaner look */
     pointer-events: none;
   }
 
   .pulsing-glow {
-    box-shadow: 0 0 0 0 rgba(41, 201, 120, 0.4);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
     animation: pulse-green 2s infinite;
   }
 
   @keyframes pulse-green {
-    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(41, 201, 120, 0.7); }
-    70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(41, 201, 120, 0); }
-    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(41, 201, 120, 0); }
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
   }
 
   .success-page-body {
-    background: radial-gradient(circle at top right, #f3e8ff, #ffffff);
+    background: #f8fafc; /* Clean slate background to match your other pages */
   }
 </style>
 
-<div class="success-page-body font-display min-h-screen relative overflow-x-hidden flex flex-col">
+<div class="success-page-body font-manrope min-h-screen relative overflow-x-hidden flex flex-col antialiased">
   
-  <div class="absolute top-10 left-5 text-emerald-success confetti-svg"><span class="material-symbols-outlined text-3xl">celebration</span></div>
-  <div class="absolute top-32 right-10 text-electric-blue confetti-svg"><span class="material-symbols-outlined text-2xl">star</span></div>
-  <div class="absolute bottom-10 left-10 text-primary/20 confetti-svg"><span class="material-symbols-outlined text-5xl">circle</span></div>
+  <div class="absolute top-10 left-5 text-emerald-500 confetti-svg"><span class="material-symbols-outlined text-3xl">celebration</span></div>
+  <div class="absolute top-32 right-10 text-indigo-400 confetti-svg"><span class="material-symbols-outlined text-2xl">star</span></div>
+  <div class="absolute bottom-10 left-10 text-slate-200 confetti-svg"><span class="material-symbols-outlined text-5xl">circle</span></div>
 
   <main class="flex-1 flex items-center justify-center p-4 md:p-6 z-10">
-    <div class="max-w-[550px] w-full glass-card rounded-3xl p-6 md:p-10 shadow-2xl relative">
+    <div class="max-w-[480px] w-full glass-card rounded-[2.5rem] p-8 md:p-10 shadow-2xl shadow-indigo-100/40 relative">
       
-      <div class="flex flex-col items-center text-center mb-8">
-        <div class="size-16 md:size-20 bg-emerald-success/10 rounded-full flex items-center justify-center mb-4 pulsing-glow">
-          <span class="material-symbols-outlined text-emerald-success text-4xl md:text-5xl font-bold">check_circle</span>
+      <div class="flex flex-col items-center text-center mb-10">
+        <div class="size-16 md:size-20 bg-emerald-50 rounded-full flex items-center justify-center mb-6 pulsing-glow">
+          <span class="material-symbols-outlined text-emerald-500 text-4xl md:text-5xl font-bold">check_circle</span>
         </div>
-        <h1 class="text-primary text-2xl md:text-3xl font-extrabold tracking-tight mb-2">Payment Successful</h1>
-        <p class="text-slate-600 text-base">Your booking has been confirmed 🎉</p>
+        <h1 class="mb-2">Payment Successful</h1>
+        <p class="text-slate-500 text-sm font-medium">Your booking has been confirmed 🎉</p>
       </div>
 
-      <div class="bg-white/50 border border-slate-100 rounded-2xl overflow-hidden mb-8 shadow-sm">
-        <div class="flex flex-col sm:flex-row items-center p-4 gap-4 border-b border-slate-100">
+      <div class="bg-white border border-slate-100 rounded-2xl overflow-hidden mb-8 shadow-sm">
+        <div class="flex flex-col sm:flex-row items-center p-4 gap-4 border-b border-slate-50 bg-slate-50/40">
           <% if (listing.image && listing.image.url) { %>
-            <div class="w-full sm:w-20 h-24 sm:h-20 rounded-xl bg-cover bg-center" style="background-image: url('<%= listing.image.url %>');"></div>
+            <div class="w-16 h-16 rounded-xl bg-cover bg-center border border-white shadow-sm" style="background-image: url('<%= listing.image.url %>');"></div>
           <% } %>
           <div class="text-center sm:text-left">
-            <h3 class="text-slate-900 text-lg font-bold leading-tight"><%= listing.title %></h3>
-            <p class="text-primary text-sm font-medium"><%= listing.location %>, <%= listing.country %></p>
+            <h3 class="leading-tight"><%= listing.title %></h3>
+            <p class="text-indigo-500 text-[10px] font-black uppercase tracking-widest mt-0.5"><%= listing.location %>, <%= listing.country %></p>
           </div>
         </div>
 
-        <div class="p-5 space-y-3">
+        <div class="p-5 space-y-4 divide-y divide-slate-50">
           <div class="flex justify-between items-center">
-            <span class="text-slate-500 text-xs font-bold uppercase tracking-widest">Check-In</span>
-            <span class="text-slate-900 font-semibold"><%= checkIn %></span>
+            <span class="text-label">Check-In</span>
+            <span class="text-value"><%= checkIn %></span>
           </div>
-          <div class="flex justify-between items-center border-t border-slate-50 pt-3">
-            <span class="text-slate-500 text-xs font-bold uppercase tracking-widest">Check-Out</span>
-            <span class="text-slate-900 font-semibold"><%= checkOut %></span>
+          <div class="flex justify-between items-center pt-4">
+            <span class="text-label">Check-Out</span>
+            <span class="text-value"><%= checkOut %></span>
           </div>
         </div>
       </div>
 
       <div class="flex flex-col gap-3">
         <a href="/listings/<%= listing._id %>" 
-           class="w-full h-14 rounded-2xl bg-gradient-to-r from-electric-blue to-primary text-white font-bold text-lg shadow-lg hover:shadow-primary/30 hover:scale-[1.01] transition-all flex items-center justify-center gap-2 group">
+           class="brand-gradient w-full h-10 rounded-xl text-white font-black text-[10px] uppercase tracking-widest shadow-lg shadow-indigo-100 hover:scale-[1.02] transition-all flex items-center justify-center gap-2 group">
           Back to Listing
-          <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
         </a>
         
-        <button onclick="window.print()" class="w-full py-3 text-slate-500 font-semibold text-sm hover:text-primary transition-colors flex items-center justify-center gap-2">
+        <button onclick="window.print()" class="w-full py-3 text-slate-400 font-bold text-[9px] uppercase tracking-widest hover:text-indigo-600 transition-colors flex items-center justify-center gap-2">
           <span class="material-symbols-outlined text-lg">print</span>
           Print Receipt
         </button>
       </div>
 
-      <div class="mt-8 text-center border-t border-slate-100 pt-6">
-        <p class="text-slate-400 text-xs tracking-wide">
-          A confirmation email has been sent to your registered address.
+      <div class="mt-10 text-center border-t border-slate-50 pt-6">
+        <p class="text-slate-400 text-[9px] font-bold uppercase tracking-widest leading-loose">
+          A confirmation email has been sent to your inbox.
           <br>
-          © 2026 Wanderlust Global Inc.
+          <span class="opacity-50">© 2026 Wanderlust Global Inc.</span>
         </p>
       </div>
     </div>
