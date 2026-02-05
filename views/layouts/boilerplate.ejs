@@ -38,12 +38,18 @@
       flex-direction: column;
       flex: 1;
     }
+
+    .admin-layout-wrapper {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
   </style>
 </head>
 
 <body>
   <% 
-    const isAdminPage = (typeof admin !== 'undefined' || (typeof body !== 'undefined' && body.toString().includes('dashboard') && !body.toString().includes('editAdminDashboard')));
+    const isAdminPage = (typeof admin !== 'undefined' || (typeof body !== 'undefined' && body.toString().includes('dashboard')));
     const isHomePage = (typeof allListings !== 'undefined');
   %>
 
